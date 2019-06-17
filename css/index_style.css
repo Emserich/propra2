@@ -21,6 +21,10 @@ body {
   	background-repeat: no-repeat;
 }
 
+.row_overview {
+	border: 1px dotted #35302f;
+}
+
 .row_board {
 	justify-content: center;	
 }
@@ -28,8 +32,11 @@ body {
 	flex: 0 0 auto; 
 	background-color: #35302f;
 	margin: 0px;
-	padding: 1px;
+	padding: 65px;
 	width: auto;
+	background-image: url('../images/board_cut.png');
+	background-size: 100% 100%;
+  	background-repeat: no-repeat;
 }
 
 .field {

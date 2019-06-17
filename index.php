@@ -9,22 +9,22 @@
   <body>
     <div class="container">
 
-      <div class="row"><!-- Übersichten -->
+      <div class="row row_overview"><!-- Übersichten -->
         <div class="col-md-12">
 
           <div class="row">
             <div class="col-md-12">Spezialstrecken</div>
           </div>
 
-          <div class="row" style="border: 1px dotted black;">
+          <div class="row">
             <div class="col-md-12">Würfelübersicht</div>
           </div>
 
-          <div class="row" style="border: 1px dotted black;">
+          <div class="row">
             <div class="col-md-12">Wertungszeile</div>
           </div>
 
-          <div class="row" style="border: 1px dotted black;">
+          <div class="row">
             <div class="col-md-12">Punkteübersicht</div>
           </div>          
 
