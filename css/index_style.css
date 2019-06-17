@@ -21,8 +21,15 @@ body {
   	background-repeat: no-repeat;
 }
 
-.board {
-	text-align: -moz-center;
+.row_board {
+	justify-content: center;	
+}
+.col_board {
+	flex: 0 0 auto; 
+	background-color: #35302f;
+	margin: 0px;
+	padding: 1px;
+	width: auto;
 }
 
 .field {
@@ -30,6 +37,8 @@ body {
     border: 1px solid #35302f;
     width: 15vh;
     height: 15vh;
+    max-width: 15vw;
+    /*max-height: 15vw;*/
     margin:0px;
     background-image: url('../images/field.png');
   	background-repeat: no-repeat;

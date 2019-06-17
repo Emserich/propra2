@@ -32,12 +32,12 @@
       </div>
 
 
-      <div class="row board"><!-- 7x7-Felder -->
-        <div class="col-md-12">
+      <div class="row row_board"><!-- 7x7-Felder -->
+        <div class="col-md-12 col_board">
 
           <?php $fieldnr=1 ?>
 
-          <div class="row">
+          <div class="row fieldrow">
             <div class="col-md-12">
               <div class="field" id="field_<?php echo($fieldnr) ?>">
                 <?php echo ($fieldnr++) ?>
