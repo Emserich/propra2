@@ -10,7 +10,7 @@
     <div class="container">
 
       <div class="row"><!-- Übersichten -->
-        <div class="col-md-12" style="background-color: lightblue; min-height: 10rem">
+        <div class="col-md-12">
 
           <div class="row">
             <div class="col-md-12">Spezialstrecken</div>
@@ -32,176 +32,190 @@
       </div>
 
 
-      <div class="row"><!-- 7x7-Felder -->
-        <div class="col-md-12" style="background-color: blue; min-height: 10rem">
+      <div class="row board"><!-- 7x7-Felder -->
+        <div class="col-md-12">
 
           <?php $fieldnr=1 ?>
 
           <div class="row">
-            <div class="col">
-              <?php echo ($fieldnr++) ?>
-            </div>
-            <div class="col">
-              <?php echo ($fieldnr++) ?>
-            </div>
-            <div class="col">
-              <?php echo ($fieldnr++) ?>
-            </div>
-            <div class="col">
-              <?php echo ($fieldnr++) ?>
-            </div>
-            <div class="col">
-              <?php echo ($fieldnr++) ?>
-            </div>
-            <div class="col">
-              <?php echo ($fieldnr++) ?>
-            </div>
-            <div class="col">
-              <?php echo ($fieldnr++) ?>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col">
-              <?php echo ($fieldnr++) ?>
-            </div>
-            <div class="col">
-              <?php echo ($fieldnr++) ?>
-            </div>
-            <div class="col">
-              <?php echo ($fieldnr++) ?>
-            </div>
-            <div class="col">
-              <?php echo ($fieldnr++) ?>
-            </div>
-            <div class="col">
-              <?php echo ($fieldnr++) ?>
-            </div>
-            <div class="col">
-              <?php echo ($fieldnr++) ?>
-            </div>
-            <div class="col">
-              <?php echo ($fieldnr++) ?>
+            <div class="col-md-12">
+              <div class="field" id="field_<?php echo($fieldnr) ?>">
+                <?php echo ($fieldnr++) ?>
+              </div>
+              <div class="field" id="field_<?php echo($fieldnr) ?>">
+                <?php echo ($fieldnr++) ?>
+              </div>
+              <div class="field" id="field_<?php echo($fieldnr) ?>">
+                <?php echo ($fieldnr++) ?>
+              </div>
+              <div class="field" id="field_<?php echo($fieldnr) ?>">
+                <?php echo ($fieldnr++) ?>
+              </div>
+              <div class="field" id="field_<?php echo($fieldnr) ?>">
+                <?php echo ($fieldnr++) ?>
+              </div>
+              <div class="field" id="field_<?php echo($fieldnr) ?>">
+                <?php echo ($fieldnr++) ?>
+              </div>
+              <div class="field" id="field_<?php echo($fieldnr) ?>">
+                <?php echo ($fieldnr++) ?>
+              </div>
             </div>
           </div>
 
           <div class="row">
-            <div class="col">
-              <?php echo ($fieldnr++) ?>
-            </div>
-            <div class="col">
-              <?php echo ($fieldnr++) ?>
-            </div>
-            <div class="col">
-              <?php echo ($fieldnr++) ?>
-            </div>
-            <div class="col">
-              <?php echo ($fieldnr++) ?>
-            </div>
-            <div class="col">
-              <?php echo ($fieldnr++) ?>
-            </div>
-            <div class="col">
-              <?php echo ($fieldnr++) ?>
-            </div>
-            <div class="col">
-              <?php echo ($fieldnr++) ?>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col">
-              <?php echo ($fieldnr++) ?>
-            </div>
-            <div class="col">
-              <?php echo ($fieldnr++) ?>
-            </div>
-            <div class="col">
-              <?php echo ($fieldnr++) ?>
-            </div>
-            <div class="col">
-              <?php echo ($fieldnr++) ?>
-            </div>
-            <div class="col">
-              <?php echo ($fieldnr++) ?>
-            </div>
-            <div class="col">
-              <?php echo ($fieldnr++) ?>
-            </div>
-            <div class="col">
-              <?php echo ($fieldnr++) ?>
+            <div class="col-md-12">
+              <div class="field" id="field_<?php echo($fieldnr) ?>">
+                <?php echo ($fieldnr++) ?>
+              </div>
+              <div class="field" id="field_<?php echo($fieldnr) ?>">
+                <?php echo ($fieldnr++) ?>
+              </div>
+              <div class="field" id="field_<?php echo($fieldnr) ?>">
+                <?php echo ($fieldnr++) ?>
+              </div>
+              <div class="field" id="field_<?php echo($fieldnr) ?>">
+                <?php echo ($fieldnr++) ?>
+              </div>
+              <div class="field" id="field_<?php echo($fieldnr) ?>">
+                <?php echo ($fieldnr++) ?>
+              </div>
+              <div class="field" id="field_<?php echo($fieldnr) ?>">
+                <?php echo ($fieldnr++) ?>
+              </div>
+              <div class="field" id="field_<?php echo($fieldnr) ?>">
+                <?php echo ($fieldnr++) ?>
+              </div>
             </div>
           </div>
 
           <div class="row">
-            <div class="col">
-              <?php echo ($fieldnr++) ?>
-            </div>
-            <div class="col">
-              <?php echo ($fieldnr++) ?>
-            </div>
-            <div class="col">
-              <?php echo ($fieldnr++) ?>
-            </div>
-            <div class="col">
-              <?php echo ($fieldnr++) ?>
-            </div>
-            <div class="col">
-              <?php echo ($fieldnr++) ?>
-            </div>
-            <div class="col">
-              <?php echo ($fieldnr++) ?>
-            </div>
-            <div class="col">
-              <?php echo ($fieldnr++) ?>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col">
-              <?php echo ($fieldnr++) ?>
-            </div>
-            <div class="col">
-              <?php echo ($fieldnr++) ?>
-            </div>
-            <div class="col">
-              <?php echo ($fieldnr++) ?>
-            </div>
-            <div class="col">
-              <?php echo ($fieldnr++) ?>
-            </div>
-            <div class="col">
-              <?php echo ($fieldnr++) ?>
-            </div>
-            <div class="col">
-              <?php echo ($fieldnr++) ?>
-            </div>
-            <div class="col">
-              <?php echo ($fieldnr++) ?>
+            <div class="col-md-12">
+              <div class="field" id="field_<?php echo($fieldnr) ?>">
+                <?php echo ($fieldnr++) ?>
+              </div>
+              <div class="field" id="field_<?php echo($fieldnr) ?>">
+                <?php echo ($fieldnr++) ?>
+              </div>
+              <div class="field" id="field_<?php echo($fieldnr) ?>">
+                <?php echo ($fieldnr++) ?>
+              </div>
+              <div class="field" id="field_<?php echo($fieldnr) ?>">
+                <?php echo ($fieldnr++) ?>
+              </div>
+              <div class="field" id="field_<?php echo($fieldnr) ?>">
+                <?php echo ($fieldnr++) ?>
+              </div>
+              <div class="field" id="field_<?php echo($fieldnr) ?>">
+                <?php echo ($fieldnr++) ?>
+              </div>
+              <div class="field" id="field_<?php echo($fieldnr) ?>">
+                <?php echo ($fieldnr++) ?>
+              </div>
             </div>
           </div>
 
           <div class="row">
-            <div class="col">
-              <?php echo ($fieldnr++) ?>
+            <div class="col-md-12">
+              <div class="field" id="field_<?php echo($fieldnr) ?>">
+                <?php echo ($fieldnr++) ?>
+              </div>
+              <div class="field" id="field_<?php echo($fieldnr) ?>">
+                <?php echo ($fieldnr++) ?>
+              </div>
+              <div class="field" id="field_<?php echo($fieldnr) ?>">
+                <?php echo ($fieldnr++) ?>
+              </div>
+              <div class="field" id="field_<?php echo($fieldnr) ?>">
+                <?php echo ($fieldnr++) ?>
+              </div>
+              <div class="field" id="field_<?php echo($fieldnr) ?>">
+                <?php echo ($fieldnr++) ?>
+              </div>
+              <div class="field" id="field_<?php echo($fieldnr) ?>">
+                <?php echo ($fieldnr++) ?>
+              </div>
+              <div class="field" id="field_<?php echo($fieldnr) ?>">
+                <?php echo ($fieldnr++) ?>
+              </div>
             </div>
-            <div class="col">
-              <?php echo ($fieldnr++) ?>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="field" id="field_<?php echo($fieldnr) ?>">
+                <?php echo ($fieldnr++) ?>
+              </div>
+              <div class="field" id="field_<?php echo($fieldnr) ?>">
+                <?php echo ($fieldnr++) ?>
+              </div>
+              <div class="field" id="field_<?php echo($fieldnr) ?>">
+                <?php echo ($fieldnr++) ?>
+              </div>
+              <div class="field" id="field_<?php echo($fieldnr) ?>">
+                <?php echo ($fieldnr++) ?>
+              </div>
+              <div class="field" id="field_<?php echo($fieldnr) ?>">
+                <?php echo ($fieldnr++) ?>
+              </div>
+              <div class="field" id="field_<?php echo($fieldnr) ?>">
+                <?php echo ($fieldnr++) ?>
+              </div>
+              <div class="field" id="field_<?php echo($fieldnr) ?>">
+                <?php echo ($fieldnr++) ?>
+              </div>
             </div>
-            <div class="col">
-              <?php echo ($fieldnr++) ?>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="field" id="field_<?php echo($fieldnr) ?>">
+                <?php echo ($fieldnr++) ?>
+              </div>
+              <div class="field" id="field_<?php echo($fieldnr) ?>">
+                <?php echo ($fieldnr++) ?>
+              </div>
+              <div class="field" id="field_<?php echo($fieldnr) ?>">
+                <?php echo ($fieldnr++) ?>
+              </div>
+              <div class="field" id="field_<?php echo($fieldnr) ?>">
+                <?php echo ($fieldnr++) ?>
+              </div>
+              <div class="field" id="field_<?php echo($fieldnr) ?>">
+                <?php echo ($fieldnr++) ?>
+              </div>
+              <div class="field" id="field_<?php echo($fieldnr) ?>">
+                <?php echo ($fieldnr++) ?>
+              </div>
+              <div class="field" id="field_<?php echo($fieldnr) ?>">
+                <?php echo ($fieldnr++) ?>
+              </div>
             </div>
-            <div class="col">
-              <?php echo ($fieldnr++) ?>
-            </div>
-            <div class="col">
-              <?php echo ($fieldnr++) ?>
-            </div>
-            <div class="col">
-              <?php echo ($fieldnr++) ?>
-            </div>
-            <div class="col">
-              <?php echo ($fieldnr++) ?>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="field" id="field_<?php echo($fieldnr) ?>">
+                <?php echo ($fieldnr++) ?>
+              </div>
+              <div class="field" id="field_<?php echo($fieldnr) ?>">
+                <?php echo ($fieldnr++) ?>
+              </div>
+              <div class="field" id="field_<?php echo($fieldnr) ?>">
+                <?php echo ($fieldnr++) ?>
+              </div>
+              <div class="field" id="field_<?php echo($fieldnr) ?>">
+                <?php echo ($fieldnr++) ?>
+              </div>
+              <div class="field" id="field_<?php echo($fieldnr) ?>">
+                <?php echo ($fieldnr++) ?>
+              </div>
+              <div class="field" id="field_<?php echo($fieldnr) ?>">
+                <?php echo ($fieldnr++) ?>
+              </div>
+              <div class="field" id="field_<?php echo($fieldnr) ?>">
+                <?php echo ($fieldnr++) ?>
+              </div>
             </div>
           </div>
           

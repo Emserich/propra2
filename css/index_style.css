@@ -1,0 +1,42 @@
+/*
+Farben:
+
+blau:
+#cfe8f8 -> 
+#b5d8f5 ->
+#61acdf -> 
+#3063a7 ->
+
+rot:
+#e85a4d ->
+
+dunkelgrau
+#35302f ->
+*/
+
+body {
+	background-color: #cfe8f8;
+	background-image: url('../images/bg.png');
+	background-size: contain;
+  	background-repeat: no-repeat;
+}
+
+.board {
+	text-align: -moz-center;
+}
+
+.field {
+	cursor: pointer;
+    border: 1px solid #35302f;
+    width: 15vh;
+    height: 15vh;
+    margin:0px;
+    background-image: url('../images/field.png');
+  	background-repeat: no-repeat;
+  	background-size: 15vh;
+  	display: table-cell;
+}
+.field:hover {
+	background: rgba(0,0,0, 0.0);
+	background-image: url('../images/field.png');
+}
