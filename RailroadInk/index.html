@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Markowski, Maryschok, Tchudjo, Steffens, Zöller">
+
+    <title>Railroad Ink</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="libs/css/bootstrap.min.css">
+    <link href="css/bs_overwrite.css" rel="stylesheet"> <!-- Änderungen am Bootstrap-Code durch Überschreiben in separater Datei  -->
+
+    <link rel="stylesheet" href="css/index_style.css">
+
+  </head>
+
+  <body onload="insertFieldnumber();">
+    <div class="container">
+
+      <div class="row row_overview"><!-- Übersichten -->
+        <div class="col-md-12">
+
+          <div class="row">
+            <div class="col-md-12">Spezialstrecken</div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">Würfelübersicht</div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">Wertungszeile</div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">Punkteübersicht</div>
+          </div>
+
+          <button class="btn btn-primary" onclick="removeFieldnumber()">Hide FieldNr</button>
+
+        </div>
+      </div>
+
+
+      <div class="row row_board"><!-- 7x7-Felder -->
+        <div class="col-md-12 col_board">
+
+          <div class="row fieldrow">
+            <div class="col-md-12">
+              <div class="field" id="1">
+              </div>
+              <div class="field" id="2">
+              </div>
+              <div class="field" id="3">
+              </div>
+              <div class="field" id="4">
+              </div>
+              <div class="field" id="5">
+              </div>
+              <div class="field" id="6">
+              </div>
+              <div class="field" id="7">
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="field" id="8">
+              </div>
+              <div class="field" id="9">
+               </div>
+              <div class="field" id="10">
+              </div>
+              <div class="field" id="11">
+              </div>
+              <div class="field" id="12">
+              </div>
+              <div class="field" id="13">
+              </div>
+              <div class="field" id="14">
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="field" id="15">
+              </div>
+              <div class="field" id="16">
+              </div>
+              <div class="field" id="17">
+              </div>
+              <div class="field" id="18">
+              </div>
+              <div class="field" id="19">
+              </div>
+              <div class="field" id="20">
+              </div>
+              <div class="field" id="21">
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="field" id="22">
+              </div>
+              <div class="field" id="23">
+              </div>
+              <div class="field" id="24">
+              </div>
+              <div class="field" id="25">
+              </div>
+              <div class="field" id="26">
+              </div>
+              <div class="field" id="27">
+              </div>
+              <div class="field" id="28">
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="field" id="29">
+              </div>
+              <div class="field" id="30">
+              </div>
+              <div class="field" id="31">
+              </div>
+              <div class="field" id="32">
+              </div>
+              <div class="field" id="33">
+              </div>
+              <div class="field" id="34">
+              </div>
+              <div class="field" id="35">
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="field" id="36">
+              </div>
+              <div class="field" id="37">
+              </div>
+              <div class="field" id="38">
+              </div>
+              <div class="field" id="39">
+              </div>
+              <div class="field" id="40">
+              </div>
+              <div class="field" id="41">
+              </div>
+              <div class="field" id="42">
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="field" id="43">
+              </div>
+              <div class="field" id="44">
+              </div>
+              <div class="field" id="45">
+              </div>
+              <div class="field" id="46">
+              </div>
+              <div class="field" id="47">
+              </div>
+              <div class="field" id="48">
+              </div>
+              <div class="field" id="49">
+              </div>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+
+    </div><!-- /container -->
+
+
+    <footer class="container text-muted">
+      <hr>
+      &copy; ProPra'19 Gruppe 3
+    </footer>
+
+  </body>
+
+
+  <script src="libs/js/jquery-3.4.1.min.js"></script>
+  <script src="libs/js/popper.min.js"></script>
+  <script src="libs/js/bootstrap.min.js"></script>
+
+  <script src="js/index.js"></script>
+
+
+
+</html>
