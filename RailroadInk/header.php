@@ -18,7 +18,7 @@
     </title>
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="libs_frontend/css/bootstrap.min.css">
+    <link rel="stylesheet" href="libs/css/bootstrap.min.css">
     <link href="css/bs_overwrite.css" rel="stylesheet"> <!-- Änderungen am Bootstrap-Code durch Überschreiben in separater Datei  -->
 
     <?php   
