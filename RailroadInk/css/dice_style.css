@@ -41,6 +41,7 @@
   position: absolute;
   width: 100%;
   box-sizing: content-box;
+  border: 1px solid #35302f;
 }
 .dot {
   align-self: center;

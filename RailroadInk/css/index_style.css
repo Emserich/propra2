@@ -7,6 +7,9 @@ blau:
 #61acdf -> 
 #3063a7 ->
 
+tiefblau:
+#343974 ->
+
 rot:
 #e85a4d ->
 
@@ -19,40 +22,71 @@ body {
 	background-image: url('../images/bg.png');
 	background-size: contain;
   	background-repeat: no-repeat;
+  	margin-top: 0.5rem;
 }
 
-.row_overview {
-	border: 1px dotted #35302f;
-}
 
-.row_board {
-	justify-content: center;	
-}
 .col_board {
+	justify-content: center;
 	flex: 0 0 auto; 
 	background-color: #35302f;
-	margin: 0px;
-	padding: 60px;
+	margin: auto; 
+	padding: 8vh;
 	width: auto;
-	background-image: url('../images/board_cut.png');
+	background-image: url('../images/board_frame.png');
 	background-size: 100% 100%;
   	background-repeat: no-repeat;
+  	border: 3px solid #35302f;
+  	border-radius: 15px;
+  	max-width: max-content;
+  	/*max-height: 100vh;*/
+}
+@media (max-width: 1199.98px) {
 }
 
 .field {
 	cursor: pointer;
     border: 1px solid #35302f;
-    width: 15vh;
-    height: 15vh;
-    max-width: 15vw;
-    /*max-height: 15vw;*/
+    width: 11vh;
+    height: 11vh;
+    max-width: 11vw;
+    max-height: 11vw;
     margin:0px;
     background-image: url('../images/field.png');
   	background-repeat: no-repeat;
-  	background-size: 15vh;
+  	background-size: 11vh;
+  	background-size: 100% 100%;
   	display: table-cell;
 }
 .field:hover {
 	background: rgba(0,0,0, 0.0);
 	background-image: url('../images/field.png');
+}
+#field_17 {
+	border-top: 2px solid #e85a4d;
+	border-left: 2px solid #e85a4d;
+}
+#field_18 {
+	border-top: 2px solid #e85a4d;
+}
+#field_19 {
+	border-top: 2px solid #e85a4d;
+	border-right: 2px solid #e85a4d;
+}
+#field_24 {
+	border-left: 2px solid #e85a4d;
+}
+#field_26 {
+	border-right: 2px solid #e85a4d;
+}
+#field_31 {
+	border-bottom: 2px solid #e85a4d;
+	border-left: 2px solid #e85a4d;
+}
+#field_32 {
+	border-bottom: 2px solid #e85a4d;
+}
+#field_33 {
+	border-bottom: 2px solid #e85a4d;
+	border-right: 2px solid #e85a4d;
 }
