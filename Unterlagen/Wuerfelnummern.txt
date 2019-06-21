@@ -1,0 +1,18 @@
+Sreckenwürfel 1:
+
+1: Gleis-Gerade
+2: Gleis-Kurve
+3: Gleis-T-Kreuzung
+
+4: Straßen-Gerade
+5: Straßen-Kurve
+6: Straßen-T-Kreuzung
+
+
+
+Streckenwürfel 2:
+
+1/6: Bahnhof-Gerade
+2/5: Bahnhof-Kurve 
+3/4: Überführung
+
