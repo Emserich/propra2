@@ -35,23 +35,27 @@ public class RailroadInk extends Game {
 	
 	@Override
 	public String getSite() {
-		// TODO load the HTML-File of the game
-		// (see page 12 of the tutorial)
+		try {
+			FileHelper.getFile("RailroadInk/index.html");
+		} catch (IOException e) {
+			System.err.println("Loading of file RailroadInk/index.html failed");
+		}
 		return null;
 	}
 
 	@Override
 	public String getCSS() {
-		// TODO load the CSS-File(s?) of the game
-		// (see page 13 of the tutorial)
+		try {
+			return FileHelper.getFile("RailroadInk/css/index_style.css");
+		} catch (IOException e) {
+			System.err.println("Loading of file RailroadInk/css/index_style.css failed");
+		}
 		return null;
 	}
 
 	@Override
 	public String getJavaScript() {
-		// TODO load the JS-File(s?) of the game
-		// (see page 13 of the tutorial)
-		return null;
+		return "<script src =\"js/index.js\"></script>";
 	}
 
 	@Override
