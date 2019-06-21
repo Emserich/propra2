@@ -25,15 +25,7 @@ body {
   	margin-top: 0.5rem;
 }
 
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-    /* display: none; <- Crashes Chrome on hover */
-    -webkit-appearance: none;
-    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
-}
-input[type=number] {
-    -moz-appearance:textfield; /* Firefox */
-}
+
 
 
 .col_board {
@@ -78,6 +70,7 @@ input[type=number] {
 	margin-right: 0.2vw;
 	font-weight: bold;
 	color: #e85a4d;
+	vertical-align: top;
 }
 
 #field_17 {
@@ -112,7 +105,7 @@ input[type=number] {
 	
 
 
-#field_17x:after {
+#field_17:before {
 	content: "";
 	position: absolute;
 	opacity: .9;
