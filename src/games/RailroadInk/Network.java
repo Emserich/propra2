@@ -45,5 +45,8 @@ public class Network {
 	public int getErrors() {
 		return errors;
 	}
-
+	
+	public void addError() {
+		this.errors++;
+	}
 }

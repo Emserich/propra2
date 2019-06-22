@@ -768,35 +768,4 @@ public class Board {
 		this.stationFourPlaced = true;
 	}
 	
-	/*
-	public static void main(String[] args) {
-		User user = new User("hallo", "hehe");
-		Board board = new Board(user);
-		
-		Field rightNeighbour = board.getFields().get(31);
-		Field leftNeighbour = board.getFields().get(29);
-		try {
-			leftNeighbour.addElement(new RouteElement(Orientations.ZERO_DEGREES, ElementTypes.ROAD, false));
-			rightNeighbour.addElement(new RouteElement(Orientations.ZERO_DEGREES, ElementTypes.RAIL, false));
-		} catch (IllegalPlayerMoveException e) {
-			e.printStackTrace();
-		}
-			
-		Field f = board.getFields().get(30);
-		RouteElement e = new RouteElement(Orientations.ZERO_DEGREES, ElementTypes.ROAD, false);
-		
-		boolean canBePlaced = board.canElementBePlaced(f, e);
-		
-		System.out.println(canBePlaced);
-		
-		RouteElement roadCrossroad = new RouteElement(Orientations.ZERO_DEGREES, ElementTypes.ROAD_CROSSROAD, false);
-		RouteElement railCrossroad = new RouteElement(Orientations.TWOHUNDREDSEVENTY_DEGREES, ElementTypes.RAIL_CROSSROAD, true);
-		
-		RouteElement[] elements = {roadCrossroad, railCrossroad};
-		
-		boolean movesLeft = board.movesLeft(elements);
-		
-		System.out.println(movesLeft);
-	}
-	*/
 }
