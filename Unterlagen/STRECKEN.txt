@@ -1,0 +1,37 @@
+CP = Connection Point mit
+	Ausrichtung: 1 = oben, 2 = rechts, 3 = unten, 4 = links
+	Typ: r = rail, s = street
+
+Unten die Default-CP der gemäß den Bildern. 
+Bei 90°-Drehung im UZS werden alle CP jeweils  (Wert + 1)mod 4  gerechnet.
+
+
+Sreckenwürfel 1:
+
+1_1: 1r, 3r (2CP)("Gleis-Gerade")
+1_2: 1r, 4r (2CP)("Gleis-Kurve")
+1_3: 1r, 2r, 4r (3CP)("Gleis-T-Kreuzung")
+
+1_4: 1s, 3s (2CP)("Straßen-Gerade")
+1_5: 1s, 4s (2CP)("Straßen-Kurve")
+1_6: 1s, 2s, 4s (3CP)("Straßen-T-Kreuzung")
+
+
+
+Streckenwürfel 2:
+
+2_1 (6): 1r, 3s (2CP)("Bahnhof-Gerade")
+2_2 (5): 1r, 4s (2CP)("Bahnhof-Kurve")
+2_3 (4): 1s, 2r, 3s, 4r (4CP)("Überführung")
+
+
+
+Spezialstrecken (alle 4 CP):
+
+special_1: 1s, 2s, 3r, 4s
+special_2: 1s, 2r, 3r, 4r
+special_3: 1s, 2s, 3s, 4s
+special_4: 1r, 2r, 3r, 4r
+special_5: 1s, 2r, 3r, 4s
+special_1: 1s, 2r, 3s, 4r
+

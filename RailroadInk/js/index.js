@@ -9,17 +9,36 @@ function insertFieldnumber() {
 function toogleFieldnumber() {
 
 	for (var i = 1; i <= 49; i++) {
-		if (document.getElementById("field_"+i).innerHTML != '') {
-			document.getElementById("field_"+i).innerHTML = '';
+
+
+		// if( $('#field_'+i).is(':empty') ) {
+
+		// 	$('#field_'+i).append('<span>'+i+'</span>');
+		// } 
+		// else {
+		// 	$('#field_'+i).empty();
+		// }
+
+
+		if (document.getElementById("field_"+i).innerHTML != '<div></div>') {
+			document.getElementById("field_"+i).innerHTML = '<div></div>';
 		}
 		else {
-			document.getElementById("field_"+i).innerHTML = i;
-		}		
+			document.getElementById("field_"+i).innerHTML = '<span>'+i+'</span>';
+		}
 	}
 }
 
 
 function toogleMarker(id) {
+
+	// if (id<=49 && id>0) {
+	// 	$('#field_'+id).html('<div>&#10003;</div>'); 
+	// }
+	// else {
+	// 	alert("Feld existiert nicht!");
+	// }
+
 
 	if (id<=49 && id>0) {
 		document.getElementById("field_"+id).innerHTML = '<div>&#10003;</div>'; //aktuelle Rundenzahl muss eingetragen werden
