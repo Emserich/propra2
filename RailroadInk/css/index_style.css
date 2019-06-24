@@ -37,8 +37,8 @@ input[type=number] {
 
 
 .col_board {
-	justify-content: center;
-	flex: 0 0 auto; 
+	/*justify-content: center;*/
+	/*flex: 0 0 auto;*/
 	background-color: #35302f;
 	margin: auto; 
 	padding: 8vh;
@@ -50,7 +50,17 @@ input[type=number] {
   	border-radius: 15px;
   	max-width: max-content;
   	/*max-height: 100vh;*/
+  	/*min-width: max-content;*/
 }
+.col_board .row .col-md-12 {
+	display: flex;
+}
+.col_board img {
+	max-width: 100%;
+	height: auto;
+
+}
+
 @media (max-width: 1199.98px) {
 }
 
@@ -60,18 +70,19 @@ input[type=number] {
     width: 11vh;
     height: 11vh;
     max-width: 11vw;
-    max-height: 11vw;
+    /*min-width: 11vh;*/
     margin:0px;
     background-image: url('../images/field.png');
   	background-repeat: no-repeat;
   	background-size: 11vh;
   	background-size: 100% 100%;
-  	display: table-cell;
+  	/*display: table-cell;*/
   	position: relative;
 }
 .field:hover {
 	background: rgba(0,0,0, 0.0);
 	background-image: url('../images/field.png');
+	background-size: 800%;
 }
 .field div {
 	text-align: end;
@@ -108,6 +119,13 @@ input[type=number] {
 #field_33 {
 	border-bottom: 2px solid #e85a4d;
 	border-right: 2px solid #e85a4d;
+}
+
+#img_points {
+	width: 80%;
+	max-width: 80%;
+	height: auto;
+	margin: auto;
 }
 
 	

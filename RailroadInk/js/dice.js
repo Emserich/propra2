@@ -7,7 +7,6 @@ function rollDice() {
 }
 
 function toggleClasses(die) {
-  die.classList.toggle("odd-roll");
   die.classList.toggle("even-roll");
 }
 

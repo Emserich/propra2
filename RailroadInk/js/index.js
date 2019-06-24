@@ -2,7 +2,7 @@ function insertFieldnumber() {
 
 	for (var i = 1; i <= 49; i++) {
 
-		document.getElementById("field_"+i).innerHTML = '<span>'+i+'</span>';
+		// document.getElementById("field_"+i).innerHTML = '<span>'+i+'</span>';
 	}    
 }
 
@@ -47,4 +47,21 @@ function toogleMarker(id) {
 		alert("Feld existiert nicht!");
 	}
 
+}
+
+
+// -----------------------------DRAG&DROP-----------------------------
+
+function allowDrop(ev) {
+  ev.preventDefault();
+}
+
+function drag(ev) {
+  ev.dataTransfer.setData("text", ev.target.id);
+}
+
+function drop(ev) {
+  ev.preventDefault();
+  var data = ev.dataTransfer.getData("text");
+  ev.target.appendChild(document.getElementById(data));
 }
