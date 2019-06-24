@@ -2,7 +2,7 @@ function insertFieldnumber() {
 
 	for (var i = 1; i <= 49; i++) {
 
-		// document.getElementById("field_"+i).innerHTML = '<span>'+i+'</span>';
+		document.getElementById("field_"+i).innerHTML = '<span>'+i+'</span>';
 	}    
 }
 

@@ -232,19 +232,9 @@
 
         <div class="col-lg-3 text-center"><!-- Spalte rechts -->
           <div class="row mt-2">
-            <div class="col-md-12">Spezialstrecken</div>
-          </div>
-
-          <div class="row">
-            <div class="col-md-12">Würfelübersicht</div>
-          </div>
-
-          <div class="row">
-            <div class="col-md-12">Wertungszeile</div>
-          </div>
-
-          <div class="row">
-            <div class="col-md-12">Punkteübersicht</div>
+            <div class="col-md-12">
+              <h3>Runde X</h3>
+            </div>
           </div>
 
           <button class="btn btn-primary" onclick="toogleFieldnumber()">Toggle FieldNr</button>
@@ -259,12 +249,25 @@
                   </div>
                 </div>                
               </form>
-
-
               
               <button class="btn btn-primary" onclick="toogleMarker(document.getElementById('input_fieldtomark').value)">Markieren</button>
             </div>
           </div>
+
+          <div class="row mt-5">
+            <div class="col-md-12 special">
+              <img src="images/dice/special_1.png" id="special_1" draggable="true" ondragstart="drag(event)">
+              <img src="images/dice/special_2.png" id="special_2" draggable="true" ondragstart="drag(event)">
+              <img src="images/dice/special_3.png" id="special_3" draggable="true" ondragstart="drag(event)">
+              <img src="images/dice/special_4.png" id="special_4" draggable="true" ondragstart="drag(event)">
+              <img src="images/dice/special_5.png" id="special_5" draggable="true" ondragstart="drag(event)">
+              <img src="images/dice/special_6.png" id="special_6" draggable="true" ondragstart="drag(event)">
+            </div>
+          </div>
+
+
+
+
         </div><!-- /Spalte rechts -->
 
       </div> <!-- /row -->
