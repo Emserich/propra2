@@ -11,7 +11,6 @@ public class ResultCalculator {
 		int score = 0;
 		
 		//find the networks
-		//TODO
 		ArrayList<Network> networks = findNetworks(board);
 		
 		//go through each network
@@ -25,6 +24,13 @@ public class ResultCalculator {
 			//TODO change depending on how the result is actually calculated
 			ArrayList<Exits> exits = n.getExits();
 			score += exits.size() * 3;
+			
+			if(exits.size() > 5) {
+				score += exits.size() - 5;
+			}
+			
+			System.out.println(n);
+			
 		}
 		
 		//get the longest road 
@@ -110,7 +116,7 @@ public class ResultCalculator {
 					continue;
 				}
 				//if it is, check whether it is already in the result
-				if(!containsField(result, f)) {
+				if(containsField(result, f)) {
 					//if it is, go on with the next one
 					continue;
 				}
@@ -118,6 +124,13 @@ public class ResultCalculator {
 				result.add(f);
 			}
 		}
+		
+		//TODO for testing, remove later
+		System.out.println("\nUsed Central Fields:\n");
+		for(Field f : result) {
+			System.out.println(f);
+		}
+		System.out.println("\n");
 		
 		//return the result
 		return result;
@@ -297,18 +310,67 @@ public class ResultCalculator {
 				
 				//if the neighbour is null, then the network obviously cannot grow any further into this direction
 				if(neighbour == null) {
-					//therefore, return
+					//therefore, go on with the next one
 					continue;
 				}
 				
 				//if the neighbour is empty, then this counts as an error
 				if(neighbour.isEmpty()) {
 					network.addError();
+					//TODO for testing, remove later
+					System.out.println(field + ", Direction: " + roadConnections[i]);
 					//and obviously, the network cannot grow any further
 					continue;
 				}
 				
-				//if the neighbour is not empty, check whether it is one of the exits
+				//if the neighbour is not empty, check whether it has a connection to the current field
+				Directions[] neighbourConnections = neighbour.getElement().getRoadConnections();
+				boolean matchingConnection = false;
+				if(neighbourConnections != null) {
+					//therefore, go through each of the connections
+					for(int k = 0; k < neighbourConnections.length; k++) {
+						//if we have already found a matching connection, stop
+						if(matchingConnection) {
+							break;
+						}
+						
+						//check whether the direction of the neighbour matches the one of the field we're looking at
+						switch(neighbourConnections[k]) {
+						case NORTH:
+							if(roadConnections[i] == Directions.SOUTH) {
+								matchingConnection = true;
+							}
+							break;
+						case EAST:
+							if(roadConnections[i] == Directions.WEST) {
+								matchingConnection = true;
+							}
+							break;
+						case SOUTH:
+							if(roadConnections[i] == Directions.NORTH) {
+								matchingConnection = true;
+							}
+							break;
+						case WEST:
+							if(roadConnections[i] == Directions.EAST) {
+								matchingConnection = true;
+							}
+							break;
+						default:
+							//undefined behaviour, just do nothing and hope it helps
+						}
+					}
+				}
+				//if there is no matching connection, the network can obviously not grow any further
+				if(!matchingConnection) {
+					//moreover, it counts as an error
+					network.addError();
+					//TODO for testing, remove later
+					System.out.println(field + ", Direction: " + roadConnections[i]);
+					continue;
+				}
+				
+				//if the neighbour has a matching connection, check whether it is one of the exits
 				if(neighbour.getPosition() < 0) {
 					int position = neighbour.getPosition();
 					switch(position) {
@@ -391,11 +453,60 @@ public class ResultCalculator {
 				//if the neighbour is empty, then this counts as an error
 				if(neighbour.isEmpty()) {
 					network.addError();
+					//TODO for testing, remove later
+					System.out.println(field + ", Direction: " + railConnections[i]);
 					//and obviously, the network cannot grow any further
 					continue;
 				}
 				
-				//if the neighbour is not empty, check whether it is one of the exits
+				//if the neighbour is not empty, check whether it has a connection to the current field
+				Directions[] neighbourConnections = neighbour.getElement().getRailConnections();
+				boolean matchingConnection = false;
+				if(neighbourConnections != null) {
+					//therefore, go through each of the connections
+					for(int k = 0; k < neighbourConnections.length; k++) {
+						//if we have already found a matching connection, stop
+						if(matchingConnection) {
+							break;
+						}
+						
+						//check whether the direction of the neighbour matches the one of the field we're looking at
+						switch(neighbourConnections[k]) {
+						case NORTH:
+							if(railConnections[i] == Directions.SOUTH) {
+								matchingConnection = true;
+							}
+							break;
+						case EAST:
+							if(railConnections[i] == Directions.WEST) {
+								matchingConnection = true;
+							}
+							break;
+						case SOUTH:
+							if(railConnections[i] == Directions.NORTH) {
+								matchingConnection = true;
+							}
+							break;
+						case WEST:
+							if(railConnections[i] == Directions.EAST) {
+								matchingConnection = true;
+							}
+							break;
+						default:
+							//undefined behaviour, just do nothing and hope it helps
+						}
+					}
+				}
+				//if there is no matching connection, the network can obviously not grow any further
+				if(!matchingConnection) {
+					//moreover, it counts as an error
+					network.addError();
+					//TODO for testing, remove later
+					System.out.println(field + ", Direction: " + railConnections[i]);
+					continue;
+				}
+				
+				//if the neighbour has a matching connection, check whether it is one of the exits
 				if(neighbour.getPosition() < 0) {
 					int position = neighbour.getPosition();
 					switch(position) {
@@ -449,52 +560,122 @@ public class ResultCalculator {
 		}
 	}
 	
+	public void findLongestRoad(Network network) {
+		//copy the fields of the network into a new ArrayList (to not influence the fields of the network)
+		ArrayList<Field> fieldsCopy = new ArrayList<Field>();
+		
+		//only do that if the network has fields (but that should be the case)
+		if(network.getFields() == null || network.getFields().isEmpty()) {
+			return;
+		}
+		
+		//copy the list
+		for(Field f : network.getFields()) {
+			fieldsCopy.add(f);
+		}
+
+		
+	}
 	/*
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IllegalPlayerMoveException {
 		
 		userManagement.User user = new userManagement.User("hallo", "hehe");
 		Board board = new Board(user);
 		
-		Field f = board.getFields().get(8);
-		RouteElement element = new RouteElement(Orientations.TWOHUNDREDSEVENTY_DEGREES, ElementTypes.STATION_2, false);
-		try {
-			f.addElement(element);
-		} catch (IllegalPlayerMoveException e) {
-			e.printStackTrace();
-		}
+		Field one = board.getFields().get(1);
+		one.addElement(new RouteElement(Orientations.NINETY_DEGREES, ElementTypes.ROAD, false));
 		
-		ArrayList<Network> networks = new ArrayList<Network>();
-		Network network = new Network();
-		network.getFields().add(f);
-		networks.add(network);
+		Field three = board.getFields().get(3);
+		three.addElement(new RouteElement(Orientations.NINETY_DEGREES, ElementTypes.RAIL, false));
 		
-		Field f2 = board.getFields().get(3);
-		RouteElement element2 = new RouteElement(Orientations.NINETY_DEGREES, ElementTypes.RAIL, false);
-		try {
-			f2.addElement(element2);
-		} catch (IllegalPlayerMoveException e) {
-			e.printStackTrace();
-		}
+		Field four = board.getFields().get(4);
+		four.addElement(new RouteElement(Orientations.NINETY_DEGREES, ElementTypes.OVERPASS, false));
+		
+		Field seven = board.getFields().get(7);
+		seven.addElement(new RouteElement(Orientations.ZERO_DEGREES, ElementTypes.RAIL, false));
+		
+		Field eight = board.getFields().get(8);
+		eight.addElement(new RouteElement(Orientations.NINETY_DEGREES, ElementTypes.OVERPASS, false));
+		
+		Field nine = board.getFields().get(9);
+		nine.addElement(new RouteElement(Orientations.ZERO_DEGREES, ElementTypes.RAIL, false));
+		
+		Field ten = board.getFields().get(10);
+		ten.addElement(new RouteElement(Orientations.ONEHUNDREDEIGHTY_DEGREES, ElementTypes.STATION_2, false));
+		
+		Field eleven = board.getFields().get(11);
+		eleven.addElement(new RouteElement(Orientations.ZERO_DEGREES, ElementTypes.STATION_TURN, true));
+		
+		Field fifteen = board.getFields().get(15);
+		fifteen.addElement(new RouteElement(Orientations.NINETY_DEGREES, ElementTypes.ROAD, false));
+		
+		Field seventeen = board.getFields().get(17);
+		seventeen.addElement(new RouteElement(Orientations.NINETY_DEGREES, ElementTypes.ROAD_TURN, false));
+		
+		Field eighteen = board.getFields().get(18);
+		eighteen.addElement(new RouteElement(Orientations.ZERO_DEGREES, ElementTypes.ROAD, false));
+		
+		Field nineteen = board.getFields().get(19);
+		nineteen.addElement(new RouteElement(Orientations.TWOHUNDREDSEVENTY_DEGREES, ElementTypes.ROAD_TURN, false));
+		
+		Field twentyone = board.getFields().get(21);
+		twentyone.addElement(new RouteElement(Orientations.ZERO_DEGREES, ElementTypes.ROAD, false));
+		
+		Field twentytwo = board.getFields().get(22);
+		twentytwo.addElement(new RouteElement(Orientations.ONEHUNDREDEIGHTY_DEGREES, ElementTypes.ROAD_TJUNCTION, false));
+		
+		Field twentythree = board.getFields().get(23);
+		twentythree.addElement(new RouteElement(Orientations.TWOHUNDREDSEVENTY_DEGREES, ElementTypes.ROAD_TURN, false));
+		
+		Field twentysix = board.getFields().get(26);
+		twentysix.addElement(new RouteElement(Orientations.NINETY_DEGREES, ElementTypes.ROAD_TJUNCTION, false));
+		
+		Field twentyseven = board.getFields().get(27);
+		twentyseven.addElement(new RouteElement(Orientations.ZERO_DEGREES, ElementTypes.ROAD, false));
+		
+		Field thirty = board.getFields().get(30);
+		thirty.addElement(new RouteElement(Orientations.NINETY_DEGREES, ElementTypes.ROAD, false));
+		
+		Field thirtyone = board.getFields().get(31);
+		thirtyone.addElement(new RouteElement(Orientations.NINETY_DEGREES, ElementTypes.STATION_TURN, false));
+		
+		Field thirtytwo = board.getFields().get(32);
+		thirtytwo.addElement(new RouteElement(Orientations.NINETY_DEGREES, ElementTypes.ROAD_CROSSROAD, false));
+		
+		Field thirtythree = board.getFields().get(33);
+		thirtythree.addElement(new RouteElement(Orientations.ZERO_DEGREES, ElementTypes.STATION_3, false));
+		
+		Field thirtyfive = board.getFields().get(35);
+		thirtyfive.addElement(new RouteElement(Orientations.ZERO_DEGREES, ElementTypes.RAIL, false));
+		
+		Field thirtysix = board.getFields().get(36);
+		thirtysix.addElement(new RouteElement(Orientations.ZERO_DEGREES, ElementTypes.RAIL_TJUNCTION, false));
+		
+		Field thirtyseven = board.getFields().get(37);
+		thirtyseven.addElement(new RouteElement(Orientations.ZERO_DEGREES, ElementTypes.STATION_TURN, true));
+		
+		Field thirtyeight = board.getFields().get(38);
+		thirtyeight.addElement(new RouteElement(Orientations.NINETY_DEGREES, ElementTypes.RAIL, false));
+		
+		Field forty = board.getFields().get(40);
+		forty.addElement(new RouteElement(Orientations.NINETY_DEGREES, ElementTypes.RAIL_TURN, false));
+		
+		Field fortyone = board.getFields().get(41);
+		fortyone.addElement(new RouteElement(Orientations.ZERO_DEGREES, ElementTypes.RAIL, false));
+		
+		Field fortythree = board.getFields().get(43);
+		fortythree.addElement(new RouteElement(Orientations.TWOHUNDREDSEVENTY_DEGREES, ElementTypes.STATION, false));
+		
+		Field fortyfive = board.getFields().get(45);
+		fortyfive.addElement(new RouteElement(Orientations.NINETY_DEGREES, ElementTypes.RAIL_TJUNCTION, false));
+		
+		Field fortysix = board.getFields().get(46);
+		fortysix.addElement(new RouteElement(Orientations.ZERO_DEGREES, ElementTypes.RAIL, false));
+		
+		Field fortyseven = board.getFields().get(47);
+		fortyseven.addElement(new RouteElement(Orientations.ZERO_DEGREES, ElementTypes.STATION_TURN, false));
 		
 		ResultCalculator calc = new ResultCalculator();
-		Field startingPoint = calc.findStartingPoint(board, networks);
-		if(startingPoint == null) {
-			System.out.println("No starting point found");
-			return;
-		}
-		Directions[] roadConnections = startingPoint.getElement().getRoadConnections();
-		Directions[] railConnections = startingPoint.getElement().getRailConnections();
-		
-		System.out.println(startingPoint);
-		System.out.println("Road Connections:");
-		for(int i = 0; i < roadConnections.length; i++) {
-			System.out.println(roadConnections[i]);
-		}
-		System.out.println("Rail Connections");
-		for(int j = 0; j < railConnections.length; j++) {
-			System.out.println(railConnections[j]);
-		}
-		
 		int result = calc.calculateResult(board);
 		System.out.println(result);
 	}

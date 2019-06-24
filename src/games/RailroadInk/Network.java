@@ -24,6 +24,26 @@ public class Network {
 		this.errors = 0;
 	}
 
+	/* -- METHODS -- */
+	
+	@Override
+	public String toString() {
+		String description = "Network:\n";
+		description += "\nFields:\n";
+		for(Field f : fields) {
+			description += f + "\n";
+		}
+		description += "\nExits:\n";
+		for(Exits e : exits) {
+			description += e + "\n";
+		}
+		description += "\nLength of the longest road: " + longestRoad.size(); 
+		description += "\nLength 0f the longest track: " + longestTrack.size();
+		description += "\nNumber of errors: " + errors + "\n";
+		description += "\n------------";
+		return description;
+	}
+	
 	/* -- GETTERS AND SETTERS */
 	
 	public ArrayList<Field> getFields() {
@@ -48,5 +68,13 @@ public class Network {
 	
 	public void addError() {
 		this.errors++;
+	}
+
+	public void setLongestRoad(ArrayList<Field> longestRoad) {
+		this.longestRoad = longestRoad;
+	}
+
+	public void setLongestTrack(ArrayList<Field> longestTrack) {
+		this.longestTrack = longestTrack;
 	}
 }
