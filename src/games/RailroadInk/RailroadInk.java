@@ -30,6 +30,7 @@ public class RailroadInk extends Game {
 	
 	//a String is used to indicate if a player has left
 	private String playerLeft = null;
+
 	
 	/* -- METHODS NECESSARY FOR THE SERVER -- */
 	
@@ -151,6 +152,12 @@ public class RailroadInk extends Game {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+/*		@Override
+	public  void sendGameDataToClients(String eventName, String id)
+	{
+		this.createServerSentEvent(e, ed) = new Event
+	} */
 
 	
 	

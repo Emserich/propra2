@@ -191,6 +191,13 @@ public class TicTacToe extends Game {
 
 		return gameData;
 	}
+	
+	
+/*	@Override
+	protected final void sendGameDataToClients(String eventName, String id)
+	{
+		
+	} */
 
 	private String isHost(User user) {
 		if(user==creator) return ",HOST";
