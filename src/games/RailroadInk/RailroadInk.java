@@ -36,7 +36,7 @@ public class RailroadInk extends Game {
 	@Override
 	public String getSite() {
 		try {
-			FileHelper.getFile("RailroadInk/index.html");
+			return FileHelper.getFile("RailroadInk/index.html");
 		} catch (IOException e) {
 			System.err.println("Loading of file RailroadInk/index.html failed");
 		}
