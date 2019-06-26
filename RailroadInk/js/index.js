@@ -11,19 +11,31 @@ var mirror = 0; //Spiegelung
 $(document).on("click",".dice_img", function () {
 	// $('#rotation_image').html($(this));
 
-	angle = 0;
-  	mirror = 0;
+	if (!$(this).hasClass('img_used')) {
 
-	var img = $('<img />').attr({
-            'id': 'dice_rotated_'+img_index,
-            'class': 'dice_rotated unset',
-            'src': $(this).attr('src'),
-            'draggable':'true'
-        });
+		$(this).addClass('img_used');
 
-	$('#rotation_image').html(img);
-	$('.rotation_field').fadeIn( "fast" );
+		angle = 0;
+	  	mirror = 0;
+
+		var img = $('<img />').attr({
+	            'id': 'dice_rotated_'+img_index,
+	            'class': 'dice_rotated unset',
+	            'src': $(this).attr('src'),
+	            'draggable':'true'
+	        });
+
+		$('#rotation_image').html(img);
+		$('.rotation_field').fadeIn( "fast" );
+	}
 });
+
+//Würfel wieder wählbar machen wenn neu gewürfelt
+$(document).on("click","#roll-button", function () {
+	
+		$('.dice_cube').removeClass("img_used");
+});
+
 
 
 // Rotation
@@ -139,6 +151,8 @@ document.addEventListener("drop", function(event) {
 
 	if ( event.target.className == "field" && $('#'+data).hasClass('unset') ) {
 		// document.getElementById("demo").style.color = "";
+
+		// $('#'+event.target.id).append('<div class="round_nr">&#10003;</div>');
 		
 		event.target.style.border = "";
 		$(".field").css("border","");
@@ -150,7 +164,9 @@ document.addEventListener("drop", function(event) {
 		
 
 		$('.rotation_field').hide();
-		img_index++;
+		img_index++; //ID hochzählen
+
+		$('#'+event.target.id).prepend('<div class="round_nr">5</div>'); //Runde eintragen
 	}
 });
 
@@ -207,16 +223,4 @@ function toggleFieldnumber() {
 			document.getElementById("field_"+i).innerHTML = '<span>'+i+'</span>';
 		}
 	}
-}
-
-
-function setMarker(id) {
-
-	if (id<=49 && id>0) {
-		document.getElementById("field_"+id).innerHTML = '<div>&#10003;</div>'; //aktuelle Rundenzahl muss eingetragen werden
-	}
-	else {
-		alert("Feld existiert nicht!");
-	}
-
 }
