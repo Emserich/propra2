@@ -42,10 +42,13 @@ h3 {
 
 .dice_img {
 	cursor: pointer;
-	-ms-user-select: None;
- 	-moz-user-select: None;
- 	-webkit-user-select: None;
+	/*-ms-user-select: None;*/
+ 	/*-moz-user-select: None;*/
+ 	/*-webkit-user-select: None;*/
 }
+.dice_img::selection {
+	background-color: rgba(0,0,0,0);
+} 
 
 .img_used {
 	cursor: not-allowed;
