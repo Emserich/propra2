@@ -84,11 +84,12 @@ function getMirror() { //Gibt die aktuelle Spiegelung an die Rotation
 	  	return 'scale(1, -1)';
 	}
 };
+// -----------------------------/Rotation und Spiegelung-----------------------------
+
 
 
 
 // -----------------------------DRAG & DROP-----------------------------
-
 //Kein anderes Image darf draggable sein
 $('img').attr('draggable', false);
 
@@ -169,41 +170,12 @@ document.addEventListener("drop", function(event) {
 		$('#'+event.target.id).prepend('<div class="round_nr">5</div>'); //Runde eintragen
 	}
 });
+// -----------------------------/DRAG & DROP-----------------------------
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// -----------------------------BLA-----------------------------
 function insertFieldnumber() {
 
 	for (var i = 1; i <= 49; i++) {
@@ -224,3 +196,4 @@ function toggleFieldnumber() {
 		}
 	}
 }
+// -----------------------------/BLA-----------------------------
