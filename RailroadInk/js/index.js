@@ -15,6 +15,13 @@ $(document).on("click",".dice_img", function () {
 
 		$(this).addClass('img_used');
 
+		if ($(this).is('#d2_2') || $(this).is('#d2_5')) {
+			$('#mirror_row').show();
+		}
+		else {
+			$('#mirror_row').hide();
+		}
+
 		angle = 0;
 	  	mirror = 0;
 
@@ -84,11 +91,12 @@ function getMirror() { //Gibt die aktuelle Spiegelung an die Rotation
 	  	return 'scale(1, -1)';
 	}
 };
+// -----------------------------/Rotation und Spiegelung-----------------------------
+
 
 
 
 // -----------------------------DRAG & DROP-----------------------------
-
 //Kein anderes Image darf draggable sein
 $('img').attr('draggable', false);
 
@@ -169,41 +177,25 @@ document.addEventListener("drop", function(event) {
 		$('#'+event.target.id).prepend('<div class="round_nr">5</div>'); //Runde eintragen
 	}
 });
+// -----------------------------/DRAG & DROP-----------------------------
 
 
 
 
 
 
+// -----------------------------Ergebnis-Modal-----------------------------
+$(document).on("click","#ergebnis_button", function () {
+	$('#modal_finish').modal('toggle')
+});
+// -----------------------------/Ergebnis-Modal-----------------------------
 
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// -----------------------------BLA-----------------------------
 function insertFieldnumber() {
 
 	for (var i = 1; i <= 49; i++) {
@@ -224,3 +216,4 @@ function toggleFieldnumber() {
 		}
 	}
 }
+// -----------------------------/BLA-----------------------------

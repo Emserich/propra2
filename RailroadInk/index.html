@@ -131,7 +131,7 @@
           <div class="row mt-3 mb-1">
             <div class="col-md-12 text-center">
               <div class="rotation_field" style="display: none;">
-                <div class="row">
+                <div class="row" id="mirror_row">
                   <div class="col-md-12">
                     <button class="btn button_rotation" id="mirror">&#8646;</button>
                   </div>
@@ -274,6 +274,14 @@
 
 
 
+          <button type="button" class="btn btn-primary mt-5" id="ergebnis_button">Ergebnis</button> <!-- Aufruf später ohen Button durch Javascript  -->
+          
+
+
+          
+
+
+
 
         </div><!-- /Spalte rechts -->
 
@@ -281,10 +289,150 @@
     </div><!-- /container -->
 
 
-    <!-- <footer class="container text-muted">
-      <hr>
-      &copy; ProPra'19 Gruppe 3
-    </footer> -->
+    <!-- ################## Ergebnis-Modal ################## -->
+    <div class="modal fade" id="modal_finish" tabindex="-1" role="dialog" aria-labelledby="modal_finish_title" aria-hidden="true">
+      <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modal_finish_title">Spielende</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+
+            <div class="container">              
+
+              <div class="row score_row">
+                <div class="col-auto">
+                  <img class="score_img" src="images/score/score_1.png">
+                  <span class="score_text">= 42</span>
+                </div>
+                <div class="col-auto">
+                  <img class="score_img" src="images/score/score_2.png">
+                  <span class="score_text">= 42</span>
+                </div>
+                <div class="col-auto">
+                  <img class="score_img" src="images/score/score_3.png">
+                  <span class="score_text">= 42</span>
+                </div>
+                <div class="col-auto">
+                  <img class="score_img" src="images/score/score_4.png">
+                  <span class="score_text">= 42</span>
+                </div>
+                <div class="col-auto">
+                  <img class="score_img" src="images/score/score_5.png">
+                  <span class="score_text">= 42</span>
+                </div>
+                <div class="col-auto ml-auto">
+                  <img class="score_img" src="images/score/score_final.png">
+                  <span class="score_text_final">210 Punkte</span>
+                </div>
+              </div>
+
+              <div class="text-center my-4">
+                <h5>Der Sieger ist <b>Florian Thomas</b> mit 300 Punkten:</h5>              
+              </div>
+
+              <div class="col_board"> <!-- Spielbrett -->
+
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="field" id="result_field_1" ></div>
+                    <div class="field" id="result_field_2" ></div>
+                    <div class="field" id="result_field_3" ></div>
+                    <div class="field" id="result_field_4" ></div>
+                    <div class="field" id="result_field_5" ></div>
+                    <div class="field" id="result_field_6" ></div>
+                    <div class="field" id="result_field_7" ></div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="field" id="result_field_8" ></div>
+                    <div class="field" id="result_field_9" ></div>
+                    <div class="field" id="result_field_10"></div>
+                    <div class="field" id="result_field_11"></div>
+                    <div class="field" id="result_field_12"></div>
+                    <div class="field" id="result_field_13"></div>
+                    <div class="field" id="result_field_14"></div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="field" id="result_field_15"></div>
+                    <div class="field" id="result_field_16"></div>
+                    <div class="field" id="result_field_17"></div>
+                    <div class="field" id="result_field_18"></div>
+                    <div class="field" id="result_field_19"></div>
+                    <div class="field" id="result_field_20"></div>
+                    <div class="field" id="result_field_21"></div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="field" id="result_field_22"></div>
+                    <div class="field" id="result_field_23"></div>
+                    <div class="field" id="result_field_24"></div>
+                    <div class="field" id="result_field_25"></div>
+                    <div class="field" id="result_field_26"></div>
+                    <div class="field" id="result_field_27"></div>
+                    <div class="field" id="result_field_28"></div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="field" id="result_field_29"></div>
+                    <div class="field" id="result_field_30"></div>
+                    <div class="field" id="result_field_31"></div>
+                    <div class="field" id="result_field_32"></div>
+                    <div class="field" id="result_field_33"></div>
+                    <div class="field" id="result_field_34"></div>
+                    <div class="field" id="result_field_35"></div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="field" id="result_field_36"></div>
+                    <div class="field" id="result_field_37"></div>
+                    <div class="field" id="result_field_38"></div>
+                    <div class="field" id="result_field_39"></div>
+                    <div class="field" id="result_field_40"></div>
+                    <div class="field" id="result_field_41"></div>
+                    <div class="field" id="result_field_42"></div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="field" id="result_field_43"></div>
+                    <div class="field" id="result_field_44"></div>
+                    <div class="field" id="result_field_45"></div>
+                    <div class="field" id="result_field_46"></div>
+                    <div class="field" id="result_field_47"></div>
+                    <div class="field" id="result_field_48"></div>
+                    <div class="field" id="result_field_49"></div>
+                  </div>
+                </div>
+              </div> <!-- /Spielbrett -->
+            </div> <!-- /container -->
+
+          </div> <!-- /modal-body -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">Fertig</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- ################## /Ergebnis-Modal ################## -->
+
+
+
 
   </body>
 

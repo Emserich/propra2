@@ -35,7 +35,7 @@ input[type=number] {
     -moz-appearance:textfield; /* Firefox */
 }
 
-h3 {
+h3, h5 {
 	color: #e85a4d;
 	font-family:verdana, sans-serif;
 }
@@ -237,6 +237,51 @@ h3 {
 
 
 
+.modal-header {
+	background-color: #cfe8f8;
+	border-bottom: 1px solid #e85a4d;
+}
+#modal_finish_title {
+	font-weight: bold;
+	color: #e85a4d;
+	font-family:verdana, sans-serif;
+}
+.modal-body {
+	background-color: #cfe8f8;
+}
+.modal-footer {
+	background-color: #cfe8f8;
+	border-top: 1px solid #e85a4d;
+}
 
+.score_row {
+	margin: 3rem 3rem;
+	margin-top: 1rem;
+	padding: 15px 15px;
+	border: 3px solid #e85a4d;
+	border-radius: 15px;
+}
+.score_row .col-auto {
+	padding: 15px;
+}
+.score_img {
+	width: 3em;
+	max-width: 4em;
+	height: auto;
+}
+.score_text, .score_text_final {
+	margin-left: 0.3em;
+	font-size: 1.2em;
+	color: #e85a4d;
+	font-family:verdana, sans-serif;
+	vertical-align: middle;
+	/*text-shadow: 0.7px 0.7px 0.7px black;*/
+}
+.score_text_final {
+	font-weight: bold;
+	font-size: 1.5em;
+	text-shadow: 0.7px 0.7px 0px black;
+	/*text-decoration: underline;*/
+  	/*text-decoration-color: black;*/
 
- 
+}
