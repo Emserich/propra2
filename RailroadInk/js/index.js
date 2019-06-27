@@ -182,6 +182,19 @@ document.addEventListener("drop", function(event) {
 
 
 
+
+
+// -----------------------------Ergebnis-Modal-----------------------------
+$(document).on("click","#ergebnis_button", function () {
+	$('#modal_finish').modal('toggle')
+});
+// -----------------------------/Ergebnis-Modal-----------------------------
+
+
+
+
+
+
 // -----------------------------BLA-----------------------------
 function insertFieldnumber() {
 
