@@ -11,14 +11,11 @@ public static String getPage(boolean loggedIn, String name, boolean game, boolea
 					page.append(chatCSS);
 				}
 				
-									
+				if(game)
+					page.append(gameCSS);
+					
 				try {
 					page.append(FileHelper.getFile(mainCSS));
-
-					if(game) {
-						page.append(gameCSS);
-					}
-
 					page.append("</style>");
 					page.append("<script>");
 					page.append(FileHelper.getFile(mainJS));
@@ -101,6 +98,51 @@ public static String getPage(boolean loggedIn, String name, boolean game, boolea
 					}
 					page.append(toShow);
 				}
+
+
+				if(game){
+
+
+					page.append("<div id=\"head_new\"></div>" +
+						"<div id=\"top1_new\">" +
+						"<div id=\"logo_new\"></div>" +
+						"<div id=\"login_new\">");
+					if(!loggedIn) {
+						// no active session, show login and register links
+						page.append(
+								"<ul id=\"list_new\">" +
+								"<li><a href=\"/login\">LOGIN</a>"+ SPACE +"|" + SPACE + "<a href=\"/register\">REGISTER</a></li>" +
+								"</ul>"); 
+					} else {
+						// session found, show logout link
+						String logoutlink = "";
+						if(context.equals("")) {
+							logoutlink = "Hallo " + name + SPACE + SPACE + "|" + SPACE + SPACE + "<a href=\""+context+"logout\">LOGOUT</a>";
+						} else {
+							logoutlink = "Hallo " + name + SPACE + SPACE + "|" + SPACE + SPACE + "<a href=\"javascript:sendDataToServer('logout')\">LOGOUT</a>";
+						}
+						page.append(logoutlink);
+					}
+					page.append("</div></div>");	
+					
+					// menu tab
+					page.append("<div id=\"menu_new\">");
+					if(loggedIn) {
+						
+						page.append("<ul id=\"list_new\">" +
+									"<li>"+
+									"<a href=\"javascript:sendDataToServer('quit')\">SPIEL VERLASSEN</a>");
+						
+						page.append("</li></ul>");
+					}
+					page.append("</div>");
+
+
+				}
+
+
+
+
 				page.append(
 				"</div>" +
 				HTML_END);
