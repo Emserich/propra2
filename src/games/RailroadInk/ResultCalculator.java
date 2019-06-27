@@ -21,13 +21,23 @@ public class ResultCalculator {
 			score -= errors;
 			
 			//for every linked exit, the player gets points
-			//TODO change depending on how the result is actually calculated
 			ArrayList<Exits> exits = n.getExits();
-			score += exits.size() * 3;
-			
-			if(exits.size() > 5) {
-				score += exits.size() - 5;
+
+			//however, the player only gets points if they connected more than one exit
+			int numberOfExits = exits.size();
+			if(numberOfExits > 1) {
+				numberOfExits--;
+				score += numberOfExits * 4;
 			}
+			
+			//if the network connected all 12 exits, you get a bonus point
+			if(numberOfExits == 11) {
+				score++;
+			}
+			
+			//get the longest road and the longest track of the network
+			findLongestRoad(n);
+			findLongestTrack(n);
 			
 			System.out.println(n);
 			
@@ -58,6 +68,9 @@ public class ResultCalculator {
 		//the result is an integer value
 		int longestRoadLength = 0;
 		
+		//for testing purposes, also save the position of the network
+		int position = -1;
+		
 		//go through each network
 		for(Network n : networks) {
 			//get the length of the longest road
@@ -66,6 +79,9 @@ public class ResultCalculator {
 				//if it is longer than the current longest road, change the value
 				if(longestRoadLength < currentLength) {
 					longestRoadLength = currentLength;
+					
+					//for testing purposes, also get the position of the network
+					position = networks.indexOf(n);
 				}
 			} catch (NullPointerException e) {
 				//there could be the case that the network does not have any roads
@@ -74,6 +90,16 @@ public class ResultCalculator {
 			}
 		}
 		
+		//TODO for testing, remove later
+		if(position != -1) {
+			System.out.println("\nLongest Road:\n");
+			Network longestRoad = networks.get(position);
+			for(Field f : longestRoad.getLongestRoad()) {
+				System.out.println(f);
+			}
+			System.out.println("\n----------\n");
+		}
+			
 		//return the result
 		return longestRoadLength;
 	}
@@ -81,6 +107,9 @@ public class ResultCalculator {
 	private int longestTrack(ArrayList<Network> networks) {
 		//the result is an integer value
 		int longestTrackLength = 0;
+		
+		//for testing purposes, also save the position of the network
+		int position = -1;
 		
 		//go through each network
 		for(Network n : networks) {
@@ -90,12 +119,25 @@ public class ResultCalculator {
 				//if it is longer than the current longest track, change the value
 				if(longestTrackLength < currentLength) {
 					longestTrackLength = currentLength;
+					
+					//for testing purposes, also get the position of the network
+					position = networks.indexOf(n);
 				}
 			} catch (NullPointerException e) {
 				//there could be the case that the network does not have any roads
 				//but that does not really matter
 				e.printStackTrace();
 			}
+		}
+		
+		//TODO for testing, remove later
+		if(position != -1) {
+			System.out.println("\nLongest Track:\n");
+			Network longestTrack = networks.get(position);
+			for(Field f : longestTrack.getLongestTrack()) {
+				System.out.println(f);
+			}
+			System.out.println("\n----------\n");
 		}
 		
 		//return the result 
@@ -158,9 +200,14 @@ public class ResultCalculator {
 			Network network = new Network();
 			networks.add(network);
 			
+			//TODO for testing, remove later
+			System.out.println("Errors:\n");
+			
 			//then, grow it beginning from the starting point
 			growNetwork(board, network, startingPoint);
 	
+			//TODO remove later
+			System.out.println("\n----------\n");
 		}
 
 		
@@ -574,9 +621,564 @@ public class ResultCalculator {
 			fieldsCopy.add(f);
 		}
 
+		//now, we're gonna find and store every field in the network that does not have a road on it
+		ArrayList<Field> fieldsWithoutRoads = new ArrayList<Field>();
+		for(Field f: fieldsCopy) {
+			switch(f.getElement().getType()) {
+			case ROAD:
+			case ROAD_TURN:
+			case ROAD_TJUNCTION:
+			case ROAD_CROSSROAD:
+			case OVERPASS:
+			case STATION:
+			case STATION_TURN:
+			case STATION_1:
+			case STATION_2:
+			case STATION_3:
+			case STATION_4:
+				//in all of the above cases, don't do anything, since they do contain roads
+				break;
+			case RAIL:
+			case RAIL_TURN:
+			case RAIL_TJUNCTION:
+			case RAIL_CROSSROAD:
+				//in all of the above cases, add the element to the newly defined list
+				fieldsWithoutRoads.add(f);
+				break;
+			default:
+				//undefined behaviour, just don't do anything
+			}
+		}
+		
+		//now, remove every element that does not have a road in it from the list containing the fields
+		if(!fieldsWithoutRoads.isEmpty()) {
+			//of course you can only do that if there are fields that do not contain roads
+			for(Field f : fieldsWithoutRoads) {
+				fieldsWithoutRoads.indexOf(f);
+				boolean removed = fieldsCopy.remove(f);
+				//if the element has not been removed, at least inform about this, as it is very weird behaviour
+				if(!removed) {
+					System.out.println(f + "could not be removed from the list of fields");
+				}
+			}
+		}
+		
+		//it is possible that the list of fields we're examining is now empty
+		//in this case, return, because there are no roads in this network
+		if(fieldsCopy.isEmpty()) {
+			return;
+		}
+		
+		//create a copy of the board that only contains the fields with roads
+		userManagement.User user = new userManagement.User("resultCalculationUser", "resultCalculationUserPassword");
+		Board roadsOnlyBoard = new Board(user);
+		
+		//fill the board
+		for(Field f : fieldsCopy) {
+			int position = f.getPosition();
+			Field currField = roadsOnlyBoard.getFields().get(position);
+			RouteElement currElement = new RouteElement(f.getElement().getOrientation(), f.getElement().getType(), f.getElement().isMirrored());
+			try {
+				currField.addElement(currElement);
+			} catch (IllegalPlayerMoveException e) {
+				//shouldn't happen, so don't do anything
+				e.printStackTrace();
+			}
+		}
+		
+		//get the every road on the board
+		ArrayList<Network> roads = findRoads(roadsOnlyBoard);
+		
+		//check if there are any
+		if(roads == null || roads.isEmpty()) {
+			//return, because we can't do anything in this case
+			return;
+		}
+		
+		//go through each road and find the longest one
+		int longestRoad = 0;
+		int longestRoadPosition = -1;
+		for(Network road : roads) {
+			if(road.getFields().size() > longestRoad) {
+				longestRoad = road.getFields().size();
+				longestRoadPosition = roads.indexOf(road);
+			}
+		}
+		
+		//check if we have found anything productive
+		if(longestRoadPosition == -1) {
+			return;
+		}
+		
+		//finally, set the longest road of the network
+		Network longestRoadNetwork = roads.get(longestRoadPosition);
+		network.setLongestRoad(longestRoadNetwork.getFields());
 		
 	}
-	/*
+	
+	private ArrayList<Network> findRoads(Board board) {
+		//the result is an ArrayList of networks
+		ArrayList<Network> networks = new ArrayList<Network>();
+		
+		//we have to keep looking until there are no more fields that don't belong to any network
+		boolean fieldsLeft = true;
+		
+		while(fieldsLeft) {
+		
+			//find a starting point
+			Field startingPoint = findStartingPoint(board, networks);
+		
+			//if the result is null, then there are no more networks to be found
+			if(startingPoint == null) {
+				fieldsLeft = false;
+				continue;
+			}
+			
+			//create a new network
+			Network network = new Network();
+			
+			//then, find every road that starts from this point
+			//this already influences the result
+			startRoad(board, network, startingPoint, networks);
+			
+		}
+
+		
+		//return the result
+		return networks;
+	}
+	
+	public void startRoad(Board board, Network network, Field field, ArrayList<Network> result) {
+		//get the matching road connections of the field
+		Directions[] roadConnections = field.getElement().getRoadConnections();
+		
+		//check whether there are any road connections
+		if(roadConnections == null || roadConnections.length <= 0) {
+			//if not, you cannot start a road from here
+			return;
+		}
+		
+		//go through each connection
+		for(int i = 0; i < roadConnections.length; i++) {
+			//copy the fields of the network that was given
+			Network copyOfNetwork = new Network();
+			for(Field f : network.getFields()) {
+				Field copyField = new Field(f.getPosition(), f.getElement());
+				copyOfNetwork.getFields().add(copyField);
+			}
+			
+			//add it to the result
+			result.add(copyOfNetwork);
+			
+			//now, grow the road from here
+			growRoad(board, copyOfNetwork, field, roadConnections[i], result);
+		}
+	}
+	
+	public void growRoad(Board board, Network network, Field field, Directions direction, ArrayList<Network> result) {
+		//get the matching road connections of the field
+		Directions[] roadConnections = field.getElement().getRoadConnections();
+		
+		//check whether there are any road connections
+		if(roadConnections == null || roadConnections.length <= 0) {
+			//if not, you cannot go any further into this direction
+			return;
+		}
+		
+		//now if we haven't been given a direction, we have to check whether this field has more than one road connection
+		if(direction == null) {
+			if(roadConnections.length == 1) {
+				//in this case, we can simply set the direction to the only one this element has
+				direction = roadConnections[0];
+			} else {
+				//in this case, there is more than one direction and we have to start anew
+				startRoad(board, network, field, result);
+				//and, very importantly, we have to stop this method
+				return;
+			}
+		}
+		
+		//check whether the field is already part of the network
+		if(containsField(network.getFields(), field)) {
+			//in this case, the field is already part of the network, therefore return
+			return;
+		}
+		
+		//if not, add the field to the network
+		network.getFields().add(field);
+		
+		//depending on the direction, we have to get the neighbouring field
+		Field neighbour = null;
+		switch(direction) {
+		case NORTH:
+			neighbour = board.getTopNeighbour(field);
+			break;
+		case EAST:
+			neighbour = board.getRightNeighbour(field);
+			break;
+		case SOUTH:
+			neighbour = board.getBottomNeighbour(field);
+			break;
+		case WEST:
+			neighbour = board.getLeftNeighbour(field);
+			break;
+		default:
+			//undefined behaviour, just do nothing
+		}
+				
+		//if the neighbour is null, then the network obviously cannot grow any further into this direction
+		if(neighbour == null) {
+			//therefore, return
+			return;
+		}
+				
+		//if the neighbour is empty, then the network obviously cannot grow any further into this direction
+		if(neighbour.isEmpty()) {
+			//therefore, return
+			return;
+		}
+				
+		//if the neighbour is not empty, check whether it has a connection to the current field
+		Directions[] neighbourConnections = neighbour.getElement().getRoadConnections();
+		boolean matchingConnection = false;
+		if(neighbourConnections != null) {
+			//therefore, go through each of the connections
+			for(int k = 0; k < neighbourConnections.length; k++) {
+				//if we have already found a matching connection, stop
+				if(matchingConnection) {
+					break;
+				}
+						
+				//check whether the direction of the neighbour matches the one of the field we're looking at
+				switch(neighbourConnections[k]) {
+				case NORTH:
+					if(direction == Directions.SOUTH) {
+						matchingConnection = true;
+					}
+					break;
+				case EAST:
+					if(direction == Directions.WEST) {
+						matchingConnection = true;
+					}
+					break;
+				case SOUTH:
+					if(direction == Directions.NORTH) {
+						matchingConnection = true;
+					}
+					break;
+				case WEST:
+					if(direction == Directions.EAST) {
+						matchingConnection = true;
+					}
+					break;
+				default:
+					//undefined behaviour, just do nothing and hope it helps
+				}
+			}
+				
+			//if there is no matching connection, the network can obviously not grow any further
+			if(!matchingConnection) {
+				//therefore, return
+				return;
+			}
+				
+			//if the neighbour has a matching connection, check whether it is one of the exits
+			if(neighbour.getPosition() < 0) {
+				//obviously, the network cannot grow any further from this
+				return;
+			}
+				
+			//in all other cases, the network can grow further from here
+			growRoad(board, network, neighbour, null, result);
+		}
+	}
+	
+	public void findLongestTrack(Network network) {
+		//copy the fields of the network into a new ArrayList (to not influence the fields of the network)
+		ArrayList<Field> fieldsCopy = new ArrayList<Field>();
+		
+		//only do that if the network has fields (but that should be the case)
+		if(network.getFields() == null || network.getFields().isEmpty()) {
+			return;
+		}
+		
+		//copy the list
+		for(Field f : network.getFields()) {
+			fieldsCopy.add(f);
+		}
+
+		//now, we're gonna find and store every field in the network that does not have a rails on it
+		ArrayList<Field> fieldsWithoutRails = new ArrayList<Field>();
+		for(Field f: fieldsCopy) {
+			switch(f.getElement().getType()) {
+			case ROAD:
+			case ROAD_TURN:
+			case ROAD_TJUNCTION:
+			case ROAD_CROSSROAD:
+			case OVERPASS:
+				//in all of the above cases, add the field to the newly defined list
+				fieldsWithoutRails.add(f);
+				break;
+			case STATION:
+			case STATION_TURN:
+			case STATION_1:
+			case STATION_2:
+			case STATION_3:
+			case STATION_4:
+			case RAIL:
+			case RAIL_TURN:
+			case RAIL_TJUNCTION:
+			case RAIL_CROSSROAD:
+				//in all of the above cases, don't do anything, since the elements do contain rails
+				break;
+			default:
+				//undefined behaviour, just don't do anything
+			}
+		}
+		
+		//now, remove every element that does not have rails in it from the list containing the fields
+		if(!fieldsWithoutRails.isEmpty()) {
+			//of course you can only do that if there are fields that do not contain rails
+			for(Field f : fieldsWithoutRails) {
+				fieldsWithoutRails.indexOf(f);
+				boolean removed = fieldsCopy.remove(f);
+				//if the element has not been removed, at least inform about this, as it is very weird behaviour
+				if(!removed) {
+					System.out.println(f + "could not be removed from the list of fields");
+				}
+			}
+		}
+		
+		//it is possible that the list of fields we're examining is now empty
+		//in this case, return, because there are no rails in this network
+		if(fieldsCopy.isEmpty()) {
+			return;
+		}
+		
+		//create a copy of the board that only contains the fields with rails
+		userManagement.User user = new userManagement.User("resultCalculationUser", "resultCalculationUserPassword");
+		Board railsOnlyBoard = new Board(user);
+		
+		//fill the board
+		for(Field f : fieldsCopy) {
+			int position = f.getPosition();
+			Field currField = railsOnlyBoard.getFields().get(position);
+			RouteElement currElement = new RouteElement(f.getElement().getOrientation(), f.getElement().getType(), f.getElement().isMirrored());
+			try {
+				currField.addElement(currElement);
+			} catch (IllegalPlayerMoveException e) {
+				//shouldn't happen, so don't do anything
+				e.printStackTrace();
+			}
+		}
+		
+		//get the every road on the board
+		ArrayList<Network> rails = findRails(railsOnlyBoard);
+		
+		//check if there are any
+		if(rails == null || rails.isEmpty()) {
+			//return, because we can't do anything in this case
+			return;
+		}
+		
+		//go through each rail and find the longest one
+		int longestRailLength = 0;
+		int longestRailPosition = -1;
+		for(Network rail : rails) {
+			if(rail.getFields().size() > longestRailLength) {
+				longestRailLength = rail.getFields().size();
+				longestRailPosition = rails.indexOf(rail);
+			}
+		}
+		
+		//check if we have found anything productive
+		if(longestRailPosition == -1) {
+			return;
+		}
+		
+		//finally, set the longest road of the network
+		Network longestRail = rails.get(longestRailPosition);
+		network.setLongestTrack(longestRail.getFields());
+		
+	}
+	
+	private ArrayList<Network> findRails(Board board) {
+		//the result is an ArrayList of networks
+		ArrayList<Network> networks = new ArrayList<Network>();
+		
+		//we have to keep looking until there are no more fields that don't belong to any network
+		boolean fieldsLeft = true;
+		
+		while(fieldsLeft) {
+		
+			//find a starting point
+			Field startingPoint = findStartingPoint(board, networks);
+		
+			//if the result is null, then there are no more networks to be found
+			if(startingPoint == null) {
+				fieldsLeft = false;
+				continue;
+			}
+			
+			//create a new network
+			Network network = new Network();
+			
+			//then, find every track that starts from this point
+			//this already influences the result
+			startRail(board, network, startingPoint, networks);
+			
+		}
+
+		
+		//return the result
+		return networks;
+	}
+	
+	public void startRail(Board board, Network network, Field field, ArrayList<Network> result) {
+		//get the matching rail connections of the field
+		Directions[] railConnections = field.getElement().getRailConnections();
+		
+		//check whether there are any road connections
+		if(railConnections == null || railConnections.length <= 0) {
+			//if not, you cannot start a road from here
+			return;
+		}
+		
+		//go through each connection
+		for(int i = 0; i < railConnections.length; i++) {
+			//copy the fields of the network that was given
+			Network copyOfNetwork = new Network();
+			for(Field f : network.getFields()) {
+				Field copyField = new Field(f.getPosition(), f.getElement());
+				copyOfNetwork.getFields().add(copyField);
+			}
+			
+			//add it to the result
+			result.add(copyOfNetwork);
+			
+			//now, grow the road from here
+			growRail(board, copyOfNetwork, field, railConnections[i], result);
+		}
+	}
+	
+	public void growRail(Board board, Network network, Field field, Directions direction, ArrayList<Network> result) {
+		//get the matching rail connections of the field
+		Directions[] railConnections = field.getElement().getRailConnections();
+		
+		//check whether there are any rail connections
+		if(railConnections == null || railConnections.length <= 0) {
+			//if not, you cannot go any further into this direction
+			return;
+		}
+		
+		//now if we haven't been given a direction, we have to check whether this field has more than one rail connection
+		if(direction == null) {
+			if(railConnections.length == 1) {
+				//in this case, we can simply set the direction to the only one this element has
+				direction = railConnections[0];
+			} else {
+				//in this case, there is more than one direction and we have to start anew
+				startRail(board, network, field, result);
+				//and, very importantly, we have to stop this method
+				return;
+			}
+		}
+		
+		//check whether the field is already part of the network
+		if(containsField(network.getFields(), field)) {
+			//in this case, the field is already part of the network, therefore return
+			return;
+		}
+		
+		//if not, add the field to the network
+		network.getFields().add(field);
+		
+		//depending on the direction, we have to get the neighbouring field
+		Field neighbour = null;
+		switch(direction) {
+		case NORTH:
+			neighbour = board.getTopNeighbour(field);
+			break;
+		case EAST:
+			neighbour = board.getRightNeighbour(field);
+			break;
+		case SOUTH:
+			neighbour = board.getBottomNeighbour(field);
+			break;
+		case WEST:
+			neighbour = board.getLeftNeighbour(field);
+			break;
+		default:
+			//undefined behaviour, just do nothing
+		}
+				
+		//if the neighbour is null, then the network obviously cannot grow any further into this direction
+		if(neighbour == null) {
+			//therefore, return
+			return;
+		}
+				
+		//if the neighbour is empty, then the network obviously cannot grow any further into this direction
+		if(neighbour.isEmpty()) {
+			//therefore, return
+			return;
+		}
+				
+		//if the neighbour is not empty, check whether it has a connection to the current field
+		Directions[] neighbourConnections = neighbour.getElement().getRailConnections();
+		boolean matchingConnection = false;
+		if(neighbourConnections != null) {
+			//therefore, go through each of the connections
+			for(int k = 0; k < neighbourConnections.length; k++) {
+				//if we have already found a matching connection, stop
+				if(matchingConnection) {
+					break;
+				}
+						
+				//check whether the direction of the neighbour matches the one of the field we're looking at
+				switch(neighbourConnections[k]) {
+				case NORTH:
+					if(direction == Directions.SOUTH) {
+						matchingConnection = true;
+					}
+					break;
+				case EAST:
+					if(direction == Directions.WEST) {
+						matchingConnection = true;
+					}
+					break;
+				case SOUTH:
+					if(direction == Directions.NORTH) {
+						matchingConnection = true;
+					}
+					break;
+				case WEST:
+					if(direction == Directions.EAST) {
+						matchingConnection = true;
+					}
+					break;
+				default:
+					//undefined behaviour, just do nothing and hope it helps
+				}
+			}
+				
+			//if there is no matching connection, the network can obviously not grow any further
+			if(!matchingConnection) {
+				//therefore, return
+				return;
+			}
+				
+			//if the neighbour has a matching connection, check whether it is one of the exits
+			if(neighbour.getPosition() < 0) {
+				//obviously, the network cannot grow any further from this
+				return;
+			}
+				
+			//in all other cases, the network can grow further from here
+			growRail(board, network, neighbour, null, result);
+		}
+	}
+	
 	public static void main(String[] args) throws IllegalPlayerMoveException {
 		
 		userManagement.User user = new userManagement.User("hallo", "hehe");
@@ -679,5 +1281,5 @@ public class ResultCalculator {
 		int result = calc.calculateResult(board);
 		System.out.println(result);
 	}
-	*/
+	
 }

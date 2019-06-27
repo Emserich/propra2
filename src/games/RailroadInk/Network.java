@@ -38,7 +38,7 @@ public class Network {
 			description += e + "\n";
 		}
 		description += "\nLength of the longest road: " + longestRoad.size(); 
-		description += "\nLength 0f the longest track: " + longestTrack.size();
+		description += "\nLength of the longest track: " + longestTrack.size();
 		description += "\nNumber of errors: " + errors + "\n";
 		description += "\n------------";
 		return description;
