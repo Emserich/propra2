@@ -15,6 +15,13 @@ $(document).on("click",".dice_img", function () {
 
 		$(this).addClass('img_used');
 
+		if ($(this).is('#d2_2') || $(this).is('#d2_5')) {
+			$('#mirror_row').show();
+		}
+		else {
+			$('#mirror_row').hide();
+		}
+
 		angle = 0;
 	  	mirror = 0;
 
