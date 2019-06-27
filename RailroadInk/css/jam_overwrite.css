@@ -1,0 +1,43 @@
+body {
+	background-color: #cfe8f8;
+	background-image: url('../images/bg.png');
+	background-size: contain;
+  	background-repeat: no-repeat;
+  	margin-top: 0.5rem;
+}
+#head, #top1, #login, #logo, #menu, #feedback, #main, #list, #serverVersion  {
+	display: none;
+}
+
+#content {
+	opacity:1;
+	position:relative; 
+	min-height:100%;	
+	width:100%;
+	color: black; 
+	padding: 0px;
+	left: 0px;
+	top:0px;
+	z-index:10;
+}
+
+a:link{ 
+	font-weight:bold; 
+	color: #3063a7; 
+	text-decoration:none; 
+}
+a:visited { 
+	font-weight:bold; 
+	color: #3063a7; 
+	text-decoration:none; 
+}
+a:hover { 
+	font-weight:bold; 
+	color:#e85a4d; 
+	text-decoration: none; 
+}
+a:active { 
+	font-weight:bold; 
+	color: #343974; 
+	text-decoration:underline; 
+}
