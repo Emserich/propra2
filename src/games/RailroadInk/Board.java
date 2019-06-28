@@ -536,6 +536,12 @@ public class Board {
 			//get the current element
 			RouteElement element = elements[i];
 			
+			//check whether the element is null
+			if(element == null) {
+				//in this case, go on with the next one
+				continue;
+			}
+			
 			//create a copy of the element in order to not change the properties of the actual element!
 			RouteElement copy = new RouteElement(element.getOrientation(), element.getType(), element.isMirrored());
 			
@@ -605,6 +611,134 @@ public class Board {
 		
 		//return the result
 		return movesLeft;
+	}
+	
+	/**
+	 * This method can be used in order to check whether the player can still do anything in a round. Moreover, it will return 
+	 * a String that contains the information about a possible move, if there are any.
+	 * In order to find out whether the player can still do anything, the remaining route elements have to be given to this 
+	 * method. Then, this method goes through each remaining element and checks whether the element can be placed anywhere
+	 * on the board. In order to do this, every possible combination of rotation and mirroring is checked. 
+	 * The method will continue with the next field if the current field is already occupied, and it will instantly terminate once it has found the first possible
+	 * move the player can do. This is done in order to save computation time.
+	 * The method also works if there are no remaining elements.
+	 * @param elements The remaining route elements the user can potentially place on the board.
+	 * @return A string formatted like this username,position,element,rotation,mirrored" or {@code null} if there are no 
+	 * possible moves left.
+	 */
+	public String proposeMove(RouteElement[] elements) {
+		//the player can still make a move as long as a single element can be placed on the board
+		boolean movesLeft = false;
+		
+		//the String that should contain the result
+		String move = null;
+		
+		//if there are no remaining elements, of course there are no moves left
+		if(elements == null || elements.length == 0) {
+			return null;
+		}
+		
+		//if there are remaining elements, go through them one by one
+		for(int i = 0;  i < elements.length; i++) {
+			//if movesLeft is true, stop
+			if(movesLeft) {
+				break;
+			}
+			
+			//get the current element
+			RouteElement element = elements[i];
+			
+			//check whether the element is null
+			if(element == null) {
+				//go on with the next one
+				continue;
+			}
+			
+			//create a copy of the element in order to not change the properties of the actual element!
+			RouteElement copy = new RouteElement(element.getOrientation(), element.getType(), element.isMirrored());
+			
+			//now, go through each field that is on the board
+			for(Field f : fields) {
+				//if the current field is already occupied, just go on with the next one in order to save computation time
+				if(!f.isEmpty()) {
+					continue;
+				}
+				
+				//check whether the element can be placed on the field in every rotation and every rotation if it is mirrored
+				//if a single way to place the element has been found, just stop already and return true
+				
+				//zero degrees
+				copy.setOrientation(Orientations.ZERO_DEGREES);
+				copy.setMirrored(false);
+				if(canElementBePlaced(f, copy)) {
+					movesLeft = true;
+					//create the string containing the move
+					move += getUser().getName() + "," + f.getPosition() + "," + copy.getType() + "," + copy.getOrientation() + "," + copy.isMirrored();
+					break;
+				}
+				copy.setMirrored(true);
+				if(canElementBePlaced(f, copy)) {
+					movesLeft = true;
+					//create the string containing the move
+					move += getUser().getName() + "," + f.getPosition() + "," + copy.getType() + "," + copy.getOrientation() + "," + copy.isMirrored();
+					break;
+				}
+				
+				//ninety degrees
+				copy.setOrientation(Orientations.NINETY_DEGREES);
+				copy.setMirrored(false);
+				if(canElementBePlaced(f, copy)) {
+					movesLeft = true;
+					//create the string containing the move
+					move += getUser().getName() + "," + f.getPosition() + "," + copy.getType() + "," + copy.getOrientation() + "," + copy.isMirrored();
+					break;
+				}
+				copy.setMirrored(true);
+				if(canElementBePlaced(f, copy)) {
+					movesLeft = true;
+					//create the string containing the move
+					move += getUser().getName() + "," + f.getPosition() + "," + copy.getType() + "," + copy.getOrientation() + "," + copy.isMirrored();
+					break;
+				}
+				
+				//one hundred and eighty degrees
+				copy.setOrientation(Orientations.ONEHUNDREDEIGHTY_DEGREES);
+				copy.setMirrored(false);
+				if(canElementBePlaced(f, copy)) {
+					movesLeft = true;
+					//create the string containing the move
+					move += getUser().getName() + "," + f.getPosition() + "," + copy.getType() + "," + copy.getOrientation() + "," + copy.isMirrored();
+					break;
+				}
+				copy.setMirrored(true);
+				if(canElementBePlaced(f, copy)) {
+					movesLeft = true;
+					//create the string containing the move
+					move += getUser().getName() + "," + f.getPosition() + "," + copy.getType() + "," + copy.getOrientation() + "," + copy.isMirrored();
+					break;
+				}
+				
+				//two hundred and seventy degrees
+				copy.setOrientation(Orientations.TWOHUNDREDSEVENTY_DEGREES);
+				copy.setMirrored(false);
+				if(canElementBePlaced(f, copy)) {
+					movesLeft = true;
+					//create the string containing the move
+					move += getUser().getName() + "," + f.getPosition() + "," + copy.getType() + "," + copy.getOrientation() + "," + copy.isMirrored();
+					break;
+				}
+				copy.setMirrored(true);
+				if(canElementBePlaced(f, copy)) {
+					movesLeft = true;
+					//create the string containing the move
+					move += getUser().getName() + "," + f.getPosition() + "," + copy.getType() + "," + copy.getOrientation() + "," + copy.isMirrored();
+					break;
+				}
+			}
+		}
+		
+		//return the result
+		return move;
 	}
 	
 	/* -- GETTERS AND SETTERS */

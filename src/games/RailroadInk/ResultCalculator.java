@@ -188,7 +188,7 @@ public class ResultCalculator {
 		while(fieldsLeft) {
 		
 			//find a starting point
-			Field startingPoint = findStartingPoint(board, networks);
+			Field startingPoint = findStartingPoint(board, networks, true);
 		
 			//if the result is null, then there are no more networks to be found
 			if(startingPoint == null) {
@@ -203,8 +203,24 @@ public class ResultCalculator {
 			//TODO for testing, remove later
 			System.out.println("Errors:\n");
 			
+			//a variable used to check whether we are going for roads or rails (only interesting for overpasses)
+			boolean road = true;
+			
+			//get the element of the starting point and check whether it is an overpass
+			RouteElement element = startingPoint.getElement();
+			if(element.getType() == ElementTypes.OVERPASS) {
+				//if it is an overpass, check whether the roads have been used or the rails
+				if(!element.isRoadsUsed()) {
+					road = true;
+				} 
+				if(!element.isRailsUsed()) {
+					road = false;
+				}
+			}
+			
 			//then, grow it beginning from the starting point
-			growNetwork(board, network, startingPoint);
+			//if we start the network from here, it does not matter whether we came from a road or a rail
+			growNetwork(board, network, startingPoint, road);
 	
 			//TODO remove later
 			System.out.println("\n----------\n");
@@ -267,7 +283,7 @@ public class ResultCalculator {
 		return false;
 	}
 	
-	private Field findStartingPoint(Board board, ArrayList<Network> networks) {
+	private Field findStartingPoint(Board board, ArrayList<Network> networks, boolean growingNetworks) {
 		//the result is a field
 		Field startingPoint = null;
 		
@@ -301,9 +317,28 @@ public class ResultCalculator {
 				}
 			}
 			
-			//if it is part of another network, just go on with the next field
+			//if it is part of another network, just go on with the next field, except if it is an overpass
 			if(isPartOfAnotherNetwork) {
-				continue;
+				//check whether the element is an overpass
+				RouteElement element = f.getElement();
+				//the special treatment should only be done if we're growing networks, as this behaviour might be bad for 
+				//finding the longest road and the longest track
+				if(element.getType() == ElementTypes.OVERPASS && growingNetworks) {
+					//if it is an overpass, check whether both the rail and the road connections have already been used
+					if(!element.isRailsUsed()) {
+						//if the rails have not been used, return this field as the starting point
+						return f;
+					} 
+					if(!element.isRoadsUsed()) {
+						//if the roads have not been used, return this field as the starting point
+						return f;
+					}
+					//if they have both been used, the overpass is alredy part of two networks and can be discarded 
+					continue;
+				} else {
+					//if it is not an overpass, just go on with the next field
+					continue;
+				}
 			}
 			
 			//if it is not part of another network, just return the field as the result
@@ -316,7 +351,16 @@ public class ResultCalculator {
 		return startingPoint;
 	}
 	
-	public void growNetwork(Board board, Network network, Field field) {
+	public void growNetwork(Board board, Network network, Field field, boolean road) {
+		//get the element
+		RouteElement element = field.getElement();
+		
+		//check whether it is an overpass
+		boolean overpass = false;
+		if(element.getType() == ElementTypes.OVERPASS) {
+			overpass = true;
+		}
+		
 		//check whether the field is already part of the network
 		if(containsField(network.getFields(), field)) {
 			//in this case, the field is already part of the network, therefore return
@@ -326,12 +370,26 @@ public class ResultCalculator {
 		//if not, add the field to the network
 		network.getFields().add(field);
 		
-		//get the element
-		RouteElement element = field.getElement();
-		
 		//get the matching road and rail connections of the field
 		Directions[] roadConnections = field.getElement().getRoadConnections();
 		Directions[] railConnections = field.getElement().getRailConnections();
+		
+		//now we have to do some special checking in case we're looking at an overpass
+		//because you can only choose either the road or the rail connections of an overpass
+		if(overpass) {
+			//in this case, we have to consider whether we were on a road or on a rail before
+			if(road) {
+				//if we were on a road before, get rid of the rail connections
+				railConnections = null;
+				//set the corresponding attribute in the element
+				element.setRoadsUsed();
+			} else {
+				//if we were on a track before, get rid of all the road connections
+				roadConnections = null;
+				//set the corresponding attribute in the element
+				element.setRailsUsed();
+			}
+		}
 		
 		//go through each road connection, as long as the array is not null
 		if(roadConnections != null) {
@@ -465,7 +523,7 @@ public class ResultCalculator {
 				}
 				
 				//in all other cases, the network can grow further from here
-				growNetwork(board, network, neighbour);
+				growNetwork(board, network, neighbour, true);
 			}
 		}
 		
@@ -601,7 +659,7 @@ public class ResultCalculator {
 				}
 				
 				//in all other cases, the network can grow further from here
-				growNetwork(board, network, neighbour);
+				growNetwork(board, network, neighbour, false);
 				
 			}
 		}
@@ -726,7 +784,7 @@ public class ResultCalculator {
 		while(fieldsLeft) {
 		
 			//find a starting point
-			Field startingPoint = findStartingPoint(board, networks);
+			Field startingPoint = findStartingPoint(board, networks, false);
 		
 			//if the result is null, then there are no more networks to be found
 			if(startingPoint == null) {
@@ -1012,7 +1070,7 @@ public class ResultCalculator {
 		while(fieldsLeft) {
 		
 			//find a starting point
-			Field startingPoint = findStartingPoint(board, networks);
+			Field startingPoint = findStartingPoint(board, networks, false);
 		
 			//if the result is null, then there are no more networks to be found
 			if(startingPoint == null) {
@@ -1178,7 +1236,7 @@ public class ResultCalculator {
 			growRail(board, network, neighbour, null, result);
 		}
 	}
-	
+	/*
 	public static void main(String[] args) throws IllegalPlayerMoveException {
 		
 		userManagement.User user = new userManagement.User("hallo", "hehe");
@@ -1279,7 +1337,60 @@ public class ResultCalculator {
 		
 		ResultCalculator calc = new ResultCalculator();
 		int result = calc.calculateResult(board);
-		System.out.println(result);
+		System.out.println(result + "\n\n--------------------\n");
+		
+		//second board
+		userManagement.User user2 = new userManagement.User("hey", "shamona");
+		Board board2 = new Board(user2);
+		
+		//fill the second board
+		Field three2 = board2.getFields().get(3);
+		three2.addElement(new RouteElement(Orientations.NINETY_DEGREES, ElementTypes.RAIL, false));
+		
+		Field ten2 = board2.getFields().get(10);
+		ten2.addElement(new RouteElement(Orientations.NINETY_DEGREES, ElementTypes.RAIL, false));
+		
+		Field seventeen2 = board2.getFields().get(17);
+		seventeen2.addElement(new RouteElement(Orientations.NINETY_DEGREES, ElementTypes.RAIL, false));
+		
+		Field twentyfour2 = board2.getFields().get(24);
+		twentyfour2.addElement(new RouteElement(Orientations.NINETY_DEGREES, ElementTypes.RAIL, false));
+		
+		Field thirtyone2 = board2.getFields().get(31);
+		thirtyone2.addElement(new RouteElement(Orientations.NINETY_DEGREES, ElementTypes.RAIL, false));
+		
+		Field thirtyeight2 = board2.getFields().get(38);
+		thirtyeight2.addElement(new RouteElement(Orientations.NINETY_DEGREES, ElementTypes.RAIL, false));
+		
+		Field fourtyfive2 = board2.getFields().get(45);
+		fourtyfive2.addElement(new RouteElement(Orientations.NINETY_DEGREES, ElementTypes.RAIL, false));
+		
+		int result2 = calc.calculateResult(board2);
+		System.out.println(result2  + "\n\n--------------------\n");
+		
+		//testing the methods designed for the AI
+		RouteElement[] remainingElements = new RouteElement[3];
+		RouteElement straightRoad = new RouteElement(Orientations.ZERO_DEGREES, ElementTypes.ROAD, false);
+		RouteElement stationTurn = new RouteElement(Orientations.NINETY_DEGREES, ElementTypes.STATION_TURN, true);
+		RouteElement railTJunction = new RouteElement(Orientations.TWOHUNDREDSEVENTY_DEGREES, ElementTypes.RAIL_TJUNCTION, false);
+		remainingElements[0] = straightRoad;
+		remainingElements[1] = stationTurn;
+		remainingElements[2] = railTJunction;
+		RouteElement[] remainingElements2 = new RouteElement[1];
+		RouteElement element = new RouteElement(Orientations.ZERO_DEGREES, ElementTypes.RAIL_CROSSROAD, false);
+		remainingElements2[0] = element;
+		System.out.println("\nBoard 1:\n");
+		System.out.println("Moves Left?");
+		System.out.println(board.movesLeft(remainingElements2) + "\n");
+		System.out.println("Proposed move:");
+		System.out.println(board.proposeMove(remainingElements2) + "\n");
+		System.out.println("\nBoard 2:\n");
+		System.out.println("Moves Left?");
+		System.out.println(board2.movesLeft(remainingElements) + "\n");
+		System.out.println("Proposed move:");
+		System.out.println(board2.proposeMove(remainingElements) + "\n");
+		
+		System.out.println(board.canElementBePlaced(board.getFields().get(34), element));
 	}
-	
+	*/
 }

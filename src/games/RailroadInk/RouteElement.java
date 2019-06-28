@@ -5,11 +5,19 @@ public class RouteElement {
 	private Orientations orientation;
 	private ElementTypes type;
 	private boolean isMirrored;
+
+	//attributes necessary for overpass-handling
+	private boolean roadsUsed;
+	private boolean railsUsed;
 	
 	public RouteElement(Orientations orientation, ElementTypes type, boolean isMirrored) {
 		this.orientation = orientation;
 		this.type = type;
 		this.isMirrored = isMirrored;
+		
+		//for overpass-handling
+		this.roadsUsed = false;
+		this.railsUsed = false;
 	}
 
 	public Directions[] getRoadConnections() {
@@ -624,4 +632,20 @@ public class RouteElement {
 		this.isMirrored = isMirrored;
 	}
 
+	public boolean isRoadsUsed() {
+		return roadsUsed;
+	}
+
+	public void setRoadsUsed() {
+		this.roadsUsed = true;
+	}
+
+	public boolean isRailsUsed() {
+		return railsUsed;
+	}
+
+	public void setRailsUsed() {
+		this.railsUsed = true;
+	}
+	
 }

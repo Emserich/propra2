@@ -41,7 +41,7 @@ public enum Orientations {
 		case 0:
 			return "zero degrees";
 		case 1:
-			 return "nintey degrees";
+			 return "ninety degrees";
 		case 2:
 			return "one hundred and eighty degrees";
 		case 3:
