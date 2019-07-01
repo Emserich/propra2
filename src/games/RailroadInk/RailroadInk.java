@@ -33,6 +33,8 @@ public class RailroadInk extends Game {
 	
 	/* -- METHODS NECESSARY FOR THE SERVER -- */
 	
+	/* -- LOADING THE HTML, CSS AND JS FILE -- */
+	
 	@Override
 	public String getSite() {
 		try {
@@ -58,10 +60,12 @@ public class RailroadInk extends Game {
 		return "<script src =\"js/index.js\"></script>";
 	}
 
+	/* -- SIMPLE GETTER METHODS -- */
+	
 	@Override
 	public int getMaxPlayerAmount() {
-		//the game is supposed to be played by a maximum number of 6 players
-		return 6;
+		//the game is supposed to be played by a maximum number of 4 players
+		return 4;
 	}
 
 	@Override
@@ -71,21 +75,26 @@ public class RailroadInk extends Game {
 	}
 
 	@Override
-	public void execute(User user, String gsonString) {
-		// TODO implement what should happen if the user interacts with the game
-		
-	}
-
-	@Override
 	public ArrayList<User> getPlayerList() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.playerList;
 	}
 
 	@Override
 	public ArrayList<User> getSpectatorList() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.spectatorList;
+	}
+	
+	@Override
+	public GameState getGameState() {
+		return this.gState;
+	}
+	
+	/* -- METHODS FOR THE SERVER COMMUNICATION -- */
+	
+	@Override
+	public void execute(User user, String gsonString) {
+		// TODO implement what should happen if the user interacts with the game
+		
 	}
 
 	@Override
@@ -94,64 +103,56 @@ public class RailroadInk extends Game {
 		return null;
 	}
 
+	/* -- METHODS FOR MANAGING THE PLAYERS -- */
+	
+	@Override
+	public void addSpectator(User user) {
+		this.spectatorList.add(user);
+	}
+	
 	@Override
 	public void addUser(User user) {
-		//TODO this is just a first version of the method, it is not finished yet
 		
-		//the user is only allowed to join the game, if there are less than 6 players and he is not already in the list
+		//the user is only allowed to join the game, if there are less than the max amount of players and they aren't already in the list
 		if (playerList.size() < getMaxPlayerAmount() && !playerList.contains(user)) {
 			playerList.add(user);
 		}
 		
 		
-		//if there are six players, start the game 
-		if(playerList.size() == 6) {
+		//if there are as many players as allowed, start the game
+		if(playerList.size() == getMaxPlayerAmount()) {
 			this.gState = GameState.RUNNING;
+			//TODO inform the players about this
 		}
-	}
-
-	@Override
-	public void addSpectator(User user) {
-		// TODO Auto-generated method stub
-		this.spectatorList.add(user);
+		
 	}
 
 	@Override
 	public boolean isJoinable() {
-		//TODO this is just a first version of the method, it is not finished yet
 		
-		//if there are 6 or more players, you cannot join
-		if(playerList.size() >= 6) {
+		//if there are more or just as many players as allowed, you cannot join
+		if(playerList.size() >= getMaxPlayerAmount()) {
 			return false;
 		} 
 		
-		//if the game is running, you can only join as a spectator
-		if(this.gState == GameState.RUNNING) {
-			//TODO add the player as a spectator
-			return false;
-		}
-		
-		//if the game is finished or closed, you cannot join
-		if(this.gState == GameState.CLOSED || this.gState == GameState.FINISHED) {
+		//if the game is finished, closed or running, you cannot join
+		if(this.gState == GameState.CLOSED || this.gState == GameState.FINISHED || this.gState == GameState.RUNNING) {
 			return false;
 		}
 		
 		//in all other cases, the game is joinable
 		return true;
-	}
-
-	@Override
-	public void playerLeft(User user) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public GameState getGameState() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	
+	public void playerLeft(User user) {
+		//try to remove the player
+		if(playerList.remove(user)) {
+			//if he was removed, inform the other players about this
+			playerLeft = user.getName();
+			//TODO inform the other players about this
+		}
+	}	
 	
 }
