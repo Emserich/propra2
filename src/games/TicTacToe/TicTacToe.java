@@ -80,7 +80,7 @@ public class TicTacToe extends Game {
 		if (!user.equals(playerTurn)) {
 			return;
 		}
-		String[] strArray = gsonString.split(",");
+		String[] strArray = gsonString.split(","); //"2,5,6,8" => 2 5 6 8
 		int[] receivedArray = new int[9];
 		for (int i = 0; i < 9; i++) {
 			receivedArray[i] = Integer.parseInt(strArray[i]);

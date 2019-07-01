@@ -29,13 +29,7 @@ public class Board {
 		//a boolean value is used to store whether a special element has been placed this round --> you are only allowed to place one each round
 		this.specialElementPlacedInThisRound = false;
 		
-		//the fields have to be initiated
-		this.fields = new ArrayList<Field>();
-		//there are 49 elements
-		for(int i = 0; i < 49; i++) {
-			Field field = new Field(i);
-			fields.add(field);
-		}
+		initializeFields();
 		
 		//the variables that check whether the special elements have already been placed have to be initialized
 		//of course, at the beginning, they are not placed
@@ -46,6 +40,19 @@ public class Board {
 		this.stationThreePlaced = false;
 		this.stationFourPlaced = false;
 	}
+	
+	
+	public void initializeFields()
+	{
+		//the fields have to be initiated
+				this.fields = new ArrayList<Field>();
+				//there are 49 elements
+				for(int i = 0; i < 49; i++) {
+					Field field = new Field(i);
+					fields.add(field);
+				}
+	}
+	
 
 	/* -- METHODS TO ACCESS NEIGHBOURING FIELDS -- */
 	

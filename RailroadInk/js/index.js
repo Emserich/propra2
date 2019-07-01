@@ -134,7 +134,7 @@ document.addEventListener("dragend", function(event) {
 document.addEventListener("dragenter", function(event) {
 	if ( event.target.className == "field" ) {
 		event.target.style.border = "3px dotted #e85a4d";
-		alter(event.dataTransfer.getData("Text"));
+		alert(event.dataTransfer.getData("Text"));
 	}
 });
 // By default, data/elements cannot be dropped in other elements. To allow a drop, we must prevent the default handling of the element
@@ -180,6 +180,32 @@ document.addEventListener("drop", function(event) {
 // -----------------------------/DRAG & DROP-----------------------------
 
 
+// ----------------------------EventListener---------------------
+// ID Player muss in html noch gesetzt werden
+
+
+//START wird ausgelöst wenn ein Spiel erstellt wird,
+// aber noch nicht genügend Spieler da sind
+addEventListener('START', function(event){
+	var stringFromServer = event.data;
+	var arr = stringFromServer.split(',');
+	playerMessage = arr[9];
+	document.getElementById("Player").innerHTML = playerMessage;
+	if(arr[10]=="HOST") setVisible();
+	statusWait = false;
+});
+
+//PLAYERLEFT wird ausgelöst wenn ein Spieler auf "Spiel verlassen" klickt
+addEventListener('PLAYERLEFT', function(event){
+	var stringFromServer = event.data;
+	playerMessage = stringFromServer;
+	document.getElementById("Player").innerHTML = playerMessage;
+});
+//CLOSE wird ausgelöst wenn der Host das Spiel per "Spiel schließen" Button beendet
+addEventListener('CLOSE', function(event){
+	document.getElementById("Player").innerHTML = "Spiel wurde vom Host beendet!";
+});
+// ---------------------------/EventListener---------------------
 
 
 
@@ -219,32 +245,6 @@ function toggleFieldnumber() {
 // -----------------------------/BLA-----------------------------
 
 
-
-// ----------------------------EventListener---------------------
-// ID Player muss in html noch gesetzt werden
-
-
-//START wird ausgelöst wenn ein Spiel erstellt wird,
-// aber noch nicht genügend Spieler da sind
-addListener('START', function(event){
-	var stringFromServer = event.data;
-	var arr = stringFromServer.split(',');
-	playerMessage = arr[9];
-	document.getElementById("Player").innerHTML = playerMessage;
-	if(arr[10]=="HOST") setVisible();
-	statusWait = false;
-});
-//PLAYERLEFT wird ausgelöst wenn ein Spieler auf "Spiel verlassen" klickt
-addListener('PLAYERLEFT', function(event){
-	var stringFromServer = event.data;
-	playerMessage = stringFromServer;
-	document.getElementById("Player").innerHTML = playerMessage;
-});
-//CLOSE wird ausgelöst wenn der Host das Spiel per "Spiel schließen" Button beendet
-addListener('CLOSE', function(event){
-	document.getElementById("Player").innerHTML = "Spiel wurde vom Host beendet!";
-});
-// ---------------------------/EventListener---------------------
 
 
 // ----------------------------Hilfsfunktionen-------------------
