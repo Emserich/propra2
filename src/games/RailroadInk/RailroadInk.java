@@ -25,6 +25,9 @@ public class RailroadInk extends Game {
 	private ArrayList<User> playerList = new ArrayList<User>();
 	private ArrayList<User> spectatorList = new ArrayList<User>();
 	
+	//an ArrayList to store the boards of the players
+	private ArrayList<Board> boardList = new ArrayList<Board>();
+	
 	//an integer value counts the turns
 	private int turnCounter = 0;
 	
@@ -94,7 +97,6 @@ public class RailroadInk extends Game {
 	@Override
 	public void execute(User user, String gsonString) {
 		// TODO implement what should happen if the user interacts with the game
-		
 	}
 
 	@Override
@@ -116,6 +118,10 @@ public class RailroadInk extends Game {
 		//the user is only allowed to join the game, if there are less than the max amount of players and they aren't already in the list
 		if (playerList.size() < getMaxPlayerAmount() && !playerList.contains(user)) {
 			playerList.add(user);
+			//create a new board for the player
+			Board board = new Board(user);
+			//add it to the list
+			boardList.add(board);
 		}
 		
 		
@@ -147,10 +153,16 @@ public class RailroadInk extends Game {
 
 	@Override
 	public void playerLeft(User user) {
+		//get the index
+		int index = playerList.indexOf(user);
 		//try to remove the player
 		if(playerList.remove(user)) {
 			//if he was removed, inform the other players about this
 			playerLeft = user.getName();
+			//also remove the board from the list
+			if(index != -1) {
+				boardList.remove(index);
+			}
 			//TODO inform the other players about this
 		}
 	}	
