@@ -4,10 +4,26 @@ import java.util.ArrayList;
 
 public class ResultCalculator {
 	
-	/* -- THE MOST IMPORTANT METHOD OF THIS CLASS -- */
+	/* -- THE MOST IMPORTANT METHODS-OF THIS CLASS -- */
 	
-	public int calculateResult(Board board) {
-		//the result is a score
+	/**
+	 * This method calculates the score of a player given their board. The result is an array of integers that consists of the 
+	 * following elements:
+	 * 1. The points gained for the number of exits that have been connected.
+	 * 2. The points gained for the longest road.
+	 * 3. The points gained for the longest track.
+	 * 4. The points gained for the used central fields.
+	 * 5. The points that have been subtracted from the result because of the errors the player made.
+	 * 6. The final score.
+	 * This is the same order as the one in the result screen of the user interface.
+	 * @param board The board of the player that is necessary for the calculation.
+	 * @return The score of the player including the details.
+	 */
+	public int[] calculateResult(Board board) {
+		//the result is an array of integers
+		int[] result = new int[6];
+		
+		//we also need the final result
 		int score = 0;
 		
 		//TODO for testing, remove later
@@ -17,26 +33,32 @@ public class ResultCalculator {
 		//find the networks
 		ArrayList<Network> networks = findNetworks(board);
 		
+		//a variable to store the amount of points the player gets for connecting exits
+		int exitPoints = 0;
+		
+		//a variable to store the amount of points the player loses for making errors
+		int errorMalus = 0;
+		
 		//go through each network
 		for(Network n : networks) {
 			//get the error counter
 			int errors = n.getErrors();
-			//for every error, the player loses a point
-			score -= errors;
+			//keep track of the total amount of errors made
+			errorMalus += errors;
 			
 			//for every linked exit, the player gets points
 			ArrayList<Exits> exits = n.getExits();
-
+			
 			//however, the player only gets points if they connected more than one exit
 			int numberOfExits = exits.size();
 			if(numberOfExits > 1) {
 				numberOfExits--;
-				score += numberOfExits * 4;
+				exitPoints += numberOfExits * 4;
 			}
 			
 			//if the network connected all 12 exits, you get a bonus point
 			if(numberOfExits == 11) {
-				score++;
+				exitPoints++;
 			}
 			
 			//get the longest road and the longest track of the network
@@ -47,23 +69,62 @@ public class ResultCalculator {
 			
 		}
 		
+		//store the points for exits and errors in the result
+		result[4] = errorMalus;
+		result[0] = exitPoints;
+		
+		//moreover, the amount of points gained for the exits increases the final score
+		score += exitPoints;
+		//and the amount of errors decreases the final score
+		score -= errorMalus;
+		
 		//get the longest road 
 		int longestRoad = longestRoad(networks);
 		//for the every field in the longest road, the player gets a point
 		score += longestRoad;
+		//it's also stored in the result
+		result[1] = longestRoad;
 		
 		//get the longest track
 		int longestTrack = longestTrack(networks);
 		//for every field in the longest track, the player gets a point
 		score += longestTrack;
+		//it's also stored in the result
+		result[2] = longestTrack;
 		
 		//find out, how many of the central fields have been used
 		ArrayList<Field> usedCentralFields = usedCentralFields(networks);
 		//for every used central field, the player gets a point
 		score += usedCentralFields.size();
+		//it's also stored in the result
+		result[3] = usedCentralFields.size();
 		
-		//return the score
-		return score;
+		//the final score is also stored in the result
+		result[5] = score;
+		
+		//return the result
+		return result;
+	}
+	
+	/**
+	 * This method calculates the result of a player given his board and returns this result as a comma separated String.
+	 * The format is "points gained for the exits,points gained for the longest road,points gained for the longest track,
+	 * points gained for the amount of used central fields,points lost for the amount of errors,final score".
+	 * @param board The board of the player which is necessary for calculating the result.
+	 * @return The result as a comma separated string.
+	 */
+	public String resultToString(Board board) {
+		String result = "";
+		
+		int[] score = calculateResult(board);
+		for(int i = 0; i < score.length; i++) {
+			result += score[i];
+			if(i != 5) {
+				result += ",";
+			}
+		}
+		
+		return result;
 	}
 	
 	/* -- METHODS THAT ARE USED TO CALCULATE THE SCORE --*/
@@ -1340,8 +1401,8 @@ public class ResultCalculator {
 		fortyseven.addElement(new RouteElement(Orientations.ZERO_DEGREES, ElementTypes.STATION_TURN, false));
 		
 		ResultCalculator calc = new ResultCalculator();
-		int result = calc.calculateResult(board);
-		System.out.println(result + "\n\n--------------------\n");
+		System.out.println(calc.resultToString(board));
+		
 		
 		//second board
 		userManagement.User user2 = new userManagement.User("hey", "shamona");
@@ -1369,8 +1430,7 @@ public class ResultCalculator {
 		Field fourtyfive2 = board2.getFields().get(45);
 		fourtyfive2.addElement(new RouteElement(Orientations.NINETY_DEGREES, ElementTypes.RAIL, false));
 		
-		int result2 = calc.calculateResult(board2);
-		System.out.println(result2  + "\n\n--------------------\n");
+		System.out.println(calc.resultToString(board2));
 		
 		//testing the methods designed for the AI
 		RouteElement[] remainingElements = new RouteElement[3];
@@ -1395,6 +1455,7 @@ public class ResultCalculator {
 		System.out.println(board2.proposeMove(remainingElements) + "\n");
 		
 		System.out.println(board.canElementBePlaced(board.getFields().get(34), element));
+		
 	}
 	*/
 }
