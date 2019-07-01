@@ -191,6 +191,8 @@ public class Board {
 	public boolean canElementBePlaced(Field field, RouteElement element) {
 		if(!field.isEmpty()) {
 			//if the field is not empty, of course you cannot put an element on it
+			//TODO for testing, remove later
+			System.out.println("Element " + element + " cannot be placed on field " + field + "\nbecause the field is not empty.");
 			return false;
 		}
 		
@@ -216,49 +218,105 @@ public class Board {
 		
 		//top neighbour
 		try {
-			topNeighbourRoadConnections = topNeighbourField.getElement().getRoadConnections();
+			//first store the connections in a temporary array in order to check whether the result is null
+			Directions[] tmpDirections = topNeighbourField.getElement().getRoadConnections();
+			//check whether it is null
+			if(tmpDirections != null) {
+				//only in this case assign the connections to the connections of the neighbour 
+				//because we would rather have an empty array than an array that is null
+				topNeighbourRoadConnections = tmpDirections;
+			}
 		} catch (NullPointerException e) {
 			//ending up here could mean that the neighbouring field is null (if we're on the border), the element on the field is null or the road connections are null
 			//no matter what the reason is, it is not important 
 		}
 		try {
-			topNeighbourRailConnections = topNeighbourField.getElement().getRailConnections();
+			//first store the connections in a temporary array in order to check whether the result is null
+			Directions[] tmpDirections = topNeighbourField.getElement().getRailConnections();
+			//check whether it is null
+			if(tmpDirections != null) {
+				//only in this case assign the connections to the connections of the neighbour 
+				//because we would rather have an empty array than an array that is null
+				topNeighbourRailConnections = tmpDirections;
+			}
 		} catch (NullPointerException e) {
 			//just go on, it is not important
 		}
 		
 		//right neighbour
 		try {
-			rightNeighbourRoadConnections = rightNeighbourField.getElement().getRoadConnections();
+			//first store the connections in a temporary array in order to check whether the result is null
+			Directions[] tmpDirections = rightNeighbourField.getElement().getRoadConnections();
+			//check whether it is null
+			if(tmpDirections != null) {
+				//only in this case assign the connections to the connections of the neighbour 
+				//because we would rather have an empty array than an array that is null
+				rightNeighbourRoadConnections = tmpDirections;
+			}
 		} catch (NullPointerException e) {
 			//just go on, it is not important
 		}
 		try {
-			rightNeighbourRailConnections = rightNeighbourField.getElement().getRailConnections();
+			//first store the connections in a temporary array in order to check whether the result is null
+			Directions[] tmpDirections = rightNeighbourField.getElement().getRailConnections();
+			//check whether it is null
+			if(tmpDirections != null) {
+				//only in this case assign the connections to the connections of the neighbour 
+				//because we would rather have an empty array than an array that is null
+				rightNeighbourRailConnections = tmpDirections;
+			}
 		} catch (NullPointerException e) {
 			//just go on, it is not important
 		}
 		
 		//bottom neighbour
 		try {
-			bottomNeighbourRoadConnections = bottomNeighbourField.getElement().getRoadConnections();
+			//first store the connections in a temporary array in order to check whether the result is null
+			Directions[] tmpDirections = bottomNeighbourField.getElement().getRoadConnections();
+			//check whether it is null
+			if(tmpDirections != null) {
+				//only in this case assign the connections to the connections of the neighbour 
+				//because we would rather have an empty array than an array that is null
+				bottomNeighbourRoadConnections = tmpDirections;
+			}
 		} catch (NullPointerException e) {
 			//just go on, it is not important
 		}
 		try {
-			bottomNeighbourRailConnections = bottomNeighbourField.getElement().getRailConnections();
+			//first store the connections in a temporary array in order to check whether the result is null
+			Directions[] tmpDirections = bottomNeighbourField.getElement().getRailConnections();
+			//check whether it is null
+			if(tmpDirections != null) {
+				//only in this case assign the connections to the connections of the neighbour 
+				//because we would rather have an empty array than an array that is null
+				bottomNeighbourRailConnections = tmpDirections;
+			}
 		} catch (NullPointerException e) {
 			//just go on, it is not important
 		}
 		
 		//left neighbour
 		try {
-			leftNeighbourRoadConnections = leftNeighbourField.getElement().getRoadConnections();
+			//first store the connections in a temporary array in order to check whether the result is null
+			Directions[] tmpDirections = leftNeighbourField.getElement().getRoadConnections();
+			//check whether it is null
+			if(tmpDirections != null) {
+				//only in this case assign the connections to the connections of the neighbour 
+				//because we would rather have an empty array than an array that is null
+				leftNeighbourRoadConnections = tmpDirections;
+			}
 		} catch (NullPointerException e) {
 			//just go on, it is not important
 		}
 		try {
-			leftNeighbourRailConnections = leftNeighbourField.getElement().getRailConnections();
+			//first store the connections in a temporary array in order to check whether the result is null
+			Directions[] tmpDirections = leftNeighbourField.getElement().getRailConnections();
+			//check whether it is null
+			if(tmpDirections != null) {
+				//only in this case assign the connections to the connections of the neighbour 
+				//because we would rather have an empty array than an array that is null
+				leftNeighbourRailConnections = tmpDirections;
+			}
 		} catch (NullPointerException e) {
 			//just go on, it is not important
 		}
@@ -267,242 +325,277 @@ public class Board {
 		//check the road connections of the element that is supposed to be placed
 		Directions[] roadConnections = element.getRoadConnections();
 		
-		//if there are any, go through them one by one
-		try {
-			if(roadConnections.length != 0) {
-				for(int i = 0; i < roadConnections.length; i++) {
-					//get the current direction
-					Directions direction = roadConnections[i];
-					//depending on the direction, check whether the connections of the corresponding neighbours are problematic or not
-					switch(direction) {
-					case NORTH:
-						//go through the connections of the top neighbour
-						//first the road connections
-						for(int j = 0; j < topNeighbourRoadConnections.length; j++) {
-							//fetch the current direction
-							Directions topNeighbourRoadConnection = topNeighbourRoadConnections[j];
-							//we only care about a connection to the bottom
-							if(topNeighbourRoadConnection == Directions.SOUTH) {
-								//in this case, the element has a connection that it can be connected to
-								connectionExists = true;
-							}
+		//check whether there are any
+		boolean roads = true;
+		if(roadConnections == null || roadConnections.length == 0) {
+			roads = false;
+			//TODO for testing, remove later
+			//System.out.println("Element " + element + " does not have any road connections.");
+		}
+		
+		//go through them one by one
+		if(roads) {
+			for(int i = 0; i < roadConnections.length; i++) {
+				//get the current direction
+				Directions direction = roadConnections[i];
+				//depending on the direction, check whether the connections of the corresponding neighbours are problematic or not
+				switch(direction) {
+				case NORTH:
+					//go through the connections of the top neighbour
+					//first the road connections
+					for(int j = 0; j < topNeighbourRoadConnections.length; j++) {
+						//fetch the current direction
+						Directions topNeighbourRoadConnection = topNeighbourRoadConnections[j];
+						//we only care about a connection to the bottom
+						if(topNeighbourRoadConnection == Directions.SOUTH) {
+							//in this case, the element has a connection that it can be connected to
+							connectionExists = true;
 						}
-						//then the rail connections
-						for(int k = 0; k < topNeighbourRailConnections.length; k++) {
-							//fetch the current direction
-							Directions topNeighbourRailConnection = topNeighbourRailConnections[k];
-							//we only care about a connection to the bottom
-							if(topNeighbourRailConnection == Directions.SOUTH) {
-								//in this case, the element has a connection that does not allow us to place the element
-								//therefore, return false
-								return false;
-							}
-						}
-						break;
-					case EAST:
-						//go through the connections of the right neighbour
-						//first the road connections
-						for(int j = 0; j < rightNeighbourRoadConnections.length; j++) {
-							//fetch the current direction
-							Directions rightNeighbourRoadConnection = rightNeighbourRoadConnections[j];
-							//we only care about a connection to the left
-							if(rightNeighbourRoadConnection == Directions.WEST) {
-								//in this case, the element has a connection that it can be connected to
-								connectionExists = true;
-							}
-						}
-						//then the rail connections
-						for(int k = 0; k < rightNeighbourRailConnections.length; k++) {
-							//fetch the current direction
-							Directions rightNeighbourRailConnection = rightNeighbourRailConnections[k];
-							//we only care about a connection to the left
-							if(rightNeighbourRailConnection == Directions.WEST) {
-								//in this case, the element has a connection that does not allow us to place the element
-								//therefore, return false
-								System.out.println("schemona");
-								return false;
-							}
-						}
-						break;
-					case SOUTH:
-						//go through the connections of the bottom neighbour
-						//first the road connections
-						for(int j = 0; j < bottomNeighbourRoadConnections.length; j++) {
-							//fetch the current direction
-							Directions bottomNeighbourRoadConnection = bottomNeighbourRoadConnections[j];
-							//we only care about a connection to the top
-							if(bottomNeighbourRoadConnection == Directions.NORTH) {
-								//in this case, the element has a connection that it can be connected to
-								connectionExists = true;
-							}
-						}
-						//then the rail connections
-						for(int k = 0; k < bottomNeighbourRailConnections.length; k++) {
-							//fetch the current direction
-							Directions bottomNeighbourRailConnection = bottomNeighbourRailConnections[k];
-							//we only care about a connection to the top
-							if(bottomNeighbourRailConnection == Directions.NORTH) {
-								//in this case, the element has a connection that does not allow us to place the element
-								//therefore, return false
-								return false;
-							}
-						}
-						break;
-					case WEST:
-						//go through the connections of the left neighbour
-						//first the road connections
-						for(int j = 0; j < leftNeighbourRoadConnections.length; j++) {
-							//fetch the current direction
-							Directions leftNeighbourRoadConnection = leftNeighbourRoadConnections[j];
-							//we only care about a connection to the right
-							if(leftNeighbourRoadConnection == Directions.EAST) {
-								//in this case, the element has a connection that it can be connected to
-								connectionExists = true;
-							}
-						}
-						//then the rail connections
-						for(int k = 0; k < leftNeighbourRailConnections.length; k++) {
-							//fetch the current direction
-							Directions leftNeighbourRailConnection = leftNeighbourRailConnections[k];
-							//we only care about a connection to the right
-							if(leftNeighbourRailConnection == Directions.EAST) {
-								//in this case, the element has a connection that does not allow us to place the element
-								//therefore, return false
-								return false;
-							}
-						}
-						break;
-					default:
-						//undefined behaviour, just hope that it does not happen
 					}
+					//then the rail connections
+					for(int k = 0; k < topNeighbourRailConnections.length; k++) {
+						//fetch the current direction
+						Directions topNeighbourRailConnection = topNeighbourRailConnections[k];
+						//we only care about a connection to the bottom
+						if(topNeighbourRailConnection == Directions.SOUTH) {
+							//in this case, the element has a connection that does not allow us to place the element
+							//TODO for testing, remove later
+							//System.out.println("Element " + element + " cannot be placed on field " + field + ",");
+							//System.out.println("because of the top neighbour: Cannot place a road connecting to a rail.");
+							//therefore, return false
+							return false;
+						}
+					}
+					break;
+				case EAST:
+					//go through the connections of the right neighbour
+					//first the road connections
+					for(int j = 0; j < rightNeighbourRoadConnections.length; j++) {
+						//fetch the current direction
+						Directions rightNeighbourRoadConnection = rightNeighbourRoadConnections[j];
+						//we only care about a connection to the left
+						if(rightNeighbourRoadConnection == Directions.WEST) {
+							//in this case, the element has a connection that it can be connected to
+							connectionExists = true;
+						}
+					}
+					//then the rail connections
+					for(int k = 0; k < rightNeighbourRailConnections.length; k++) {
+						//fetch the current direction
+						Directions rightNeighbourRailConnection = rightNeighbourRailConnections[k];
+						//we only care about a connection to the left
+						if(rightNeighbourRailConnection == Directions.WEST) {
+							//in this case, the element has a connection that does not allow us to place the element
+							//TODO for testing, remove later
+							//System.out.println("Element " + element + " cannot be placed on field " + field + ",");
+							//System.out.println("because of the right neighbour: Cannot place a road connecting to a rail.");
+							//therefore, return false
+							return false;
+						}
+					}
+					break;
+				case SOUTH:
+					//go through the connections of the bottom neighbour
+					//first the road connections
+					for(int j = 0; j < bottomNeighbourRoadConnections.length; j++) {
+						//fetch the current direction
+						Directions bottomNeighbourRoadConnection = bottomNeighbourRoadConnections[j];
+						//we only care about a connection to the top
+						if(bottomNeighbourRoadConnection == Directions.NORTH) {
+							//in this case, the element has a connection that it can be connected to
+							connectionExists = true;
+						}
+					}
+					//then the rail connections
+					for(int k = 0; k < bottomNeighbourRailConnections.length; k++) {
+						//fetch the current direction
+						Directions bottomNeighbourRailConnection = bottomNeighbourRailConnections[k];
+						//we only care about a connection to the top
+						if(bottomNeighbourRailConnection == Directions.NORTH) {
+							//in this case, the element has a connection that does not allow us to place the element
+							//TODO for testing, remove later
+							//System.out.println("Element " + element + " cannot be placed on field " + field + ",");
+							//System.out.println("because of the bottom neighbour: Cannot place a road connecting to a rail.");
+							//therefore, return false
+							return false;
+						}
+					}
+					break;
+				case WEST:
+					//go through the connections of the left neighbour
+					//first the road connections
+					for(int j = 0; j < leftNeighbourRoadConnections.length; j++) {
+						//fetch the current direction
+						Directions leftNeighbourRoadConnection = leftNeighbourRoadConnections[j];
+						//we only care about a connection to the right
+						if(leftNeighbourRoadConnection == Directions.EAST) {
+							//in this case, the element has a connection that it can be connected to
+							connectionExists = true;
+						}
+					}
+					//then the rail connections
+					for(int k = 0; k < leftNeighbourRailConnections.length; k++) {
+						//fetch the current direction
+						Directions leftNeighbourRailConnection = leftNeighbourRailConnections[k];
+						//we only care about a connection to the right
+						if(leftNeighbourRailConnection == Directions.EAST) {
+							//in this case, the element has a connection that does not allow us to place the element
+							//TODO for testing, remove later
+							//System.out.println("Element " + element + " cannot be placed on field " + field + ",");
+							//System.out.println("because of the left neighbour: Cannot place a road connecting to a rail.");
+							//therefore, return false
+							return false;
+						}
+					}
+					break;
+				default:
+					//undefined behaviour, just hope that it does not happen
 				}
 			}
-		} catch(NullPointerException e) {
-			//in this case, there are no road connections, but that is okay, just don't do anything
 		}
 		
 		//check the rail connections of the element that is supposed to be placed
 		Directions[] railConnections = element.getRailConnections();
 		
-		//if there are any, go through them one by one
-		try {
-			if(railConnections.length != 0) {
-				for(int i = 0; i < roadConnections.length; i++) {
-					//get the current direction
-					Directions direction = railConnections[i];
-					//depending on the direction, check whether the connections of the corresponding neighbours are problematic or not
-					switch(direction) {
-					case NORTH:
-						//go through the connections of the top neighbour
-						//first the road connections
-						for(int j = 0; j < topNeighbourRoadConnections.length; j++) {
-							//fetch the current direction
-							Directions topNeighbourRoadConnection = topNeighbourRoadConnections[j];
-							//we only care about a connection to the bottom
-							if(topNeighbourRoadConnection == Directions.SOUTH) {
-								//in this case, the element has a connection that does not allow us to place the element 
-								//therefore, return false
-								return false;
-							}
+		//check whether there are any
+		boolean rails = true;
+		if(railConnections == null || railConnections.length == 0) {
+			rails = false;
+			//TODO for testing, remove later
+			//System.out.println("Element " + element + " does not have any rail connections.");
+		}
+		
+		//go through them one by one
+		if(rails) {
+			for(int i = 0; i < railConnections.length; i++) {
+				//get the current direction
+				Directions direction = railConnections[i];
+				//depending on the direction, check whether the connections of the corresponding neighbours are problematic or not
+				switch(direction) {
+				case NORTH:
+					//go through the connections of the top neighbour
+					//first the road connections
+					for(int j = 0; j < topNeighbourRoadConnections.length; j++) {
+						//fetch the current direction
+						Directions topNeighbourRoadConnection = topNeighbourRoadConnections[j];
+						//we only care about a connection to the bottom
+						if(topNeighbourRoadConnection == Directions.SOUTH) {
+							//in this case, the element has a connection that does not allow us to place the element 
+							//TODO for testing, remove later
+							//System.out.println("Element " + element + " cannot be placed on field " + field + ",");
+							//System.out.println("because of the top neighbour: Cannot place a rail connecting to a road.");
+							//therefore, return false
+							return false;
 						}
-						//then the rail connections
-						for(int k = 0; k < topNeighbourRailConnections.length; k++) {
-							//fetch the current direction
-							Directions topNeighbourRailConnection = topNeighbourRailConnections[k];
-							//we only care about a connection to the bottom
-							if(topNeighbourRailConnection == Directions.SOUTH) {
-								//in this case, the element has a connection that it can be connected to
-								connectionExists = true;
-							}
-						}
-						break;
-					case EAST:
-						//go through the connections of the right neighbour
-						//first the road connections
-						for(int j = 0; j < rightNeighbourRoadConnections.length; j++) {
-							//fetch the current direction
-							Directions rightNeighbourRoadConnection = rightNeighbourRoadConnections[j];
-							//we only care about a connection to the left
-							if(rightNeighbourRoadConnection == Directions.WEST) {
-								//in this case, the element has a connection that does not allow us to place the element
-								//therefore, return false
-								return false;
-							}
-						}
-						//then the rail connections
-						for(int k = 0; k < rightNeighbourRailConnections.length; k++) {
-							//fetch the current direction
-							Directions rightNeighbourRailConnection = rightNeighbourRailConnections[k];
-							//we only care about a connection to the left
-							if(rightNeighbourRailConnection == Directions.WEST) {
-								//in this case, the element has a connection that it can be connected to
-								connectionExists = true;
-							}
-						}
-						break;
-					case SOUTH:
-						//go through the connections of the bottom neighbour
-						//first the road connections
-						for(int j = 0; j < bottomNeighbourRoadConnections.length; j++) {
-							//fetch the current direction
-							Directions bottomNeighbourRoadConnection = bottomNeighbourRoadConnections[j];
-							//we only care about a connection to the top
-							if(bottomNeighbourRoadConnection == Directions.NORTH) {
-								//in this case, the element has a connection that does not allow us to place the element
-								//therefore, return false
-								return false;
-							}
-						}
-						//then the rail connections
-						for(int k = 0; k < bottomNeighbourRailConnections.length; k++) {
-							//fetch the current direction
-							Directions bottomNeighbourRailConnection = bottomNeighbourRailConnections[k];
-							//we only care about a connection to the top
-							if(bottomNeighbourRailConnection == Directions.NORTH) {
-								//in this case, the element has a connection that it can be connected to
-								connectionExists = true;
-							}
-						}
-						break;
-					case WEST:
-						//go through the connections of the left neighbour
-						//first the road connections
-						for(int j = 0; j < leftNeighbourRoadConnections.length; j++) {
-							//fetch the current direction
-							Directions leftNeighbourRoadConnection = leftNeighbourRoadConnections[j];
-							//we only care about a connection to the right
-							if(leftNeighbourRoadConnection == Directions.EAST) {
-								//in this case, the element has a connection that does not allow us to place the element
-								//therefore, return false
-								return false;
-							}
-						}
-						//then the rail connections
-						for(int k = 0; k < leftNeighbourRailConnections.length; k++) {
-							//fetch the current direction
-							Directions leftNeighbourRailConnection = leftNeighbourRailConnections[k];
-							//we only care about a connection to the right
-							if(leftNeighbourRailConnection == Directions.EAST) {
-								//in this case, the element has a connection that it can be connected to 
-								connectionExists = true;
-							}
-						}
-						break;
-					default:
-						//undefined behaviour, just hope that it does not happen
 					}
+					//then the rail connections
+					for(int k = 0; k < topNeighbourRailConnections.length; k++) {
+						//fetch the current direction
+						Directions topNeighbourRailConnection = topNeighbourRailConnections[k];
+						//we only care about a connection to the bottom
+						if(topNeighbourRailConnection == Directions.SOUTH) {
+							//in this case, the element has a connection that it can be connected to
+							connectionExists = true;
+						}
+					}
+					break;
+				case EAST:
+					//go through the connections of the right neighbour
+					//first the road connections
+					for(int j = 0; j < rightNeighbourRoadConnections.length; j++) {
+						//fetch the current direction
+						Directions rightNeighbourRoadConnection = rightNeighbourRoadConnections[j];
+						//we only care about a connection to the left
+						if(rightNeighbourRoadConnection == Directions.WEST) {
+							//in this case, the element has a connection that does not allow us to place the element
+							//TODO for testing, remove later 
+							//System.out.println("Element " + element + " cannot be placed on field " + field + ",");
+							//System.out.println("because of the right neighbour: Cannot place a rail connecting to a road.");
+							//therefore, return false
+							return false;
+						}
+					}
+					//then the rail connections
+					for(int k = 0; k < rightNeighbourRailConnections.length; k++) {
+						//fetch the current direction
+						Directions rightNeighbourRailConnection = rightNeighbourRailConnections[k];
+						//we only care about a connection to the left
+						if(rightNeighbourRailConnection == Directions.WEST) {
+							//in this case, the element has a connection that it can be connected to
+							connectionExists = true;
+						}
+					}
+					break;
+				case SOUTH:
+					//go through the connections of the bottom neighbour
+					//first the road connections
+					for(int j = 0; j < bottomNeighbourRoadConnections.length; j++) {
+						//fetch the current direction
+						Directions bottomNeighbourRoadConnection = bottomNeighbourRoadConnections[j];
+						//we only care about a connection to the top
+						if(bottomNeighbourRoadConnection == Directions.NORTH) {
+							//in this case, the element has a connection that does not allow us to place the element
+							//TODO for testing, remove later
+							//System.out.println("Element " + element + " cannot be placed on field " + field + ",");
+							//System.out.println("because of the bottom neighbour: Cannot place a rail connecting to a road.");
+							//therefore, return false
+							return false;
+						}
+					}
+					//then the rail connections
+					for(int k = 0; k < bottomNeighbourRailConnections.length; k++) {
+						//fetch the current direction
+						Directions bottomNeighbourRailConnection = bottomNeighbourRailConnections[k];
+						//we only care about a connection to the top
+						if(bottomNeighbourRailConnection == Directions.NORTH) {
+							//in this case, the element has a connection that it can be connected to
+							connectionExists = true;
+						}
+					}
+					break;
+				case WEST:
+					//go through the connections of the left neighbour
+					//first the road connections
+					for(int j = 0; j < leftNeighbourRoadConnections.length; j++) {
+						//fetch the current direction
+						Directions leftNeighbourRoadConnection = leftNeighbourRoadConnections[j];
+						//we only care about a connection to the right
+						if(leftNeighbourRoadConnection == Directions.EAST) {
+							//in this case, the element has a connection that does not allow us to place the element
+							//TODO for testing, remove later
+							//System.out.println("Element " + element + " cannot be placed on field " + field + ",");
+							//System.out.println("because of the left neighbour: Cannot place a rail connecting to a road.");
+							//therefore, return false
+							return false;
+						}
+					}
+					//then the rail connections
+					for(int k = 0; k < leftNeighbourRailConnections.length; k++) {
+						//fetch the current direction
+						Directions leftNeighbourRailConnection = leftNeighbourRailConnections[k];
+						//we only care about a connection to the right
+						if(leftNeighbourRailConnection == Directions.EAST) {
+							//in this case, the element has a connection that it can be connected to 
+							connectionExists = true;
+						}
+					}
+					break;
+				default:
+					//undefined behaviour, just hope that it does not happen
 				}
 			}
-		} catch(NullPointerException e) {
-			//in this case, there are no rail connections, but that is okay, just don't do anything
 		}
 		
 		//if we ended up here, no complications showed up
 		//so check if the new element can be connected to anything
 		if(connectionExists) {
 			//if so, return true
+			//TODO for testing, remove later
+			//System.out.println("The element " + element + " can be placed on field " + field + ".");
 			return true;
 		} else {
+			//TODO for testing, remove later
+			//System.out.println("There are no matching connections for element " + element + "\non field " + field + ".");
 			return false;
 		}
 	}

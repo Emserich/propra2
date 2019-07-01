@@ -600,6 +600,13 @@ public class RouteElement {
 		
 	}
 	
+	@Override 
+	public String toString() {
+		String description = "";
+		description += getType() + ", " + getOrientation() + ", " + isMirrored();
+		return description;
+	}
+	
 	public Orientations getOrientation() {
 		return orientation;
 	}

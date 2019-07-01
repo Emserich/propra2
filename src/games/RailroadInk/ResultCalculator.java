@@ -10,6 +10,10 @@ public class ResultCalculator {
 		//the result is a score
 		int score = 0;
 		
+		//TODO for testing, remove later
+		System.out.println("--------------------");
+		System.out.println("Result of player " + board.getUser().getName() + "\n");
+		
 		//find the networks
 		ArrayList<Network> networks = findNetworks(board);
 		
