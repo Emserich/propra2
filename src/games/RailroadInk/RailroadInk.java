@@ -19,7 +19,6 @@ public class RailroadInk extends Game {
 	/* -- ATTRIBUTES -- */
 	
 	//a user object is used to denote the user whose turn it is (might be useless)
-	private User playerTurn = null;
 	
 	//two ArrayLists are used to store the players and the spectators
 	private ArrayList<User> playerList = new ArrayList<User>();
@@ -97,6 +96,47 @@ public class RailroadInk extends Game {
 	@Override
 	public void execute(User user, String gsonString) {
 		// TODO implement what should happen if the user interacts with the game
+		if(this.gState==GameState.CLOSED) return;
+		
+		if(gsonString.equals("CLOSE")){
+			sendGameDataToClients("CLOSE");
+			closeGame();
+			return;
+		}
+		
+		if (gsonString.equals("RESTART")) {
+			
+			boardList.clear();
+			for(User u : playerList)
+			{
+				Board board = new Board(u);
+				board.initializeFields();
+				boardList.add(board);
+			}
+			
+			//if there are as many players as allowed, start the game
+			if(playerList.size() == getMaxPlayerAmount() || playerList.size() >1) {
+				this.gState = GameState.RUNNING;
+			}
+			
+		}
+		
+		if (gState != GameState.RUNNING)
+			return;
+		
+		String[] strArray = gsonString.split(",");
+		int[] receivedArray = new int[5];
+		for (int i = 0; i < 5; i++) {
+			receivedArray[i] = Integer.parseInt(strArray[i]);
+		}
+		
+		
+		
+		
+		
+		
+		
+		
 	}
 
 	@Override
