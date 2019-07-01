@@ -20,7 +20,33 @@ body {
 	top:0px;
 	z-index:10;
 }
-
+/* DELETE THIS  */
+#Player{
+		background-color: yellow;
+		margin-top :25px;
+		height : 37px;
+		width : 589px;
+		border-style : solid;
+		border-color : black;
+		color : black;
+	}
+#restartButton{
+	height : 39px;
+	width : 90px;
+	position : absolute;
+	left : 413px;
+	top : 538px;
+	/*visibility:hidden;*/
+}
+#closeButton{
+	height : 39px;
+	width : 90px;
+	position : absolute;
+	left : 513px;
+	top : 538px;
+	/*visibility:hidden;*/
+}
+/* DELETE THIS  */
 a:link{ 
 	font-weight:bold; 
 	color: #3063a7; 

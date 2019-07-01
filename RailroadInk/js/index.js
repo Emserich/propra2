@@ -217,3 +217,66 @@ function toggleFieldnumber() {
 	}
 }
 // -----------------------------/BLA-----------------------------
+
+
+
+// ----------------------------EventListener---------------------
+// ID Player muss in html noch gesetzt werden
+
+
+//START wird ausgelöst wenn ein Spiel erstellt wird,
+// aber noch nicht genügend Spieler da sind
+addListener('START', function(event){
+	var stringFromServer = event.data;
+	var arr = stringFromServer.split(',');
+	playerMessage = arr[9];
+	document.getElementById("Player").innerHTML = playerMessage;
+	if(arr[10]=="HOST") setVisible();
+	statusWait = false;
+});
+//PLAYERLEFT wird ausgelöst wenn ein Spieler auf "Spiel verlassen" klickt
+addListener('PLAYERLEFT', function(event){
+	var stringFromServer = event.data;
+	playerMessage = stringFromServer;
+	document.getElementById("Player").innerHTML = playerMessage;
+});
+//CLOSE wird ausgelöst wenn der Host das Spiel per "Spiel schließen" Button beendet
+addListener('CLOSE', function(event){
+	document.getElementById("Player").innerHTML = "Spiel wurde vom Host beendet!";
+});
+// ---------------------------/EventListener---------------------
+
+
+// ----------------------------Hilfsfunktionen-------------------
+/*Frage ob wir die Funktion brauchen, weil aktuelle Fields IDs im html bekommen
+function initFields() {}
+window.onload=initFields;
+*/
+	function updateGameState(){
+		statusWait = true;
+		sendDataToServer(sentFields);
+	}
+	
+/*	//redraw wird im standardEvent Listener aufgerufen
+	function redraw(){
+		for(var i=0;i<49; i++){
+			var img = document.getElementById('field_'+i);
+			img.src = getImg(arrFields[i]);
+		}
+	}
+*/	
+	function restart(){
+			statusWait = true;
+			sendDataToServer("RESTART");
+	}
+
+	function setVisible(){
+		document.getElementById("restartButton").style.visibility ="visible";	
+		document.getElementById("closeButton").style.visibility ="visible";
+	}
+
+	function closeGame(){
+		sendDataToServer("CLOSE");
+	}
+
+// ---------------------------/Hilfsfunktionen-------------------
