@@ -125,10 +125,18 @@ public class RailroadInk extends Game {
 			return;
 		
 		String[] strArray = gsonString.split(",");
-		int[] receivedArray = new int[5];
+		String [] receivedArray = new String[5];
 		for (int i = 0; i < 5; i++) {
-			receivedArray[i] = Integer.parseInt(strArray[i]);
+			receivedArray[i] = strArray[i];
 		}
+		int imageNr = Integer.parseInt(receivedArray[0]);
+		String Drehung = receivedArray[1];
+		int Drehanzahl = Integer.parseInt(receivedArray[2]);
+		boolean spiegelung = Boolean.parseBoolean(receivedArray[3]);
+		int feldnr = Integer.parseInt(receivedArray[4]);
+		
+		
+		
 		
 		
 		
