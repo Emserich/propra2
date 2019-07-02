@@ -607,6 +607,16 @@ public class RouteElement {
 		return description;
 	}
 	
+	public boolean sameType(RouteElement other) {
+		boolean equals = false;
+		
+		if(this.type == other.getType()) {
+			equals = true;
+		}
+		
+		return equals;
+	}
+	
 	public Orientations getOrientation() {
 		return orientation;
 	}

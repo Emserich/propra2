@@ -65,4 +65,64 @@ public enum ElementTypes {
 		}
 	}
 	
+	public static ElementTypes getTypeViaString(String type) {
+		//the result is an element type
+		ElementTypes result = null;
+		
+		//depending on the string, set the corresponding type
+		switch(type) {
+		case "straight road":
+			result = ROAD;
+			break;
+		case "turning road":
+			result = ROAD_TURN;
+			break;
+		case "road with a t-junction":
+			result = ROAD_TJUNCTION;
+			break;
+		case "straight rail":
+			result = RAIL;
+			break;
+		case "turning rail":
+			result = RAIL_TURN;
+			break;
+		case "rail with a t-junction":
+			result = RAIL_TJUNCTION;
+			break;
+		case "overpass":
+			result = OVERPASS;
+			break;
+		case "station":
+			result = STATION;
+			break;
+		case "station with a turn":
+			result = STATION_TURN;
+			break;
+		case "road crossroad":
+			result = ROAD_CROSSROAD;
+			break;
+		case "rail crossroad":
+			result = RAIL_CROSSROAD;
+			break;
+		case "special station 1":
+			result = STATION_1;
+			break;
+		case "special station 2":
+			result = STATION_2;
+			break;
+		case "special station 3":
+			result = STATION_3;
+			break;
+		case "special station 4":
+			result = STATION_4;
+			break;
+		default:
+			System.out.println(type);
+			break;
+		}
+		
+		//return the result
+		return result;
+	}
+	
 }
