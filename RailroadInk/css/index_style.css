@@ -39,6 +39,9 @@ h3, h5 {
 	color: #e85a4d;
 	font-family:verdana, sans-serif;
 }
+h4 {
+	color: #343974;
+}
 
 .dice_img {
 	cursor: pointer;
@@ -113,6 +116,10 @@ h3, h5 {
 }
 .button_rotation:active:focus {
   box-shadow: 0 0 0 0.13rem rgba(232, 90, 77, 0.6);
+}
+
+#button_finish_round {
+	border-radius: 20px;
 }
 
 
@@ -285,3 +292,4 @@ h3, h5 {
   	/*text-decoration-color: black;*/
 
 }
+

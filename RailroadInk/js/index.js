@@ -134,7 +134,7 @@ document.addEventListener("dragend", function(event) {
 document.addEventListener("dragenter", function(event) {
 	if ( event.target.className == "field" ) {
 		event.target.style.border = "3px dotted #e85a4d";
-		alert(event.dataTransfer.getData("Text"));
+		// alert(event.dataTransfer.getData("Text"));
 	}
 });
 // By default, data/elements cannot be dropped in other elements. To allow a drop, we must prevent the default handling of the element
@@ -215,6 +215,35 @@ $(document).on("click","#ergebnis_button", function () {
 	$('#modal_finish').modal('toggle')
 });
 // -----------------------------/Ergebnis-Modal-----------------------------
+
+
+
+
+
+// ----------------------------- User Buttons -----------------------------
+$(document).on("click","#button_finish_round", function () {
+
+	//Fertigstellen des Spielzugs
+	alert('Fertigstellen des Spielzugs');
+
+});
+
+$(document).on("click","#button_restart_game", function () {
+
+	//Spiel neu starten
+	alert('Spiel neu starten');
+
+});
+
+$(document).on("click","#button_leave_game", function () {
+
+	//Spiel verlassen
+	alert('Spiel verlassen');
+
+});
+// ----------------------------- /User Buttons -----------------------------
+
+
 
 
 

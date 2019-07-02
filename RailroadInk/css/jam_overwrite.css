@@ -22,14 +22,14 @@ body {
 }
 /* DELETE THIS  */
 #Player{
-		background-color: yellow;
-		margin-top :25px;
-		height : 37px;
-		width : 589px;
-		border-style : solid;
-		border-color : black;
-		color : black;
-	}
+	background-color: yellow;
+	margin-top :25px;
+	/*height : 37px;*/
+	/*width : 589px;*/
+	border-style : solid;
+	border-color : black;
+	color : black;
+}
 #restartButton{
 	height : 39px;
 	width : 90px;
