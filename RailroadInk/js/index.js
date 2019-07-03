@@ -188,54 +188,6 @@ document.addEventListener("drop", function(event) {
 
 
 
-// ----------------------------EventListener---------------------
-addListener('standardEvent', function(event) {
-		var stringFromServer = event.data;
-		var arr = stringFromServer.split(',');
-		//console.log(arr);
-		
-		if(arr.length==11){
-			for(var i=0; i<9; i++) { arrFields[i] = +arr[i]; }
-			playerMessage = arr[9];
-			var str = arr[10];
-			if(str=="HOST"){
-				console.log(arr[10]);
-				setVisible();
-			}
-			diceCounter = 0;	
-			turnData = [0, 0, 0, 0];
- 			stringData = "";				
-			
-			document.getElementById("Player").innerHTML = playerMessage;
-			
-		}
-		statusWait = false;
-	});
-//START wird ausgelöst wenn ein Spiel erstellt wird,
-// aber noch nicht genügend Spieler da sind
-addEventListener('START', function(event){
-	var stringFromServer = event.data;
-	var arr = stringFromServer.split(',');
-	playerMessage = arr[9];
-	document.getElementById("Player").innerHTML = playerMessage;
-	if(arr[10]=="HOST") setVisible();
-	statusWait = false;
-});
-
-//PLAYERLEFT wird ausgelöst wenn ein Spieler auf "Spiel verlassen" klickt
-addEventListener('PLAYERLEFT', function(event){
-	var stringFromServer = event.data;
-	playerMessage = stringFromServer;
-	document.getElementById("Player").innerHTML = playerMessage;
-});
-//CLOSE wird ausgelöst wenn der Host das Spiel per "Spiel schließen" Button beendet
-addEventListener('CLOSE', function(event){
-	document.getElementById("Player").innerHTML = "Spiel wurde vom Host beendet!";
-});
-// ---------------------------/EventListener---------------------
-
-
-
 
 // -----------------------------Ergebnis-Modal-----------------------------
 $(document).on("click","#ergebnis_button", function () {
@@ -248,23 +200,36 @@ $(document).on("click","#ergebnis_button", function () {
 
 
 // ----------------------------- User Buttons -----------------------------
-$('#button_finish_round').on('click', function () {
+$(document).on("click","#button_finish_round", function () {
 
 	//Fertigstellen des Spielzugs
 	alert('Fertigstellen des Spielzugs');
 
 });
 
+$(document).on("click","#button_start_game_human", function () {
 
-$('#button_restart_game').on('click', function () {
+	//Online-Spiel starten
+	turnCounter = 1;
+	document.getElementById('gameround').innerHTML = 'Runde ' +  turnCounter;
+
+});
+$(document).on("click","#button_start_game_ki", function () {
+
+	//Spiel gegen KI
+	turnCounter = 1;
+	document.getElementById('gameround').innerHTML = 'Runde ' +  turnCounter;
+
+});
+
+$(document).on("click","#button_restart_game", function () {
 
 	//Spiel neu starten
 	alert('Spiel neu starten');
 
 });
 
-
-$('#button_leave_game').on('click', function () {
+$(document).on("click","#button_leave_game", function () {
 
 	//Spiel verlassen
 	alert('Spiel verlassen');
@@ -324,10 +289,11 @@ function updateGameState(){
 	sendDataToServer(stringData);
 }
 function turnDataToString(){
-		stringData = turnData.join(",");
-		}
+	stringData = turnData.join(",");
+	}
 function turnEnd(){
 	turnCounter +=1;
+	document.getElementById('gameround').innerHTML = 'Runde ' +  turnCounter;
 	sendDataToServer("END_TURN");
 }
 function restart(){
@@ -347,5 +313,53 @@ function closeGame(){
 function addAi() {
 	sendDataToServer("ADD_AI");
 }
-	
 // ---------------------------/Hilfsfunktionen-------------------
+
+
+
+
+// ----------------------------EventListener---------------------
+addListener('standardEvent', function(event) {
+		var stringFromServer = event.data;
+		var arr = stringFromServer.split(',');
+		//console.log(arr);
+		
+		if(arr.length==11){
+			for(var i=0; i<9; i++) { arrFields[i] = +arr[i]; }
+			playerMessage = arr[9];
+			var str = arr[10];
+			if(str=="HOST"){
+				console.log(arr[10]);
+				setVisible();
+			}
+			diceCounter = 0;	
+			turnData = [0, 0, 0, 0];
+ 			stringData = "";				
+			
+			document.getElementById("Player").innerHTML = playerMessage;
+			
+		}
+		statusWait = false;
+	});
+//START wird ausgelöst wenn ein Spiel erstellt wird,
+// aber noch nicht genügend Spieler da sind
+addEventListener('START', function(event){
+	var stringFromServer = event.data;
+	var arr = stringFromServer.split(',');
+	playerMessage = arr[9];
+	document.getElementById("Player").innerHTML = playerMessage;
+	if(arr[10]=="HOST") setVisible();
+	statusWait = false;
+});
+
+//PLAYERLEFT wird ausgelöst wenn ein Spieler auf "Spiel verlassen" klickt
+addEventListener('PLAYERLEFT', function(event){
+	var stringFromServer = event.data;
+	playerMessage = stringFromServer;
+	document.getElementById("Player").innerHTML = playerMessage;
+});
+//CLOSE wird ausgelöst wenn der Host das Spiel per "Spiel schließen" Button beendet
+addEventListener('CLOSE', function(event){
+	document.getElementById("Player").innerHTML = "Spiel wurde vom Host beendet!";
+});
+// ---------------------------/EventListener---------------------

@@ -37,10 +37,13 @@ input[type=number] {
 
 h3, h5 {
 	color: #e85a4d;
-	font-family:verdana, sans-serif;
+	/*font-family:verdana, sans-serif;*/
 }
 h4 {
 	color: #343974;
+}
+#gameround {
+	color: #e85a4d;
 }
 
 .dice_img {

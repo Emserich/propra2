@@ -134,7 +134,7 @@
               <div class="rotation_field" style="display: none;">
                 <div class="row" id="mirror_row">
                   <div class="col-md-12">
-                    <button class="btn button_rotation" id="mirror">&#8646;</button>
+                    <button class="btn button_rotation" id="mirror">&#8645;</button>
                   </div>
                 </div>
                 <div class="row">
@@ -259,7 +259,7 @@
         <div class="col-lg-3 text-center"><!-- Spalte rechts -->
           <div class="row mt-2 mb-5">
             <div class="col-md-12">
-              <h3>Runde X</h3>
+              <h3 id="gameround">Runde 0</h3>
             </div>
           </div>
 
@@ -289,6 +289,8 @@
           <div class="row mt-4">
             <div class="col-md-12 user_box">
               <h4 class="mb-4">Hallo Florian!</h4>
+              <button type="button" class="btn btn-primary" id="button_start_game_human" onclick="">Online-Spiel starten</button>
+              <button type="button" class="btn btn-primary" id="button_start_game_ki" onclick="">Spiel gegen KI</button>
               <button type="button" class="btn btn-primary" id="button_restart_game" onclick="restart();">Spiel neu starten</button>
               <button type="button" class="btn btn-primary" id="button_leave_game" onclick="closeGame();">Spiel verlassen</button>
             </div>
