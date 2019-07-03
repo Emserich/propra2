@@ -174,6 +174,8 @@ document.addEventListener("drop", function(event) {
 // -----------------------------/DRAG & DROP-----------------------------
 
 
+
+
 // ----------------------------EventListener---------------------
 addListener('turnEnd', function(event) {
 		var stringFromServer = event.data;
@@ -234,21 +236,23 @@ $(document).on("click","#ergebnis_button", function () {
 
 
 // ----------------------------- User Buttons -----------------------------
-$(document).on("click","#button_finish_round", function () {
+$('#button_finish_round').on('click', function () {
 
 	//Fertigstellen des Spielzugs
 	alert('Fertigstellen des Spielzugs');
 
 });
 
-$(document).on("click","#button_restart_game", function () {
+
+$('#button_restart_game').on('click', function () {
 
 	//Spiel neu starten
 	alert('Spiel neu starten');
 
 });
 
-$(document).on("click","#button_leave_game", function () {
+
+$('#button_leave_game').on('click', function () {
 
 	//Spiel verlassen
 	alert('Spiel verlassen');
