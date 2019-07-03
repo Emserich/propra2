@@ -6,7 +6,17 @@ var clickRight = 0; // nach rechts drehen
 var rotation = 0; // Anzahl Drehung
 var rotationSide = ""; //Drehrichtung
 var statusWait = true;
-
+var turnCounter = 0;
+var diceCounter = 0;
+var currentFieldID =0;
+var currentDiceImg = "";
+var turnData = 		[
+					  	 [0, 0, 0, 0],
+ 						 [0, 0, 0, 0],
+						 [0, 0, 0, 0],
+						 [0, 0, 0, 0],
+						 [0, 0, 0, 0]
+					];	
 
 // -----------------------------Rotation und Spiegelung-----------------------------
 
@@ -154,11 +164,16 @@ document.addEventListener("drop", function(event) {
 		// document.getElementById("demo").style.color = "";
 
 		// $('#'+event.target.id).append('<div class="round_nr">&#10003;</div>');
-		
+		document.getElementById("Player").innerHTML = event.target.id //nur zum Test
 		event.target.style.border = "";
 		$(".field").css("border","");
 		event.target.appendChild(document.getElementById(data));
-		document.getElementById("Player").innerHTML = document.getElementById(data).src;
+		//Bild des benutzen Würfels
+		currentDiceImg = document.getElementById(data).src.slice(-7); 
+		currentFieldID = event.target.id;
+		//turnData[diceCounter][0] = currentDiceImg; //move elsewhere?
+		setTurnData();
+		
 		$('#dice_rotated_'+img_index).removeClass("unset");
 		$('#dice_rotated_'+img_index).addClass("set");
 		$('.set').attr('draggable', false);
@@ -166,6 +181,7 @@ document.addEventListener("drop", function(event) {
 
 		$('.rotation_field').hide();
 		img_index++; //ID hochzählen
+		diceCounter++; //Anzahl benutzter Würfel
 
 		$('#'+event.target.id).prepend('<div class="round_nr">5</div>'); //Runde eintragen
 	
@@ -177,7 +193,7 @@ document.addEventListener("drop", function(event) {
 
 
 // ----------------------------EventListener---------------------
-addListener('turnEnd', function(event) {
+addListener('standardEvent', function(event) {
 		var stringFromServer = event.data;
 		var arr = stringFromServer.split(',');
 		//console.log(arr);
@@ -190,12 +206,17 @@ addListener('turnEnd', function(event) {
 				console.log(arr[10]);
 				setVisible();
 			}
-				
-			
-			
+			diceCounter = 0;	
+			turnData = [
+							   	 [0, 0, 0, 0],
+ 								 [0, 0, 0, 0],
+								 [0, 0, 0, 0],
+								 [0, 0, 0, 0],
+								 [0, 0, 0, 0],
+							];		
 			
 			document.getElementById("Player").innerHTML = playerMessage;
-			redraw();
+			
 		}
 		statusWait = false;
 	});
@@ -294,12 +315,26 @@ function toggleFieldnumber() {
 
 
 // ----------------------------Hilfsfunktionen-------------------
-
+	function setTurnData(){
+		turnData[diceCounter][0] = currentDiceImg;
+		if (currentFieldID.length == 7){
+			turnData[diceCounter][1] = currentFieldID.slice(-1);
+		} else {turnData[diceCounter][1] = currentFieldID.slice(-2)};		
+		turnData[diceCounter][2] = angle;
+		turnData[diceCounter][3] = mirror;
+		console.log(turnData[diceCounter][0]);
+		console.log(turnData[diceCounter][1]);
+		console.log(turnData[diceCounter][2]);
+		console.log(turnData[diceCounter][3]);
+		}
 	function updateGameState(){
 		statusWait = true;
-		sendDataToServer(sentFields);
+		sendDataToServer(turnData);
 	}
-	
+	function turnEnd(){
+		turnCounter +=1;
+		sendDataToServer("END_TURN");
+	}
 	function restart(){
 			statusWait = true;
 			sendDataToServer("RESTART");
@@ -344,4 +379,8 @@ function toggleFieldnumber() {
 				 };
 					return rotationSide; 
 	}
+	function addAi() {
+	sendDataToServer("ADD_AI");
+	}
+	
 // ---------------------------/Hilfsfunktionen-------------------
