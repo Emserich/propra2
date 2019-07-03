@@ -320,6 +320,7 @@ function setTurnData(){
 	}
 function updateGameState(){
 	statusWait = true;
+	turnDataToString();
 	sendDataToServer(stringData);
 }
 function turnDataToString(){
