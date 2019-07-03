@@ -242,10 +242,57 @@ public class RailroadInk extends Game {
 		
 	}
 
+	private String isHost(User user) 
+	{
+		if(user==creator)
+			
+			return 	",HOST";
+		else
+			
+		return ",NOTTHEHOST";
+	}
+	
 	@Override
 	public String getGameData(String eventName, User user) {
-		// TODO Auto-generated method stub
-		return null;
+		String gameData = "";
+		if(eventName.equals("PLAYERLEFT")){
+			return playerLeft + " hat das Spiel verlassen!";
+		}
+		if(eventName.equals("CLOSE")){
+			return "CLOSE";
+		}
+		
+		ArrayList<Board> boardList  = getBoardList();
+
+		for (int i = 0; i < boardList.size(); i++) {
+			gameData += String.valueOf(boardList.get(i));
+			gameData += ',';
+		}
+		
+		if(playerList.size() < 2){
+			gameData += "Warte Auf 2ten Spieler...";
+			gameData += isHost(user);
+			return gameData;
+		}
+
+		if (this.gState == GameState.FINISHED) {
+			if (turnCounter == 7){
+				gameData += "Unentschieden!";
+				gameData += isHost(user);
+				return gameData;
+			}
+			//TODO Fall betrachten, wenn es nicht unentschieden ist
+		}
+
+
+		if (playerList.indexOf(user) == 0)
+			gameData += " (x)";
+		else
+			gameData += " (o)";
+		
+		gameData += isHost(user);
+
+		return gameData;
 	}
 
 	/* -- METHODS FOR MANAGING THE PLAYERS -- */
@@ -308,6 +355,10 @@ public class RailroadInk extends Game {
 			}
 			//TODO inform the other players about this
 		}
+	}
+
+	public ArrayList<Board> getBoardList() {
+		return boardList;
 	}	
 	
 }
