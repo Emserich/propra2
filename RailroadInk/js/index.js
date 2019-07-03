@@ -315,72 +315,73 @@ function toggleFieldnumber() {
 
 
 // ----------------------------Hilfsfunktionen-------------------
-	function setTurnData(){
-		turnData[diceCounter][0] = currentDiceImg;
-		if (currentFieldID.length == 7){
-			turnData[diceCounter][1] = currentFieldID.slice(-1);
-		} else {turnData[diceCounter][1] = currentFieldID.slice(-2)};		
-		turnData[diceCounter][2] = angle;
-		turnData[diceCounter][3] = mirror;
-		console.log(turnData[diceCounter][0]);
-		console.log(turnData[diceCounter][1]);
-		console.log(turnData[diceCounter][2]);
-		console.log(turnData[diceCounter][3]);
-		}
-	function updateGameState(){
-		statusWait = true;
-		sendDataToServer(turnData);
+function setTurnData(){
+	turnData[diceCounter][0] = currentDiceImg;
+	if (currentFieldID.length == 7){
+		turnData[diceCounter][1] = currentFieldID.slice(-1);
+	} else {turnData[diceCounter][1] = currentFieldID.slice(-2)};		
+	turnData[diceCounter][2] = angle;
+	turnData[diceCounter][3] = mirror;
+	console.log(turnData[diceCounter][0]);
+	console.log(turnData[diceCounter][1]);
+	console.log(turnData[diceCounter][2]);
+	console.log(turnData[diceCounter][3]);
 	}
-	function turnEnd(){
-		turnCounter +=1;
-		sendDataToServer("END_TURN");
-	}
-	function restart(){
-			statusWait = true;
-			sendDataToServer("RESTART");
-	}
+function updateGameState(){
+	statusWait = true;
+	sendDataToServer(turnData);
+}
+function turnEnd(){
+	turnCounter +=1;
+	sendDataToServer("END_TURN");
+}
+function restart(){
+	statusWait = true;
+	sendDataToServer("RESTART");
+}
 
-	function setVisible(){
-		document.getElementById("restartButton").style.visibility ="visible";	
-		document.getElementById("closeButton").style.visibility ="visible";
-	}
+function setVisible(){
+	document.getElementById("restartButton").style.visibility ="visible";	
+	document.getElementById("closeButton").style.visibility ="visible";
+}
 
-	function closeGame(){
-		sendDataToServer("CLOSE");
+function closeGame(){
+	sendDataToServer("CLOSE");
+}
+function countLeft(){
+	clickLeft+=1;
+}
+function countRight(){
+	clickRight+=1;
+}
+function getRotation(){
+	if (clickRight > clickLeft){
+
+		rotation = clickRight - clickLeft;
+ 	}
+	else if (clickLeft > clickRight){
+		
+		rotation = clickLeft - clickRight;
 	}
-	function countLeft(){
-		clickLeft+=1;
+	else {
+		rotation = 0;
+	};
+	return rotation;
+}
+function getRotationSide(){
+	if (clickRight > clickLeft){
+		rotationSide = "r";
 	}
-	function countRight(){
-		clickRight+=1;
+	else if (clickLeft > clickRight){
+		rotationSide ="l";
 	}
-	function getRotation(){
-		if (clickRight > clickLeft){
-			
-				rotation = clickRight - clickLeft;
-			 	}
-				 else if (clickLeft > clickRight){
-					
-					 rotation = clickLeft - clickRight;
-				 }
-				 else {
-					rotation = 0;
-					};
-					return rotation;
-	}
-	function getRotationSide(){
-			if (clickRight > clickLeft){
-				 rotationSide = "r";
-				 	}
-				 else if (clickLeft > clickRight){
-					 rotationSide ="l";
-				}
-				 else {rotationSide ="";	
-				 };
-					return rotationSide; 
-	}
-	function addAi() {
+	else {
+		rotationSide ="";	
+	};
+	return rotationSide; 
+}
+function addAi() {
 	sendDataToServer("ADD_AI");
-	}
+}
 	
 // ---------------------------/Hilfsfunktionen-------------------
