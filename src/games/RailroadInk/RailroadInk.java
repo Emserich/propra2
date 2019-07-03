@@ -13,6 +13,7 @@ import userManagement.User;
 //java classes
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class RailroadInk extends Game {
 
@@ -114,9 +115,11 @@ public class RailroadInk extends Game {
 				boardList.add(board);
 			}
 			
+			
 			//if there are as many players as allowed, start the game
 			if(playerList.size() == getMaxPlayerAmount() || playerList.size() >1) {
 				this.gState = GameState.RUNNING;
+				sendGameDataToClients("standardEvent");
 			}
 			
 		}
@@ -136,11 +139,103 @@ public class RailroadInk extends Game {
 		int feldnr = Integer.parseInt(receivedArray[4]);
 		
 		
+		int GesamtDrehung=0;
+		if (Drehung.equals("r"))
+		{
+			GesamtDrehung= (90 * Drehanzahl) % 360 ;
+		}
+		else if (Drehung.equals("l"))
+		{
+			Drehanzahl = Drehanzahl % 4;
+			GesamtDrehung = 360 - (Drehanzahl * 90);
+		}
 		
+		Orientations orientation = Orientations.ZERO_DEGREES;
 		
+		switch (GesamtDrehung)
+		{
+			case 0: 
+				orientation = Orientations.ZERO_DEGREES;
+			case 90:
+				orientation = Orientations.NINETY_DEGREES;
+			case 180:
+				orientation = Orientations.ONEHUNDREDEIGHTY_DEGREES;
+			case 270:
+				orientation = Orientations.TWOHUNDREDSEVENTY_DEGREES;
 		
+		}
 		
+		RouteElement RouteElem=null;
+		switch (imageNr)
+		{
+			case 1:
+				RouteElem = new RouteElement(orientation, ElementTypes.ROAD, spiegelung);
+			case 2: 
+				RouteElem = new RouteElement(orientation, ElementTypes.ROAD_TURN, spiegelung);
+			case 3:
+				RouteElem = new RouteElement(orientation, ElementTypes.ROAD_TJUNCTION, spiegelung);
+			case 4:
+				RouteElem = new RouteElement(orientation, ElementTypes.RAIL, spiegelung);
+			case 5:
+				RouteElem = new RouteElement(orientation, ElementTypes.RAIL_TURN, spiegelung);
+			case 6:
+				RouteElem = new RouteElement(orientation, ElementTypes.RAIL_TJUNCTION, spiegelung);
+			case 7:
+				RouteElem = new RouteElement(orientation, ElementTypes.OVERPASS, spiegelung);
+			case 8:
+				RouteElem = new RouteElement(orientation, ElementTypes.STATION, spiegelung);
+			case 9:
+				RouteElem = new RouteElement(orientation, ElementTypes.STATION_TURN, spiegelung);
+			case 10:
+				RouteElem = new RouteElement(orientation, ElementTypes.ROAD_CROSSROAD, spiegelung);
+			case 11:
+				RouteElem = new RouteElement(orientation, ElementTypes.RAIL_CROSSROAD, spiegelung);
+			case 12:
+				RouteElem = new RouteElement(orientation, ElementTypes.STATION_1, spiegelung);
+			case 13:
+				RouteElem = new RouteElement(orientation, ElementTypes.STATION_2, spiegelung);
+			case 14:
+				RouteElem = new RouteElement(orientation, ElementTypes.STATION_3, spiegelung);
+			case 15:
+				RouteElem = new RouteElement(orientation, ElementTypes.STATION_4, spiegelung);
+		}
 		
+		Board userboard = null;;
+		
+		Iterator<Board> itB = boardList.iterator();
+		while (itB.hasNext())
+		{
+			Board userboardit = itB.next();
+			if (userboardit.getUser() == user) userboard = userboardit;
+		}
+		
+		Field field = new Field(feldnr);
+		
+		//falls SPezialelement platziert wurde in dieser runde kehre zurück
+		if(imageNr>9 && !userboard.isSpecialElementPlacedInThisRound())
+			{
+			sendGameDataToUser(user, "SpecialElementalreadyPlaced");
+			return;
+			}
+		
+		if(userboard.canElementBePlaced(field, RouteElem))
+		{
+			Iterator<Field> itF = userboard.getFields().iterator();
+			while(itF.hasNext())
+			{
+				Field f = itF.next();
+				if(f == field)
+				{
+					f = new Field(feldnr, RouteElem);
+				}
+			}
+		}
+		else 
+		{
+			sendGameDataToUser(user, "WrongField");
+			return;
+		}
+			
 		
 		
 		
