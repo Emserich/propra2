@@ -10,13 +10,8 @@ var turnCounter = 0;
 var diceCounter = 0;
 var currentFieldID =0;
 var currentDiceImg = "";
-var turnData = 		[
-					  	 [0, 0, 0, 0],
- 						 [0, 0, 0, 0],
-						 [0, 0, 0, 0],
-						 [0, 0, 0, 0],
-						 [0, 0, 0, 0]
-					];	
+var turnData = 	[0, 0, 0, 0];
+var stringData = ""; 					
 
 // -----------------------------Rotation und Spiegelung-----------------------------
 
@@ -171,8 +166,9 @@ document.addEventListener("drop", function(event) {
 		//Bild des benutzen Würfels
 		currentDiceImg = document.getElementById(data).src.slice(-7); 
 		currentFieldID = event.target.id;
-		//turnData[diceCounter][0] = currentDiceImg; //move elsewhere?
+		
 		setTurnData();
+		updateGameState();
 		
 		$('#dice_rotated_'+img_index).removeClass("unset");
 		$('#dice_rotated_'+img_index).addClass("set");
@@ -207,13 +203,8 @@ addListener('standardEvent', function(event) {
 				setVisible();
 			}
 			diceCounter = 0;	
-			turnData = [
-							   	 [0, 0, 0, 0],
- 								 [0, 0, 0, 0],
-								 [0, 0, 0, 0],
-								 [0, 0, 0, 0],
-								 [0, 0, 0, 0],
-							];		
+			turnData = [0, 0, 0, 0];
+ 			stringData = "";				
 			
 			document.getElementById("Player").innerHTML = playerMessage;
 			
@@ -316,12 +307,12 @@ function toggleFieldnumber() {
 
 // ----------------------------Hilfsfunktionen-------------------
 function setTurnData(){
-	turnData[diceCounter][0] = currentDiceImg;
+	turnData[0] = currentDiceImg;
 	if (currentFieldID.length == 7){
-		turnData[diceCounter][1] = currentFieldID.slice(-1);
-	} else {turnData[diceCounter][1] = currentFieldID.slice(-2)};		
-	turnData[diceCounter][2] = angle;
-	turnData[diceCounter][3] = mirror;
+		turnData[1] = currentFieldID.slice(-1);
+	} else {turnData[1] = currentFieldID.slice(-2)};		
+	turnData[2] = angle;
+	turnData[3] = mirror;
 	console.log(turnData[diceCounter][0]);
 	console.log(turnData[diceCounter][1]);
 	console.log(turnData[diceCounter][2]);
@@ -329,8 +320,11 @@ function setTurnData(){
 	}
 function updateGameState(){
 	statusWait = true;
-	sendDataToServer(turnData);
+	sendDataToServer(stringData);
 }
+function turnDataToString(){
+		stringData = turnData.join(",");
+		}
 function turnEnd(){
 	turnCounter +=1;
 	sendDataToServer("END_TURN");
@@ -348,38 +342,7 @@ function setVisible(){
 function closeGame(){
 	sendDataToServer("CLOSE");
 }
-function countLeft(){
-	clickLeft+=1;
-}
-function countRight(){
-	clickRight+=1;
-}
-function getRotation(){
-	if (clickRight > clickLeft){
 
-		rotation = clickRight - clickLeft;
- 	}
-	else if (clickLeft > clickRight){
-		
-		rotation = clickLeft - clickRight;
-	}
-	else {
-		rotation = 0;
-	};
-	return rotation;
-}
-function getRotationSide(){
-	if (clickRight > clickLeft){
-		rotationSide = "r";
-	}
-	else if (clickLeft > clickRight){
-		rotationSide ="l";
-	}
-	else {
-		rotationSide ="";	
-	};
-	return rotationSide; 
-}
 function addAi() {
 	sendDataToServer("ADD_AI");
 }
