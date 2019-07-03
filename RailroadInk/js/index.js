@@ -1,8 +1,11 @@
 var img_index = 1; //ID des ins Spielfeld zu ziehenden Images
 var angle = 0;  //Drehwinkel
 var mirror = 0; //Spiegelung
-
-
+var clickLeft = 0; // nach links drehen
+var clickRight = 0; // nach rechts drehen
+var rotation = 0; // Anzahl Drehung
+var rotationSide = ""; //Drehrichtung
+var statusWait = true;
 
 
 // -----------------------------Rotation und Spiegelung-----------------------------
@@ -114,6 +117,7 @@ document.addEventListener("dragstart", function(event) {
 
 		// Change the opacity of the draggable element
 		event.target.style.opacity = "0.7";
+			
 	}
 	
 });
@@ -165,7 +169,7 @@ document.addEventListener("drop", function(event) {
 		event.target.style.border = "";
 		$(".field").css("border","");
 		event.target.appendChild(document.getElementById(data));
-
+		document.getElementById("Player").innerHTML = document.getElementById(data).src;
 		$('#dice_rotated_'+img_index).removeClass("unset");
 		$('#dice_rotated_'+img_index).addClass("set");
 		$('.set').attr('draggable', false);
@@ -175,15 +179,35 @@ document.addEventListener("drop", function(event) {
 		img_index++; //ID hochzählen
 
 		$('#'+event.target.id).prepend('<div class="round_nr">5</div>'); //Runde eintragen
+	
 	}
 });
 // -----------------------------/DRAG & DROP-----------------------------
 
 
 // ----------------------------EventListener---------------------
-// ID Player muss in html noch gesetzt werden
-
-
+addListener('turnEnd', function(event) {
+		var stringFromServer = event.data;
+		var arr = stringFromServer.split(',');
+		//console.log(arr);
+		
+		if(arr.length==11){
+			for(var i=0; i<9; i++) { arrFields[i] = +arr[i]; }
+			playerMessage = arr[9];
+			var str = arr[10];
+			if(str=="HOST"){
+				console.log(arr[10]);
+				setVisible();
+			}
+				
+			
+			
+			
+			document.getElementById("Player").innerHTML = playerMessage;
+			redraw();
+		}
+		statusWait = false;
+	});
 //START wird ausgelöst wenn ein Spiel erstellt wird,
 // aber noch nicht genügend Spieler da sind
 addEventListener('START', function(event){
@@ -277,23 +301,12 @@ function toggleFieldnumber() {
 
 
 // ----------------------------Hilfsfunktionen-------------------
-/*Frage ob wir die Funktion brauchen, weil aktuelle Fields IDs im html bekommen
-function initFields() {}
-window.onload=initFields;
-*/
+
 	function updateGameState(){
 		statusWait = true;
 		sendDataToServer(sentFields);
 	}
 	
-/*	//redraw wird im standardEvent Listener aufgerufen
-	function redraw(){
-		for(var i=0;i<49; i++){
-			var img = document.getElementById('field_'+i);
-			img.src = getImg(arrFields[i]);
-		}
-	}
-*/	
 	function restart(){
 			statusWait = true;
 			sendDataToServer("RESTART");
@@ -307,5 +320,35 @@ window.onload=initFields;
 	function closeGame(){
 		sendDataToServer("CLOSE");
 	}
-
+	function countLeft(){
+		clickLeft+=1;
+	}
+	function countRight(){
+		clickRight+=1;
+	}
+	function getRotation(){
+		if (clickRight > clickLeft){
+			
+				rotation = clickRight - clickLeft;
+			 	}
+				 else if (clickLeft > clickRight){
+					
+					 rotation = clickLeft - clickRight;
+				 }
+				 else {
+					rotation = 0;
+					};
+					return rotation;
+	}
+	function getRotationSide(){
+			if (clickRight > clickLeft){
+				 rotationSide = "r";
+				 	}
+				 else if (clickLeft > clickRight){
+					 rotationSide ="l";
+				}
+				 else {rotationSide ="";	
+				 };
+					return rotationSide; 
+	}
 // ---------------------------/Hilfsfunktionen-------------------

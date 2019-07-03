@@ -139,10 +139,10 @@
                 </div>
                 <div class="row">
                   <div class="col-md-12">
-                    <button class="btn button_rotation" id="rotate_left">&#8630;</button>
+                    <button class="btn button_rotation" id="rotate_left" onclick="countLeft();">&#8630;</button>
                     <span id="rotation_image">
                     </span>
-                    <button class="btn button_rotation" id="rotate_right">&#8631;</button>
+                    <button class="btn button_rotation" id="rotate_right" onclick="countRight();">&#8631;</button>
                   </div>
                 </div>
               </div>
@@ -289,8 +289,8 @@
           <div class="row mt-4">
             <div class="col-md-12 user_box">
               <h4 class="mb-4">Hallo Florian!</h4>
-              <button type="button" class="btn btn-primary" id="button_restart_game">Spiel neu starten</button>
-              <button type="button" class="btn btn-primary" id="button_leave_game">Spiel verlassen</button>
+              <button type="button" class="btn btn-primary" id="button_restart_game" onclick="restart();">Spiel neu starten</button>
+              <button type="button" class="btn btn-primary" id="button_leave_game" onclick="closeGame();">Spiel verlassen</button>
             </div>
           </div>
 
