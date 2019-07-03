@@ -64,18 +64,11 @@ $('#mirror').on('click', function () {
 
 	switch (mirror) {
 	  case 0:
-	    $('#dice_rotated_'+img_index).css({'transform': 'rotate('+angle+'deg) scale(-1, 1)'});
+	    $('#dice_rotated_'+img_index).css({'transform': 'rotate('+angle+'deg) scale(1, -1)'});
 	    mirror = 1;
 	    break;
+	  
 	  case 1:
-	    $('#dice_rotated_'+img_index).css({'transform': 'rotate('+angle+'deg) scale(-1, -1)'});
-	    mirror = 2;
-	    break;
-	  case 2:
-	  	$('#dice_rotated_'+img_index).css({'transform': 'rotate('+angle+'deg) scale(1, -1)'});
-	    mirror =3;
-	    break;
-	  case 3:
 	  	$('#dice_rotated_'+img_index).css({'transform': 'rotate('+angle+'deg) scale(1, 1)'});
 	    mirror = 0;
 	    break;
@@ -87,10 +80,6 @@ function getMirror() { //Gibt die aktuelle Spiegelung an die Rotation
 	  case 0:
 	  	return 'scale(1, 1)';
 	  case 1:
-	  	return 'scale(-1, 1)';
-	  case 2:
-	  	return 'scale(-1, -1)';
-	  case 3:
 	  	return 'scale(1, -1)';
 	}
 };
