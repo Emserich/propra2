@@ -11,7 +11,9 @@ var diceCounter = 0;
 var currentFieldID =0;
 var currentDiceImg = "";
 var turnData = 	[0, 0, 0, 0];
-var stringData = ""; 					
+var stringData = ""; 	
+var rollButtonCounter = 0;		
+var roleValue=[];		
 
 // -----------------------------Rotation und Spiegelung-----------------------------
 
@@ -47,8 +49,14 @@ $(document).on("click",".dice_img", function () {
 
 //Würfel wieder wählbar machen wenn neu gewürfelt
 $(document).on("click","#roll-button", function () {
-	
+	if (rollButtonCounter%2==0){
 		$('.dice_cube').removeClass("img_used");
+	}
+	else {
+		getRoll();
+		
+		}
+	rollButtonCounter++;	
 });
 
 
@@ -204,12 +212,14 @@ $(document).on("click","#button_finish_round", function () {
 
 	//Fertigstellen des Spielzugs
 	alert('Fertigstellen des Spielzugs');
+	turnEnd();
 
 });
 
 $(document).on("click","#button_start_game_human", function () {
 
 	//Online-Spiel starten
+	startGame();
 	turnCounter = 1;
 	document.getElementById('gameround').innerHTML = 'Runde ' +  turnCounter;
 
@@ -217,6 +227,8 @@ $(document).on("click","#button_start_game_human", function () {
 $(document).on("click","#button_start_game_ki", function () {
 
 	//Spiel gegen KI
+	addKI();
+	startGame();
 	turnCounter = 1;
 	document.getElementById('gameround').innerHTML = 'Runde ' +  turnCounter;
 
@@ -226,6 +238,7 @@ $(document).on("click","#button_restart_game", function () {
 
 	//Spiel neu starten
 	alert('Spiel neu starten');
+	restart();
 
 });
 
@@ -233,6 +246,8 @@ $(document).on("click","#button_leave_game", function () {
 
 	//Spiel verlassen
 	alert('Spiel verlassen');
+	closeGame();
+	
 
 });
 // ----------------------------- /User Buttons -----------------------------
@@ -278,10 +293,6 @@ function setTurnData(){
 	} else {turnData[1] = currentFieldID.slice(-2)};		
 	turnData[2] = angle;
 	turnData[3] = mirror;
-	console.log(turnData[diceCounter][0]);
-	console.log(turnData[diceCounter][1]);
-	console.log(turnData[diceCounter][2]);
-	console.log(turnData[diceCounter][3]);
 	}
 function updateGameState(){
 	statusWait = true;
@@ -300,18 +311,55 @@ function restart(){
 	statusWait = true;
 	sendDataToServer("RESTART");
 }
+function startGame(){
+	sendDataToServer("START");
+}
+function getRoll(){
+	var diceClass = document.getElementsByClassName("die-list even-roll");
+	
+		for (i=0;i<diceClass.length;i++){
+				roleValue[i] = diceClass[i].getAttribute("data-roll");
+			}	
+		translateRoll();		
+}
 
 function setVisible(){
 	document.getElementById("restartButton").style.visibility ="visible";	
 	document.getElementById("closeButton").style.visibility ="visible";
+}
+function translateRoll(){
+	for(i=0;i<3;i++){
+		switch (roleValue[i]){
+			case "1": roleValue[i] ="1_1.png";
+			case "2":	roleValue[i] ="1_2.png";
+			case "3":	roleValue[i] ="1_3.png";
+			case "4":	roleValue[i] ="1_4.png";
+			case "5":	roleValue[i] ="1_5.png";
+			case "6":	roleValue[i] ="1_6.png";
+			break;
+		}
+	}
+		switch (roleValue[3]){
+			case "1": roleValue[3] ="l_1.png";
+			case "2":	roleValue[3] ="l_2.png";
+			case "3":	roleValue[3] ="l_3.png";
+			case "4":	roleValue[3] ="l_4.png";
+			case "5":	roleValue[3] ="l_5.png";
+			case "6":	roleValue[3] ="l_6.png";
+			break;
+	}
+	var roleValue2 = roleValue.join(",");
+	console.log(roleValue2);
+	sendDataToServer(roleValue2);
 }
 
 function closeGame(){
 	sendDataToServer("CLOSE");
 }
 
-function addAi() {
-	sendDataToServer("ADD_AI");
+function addKi() {
+	sendDataToServer("ADD_KI");
+	
 }
 // ---------------------------/Hilfsfunktionen-------------------
 
@@ -335,7 +383,8 @@ addListener('standardEvent', function(event) {
 			diceCounter = 0;	
 			turnData = [0, 0, 0, 0];
  			stringData = "";				
-			
+			rollButtonCounter = 0;
+			roleValue = [];
 			document.getElementById("Player").innerHTML = playerMessage;
 			
 		}
