@@ -66,6 +66,10 @@ h4 {
 	border: 2px solid #35302f;
 	border-radius: 20px;
 	padding: 5px;
+	background: url("../images/bg_box.png");
+	/*background-size: 100%;*/
+	background-size: cover;
+  	background-repeat: no-repeat;
 }
 .rotation_field img {
 	background-color: #fff;
@@ -249,9 +253,19 @@ h4 {
 
 .user_box {
 	background-color: rgba(181, 216, 245, 0.7);
+	background: url("../images/bg_box2.png");
+	/*background-size: 100%;*/
+	background-size: cover;
+  	background-repeat: no-repeat;
 	border: 2px solid #35302f;
 	border-radius: 20px;
 	padding: 15px;
+}
+.user_box h4 {
+	color: #e85a4d;
+	background-color: rgba(255,255,255, 0.93);
+	border-radius: 7px;
+	padding: 0.1em 0px;
 }
 .button_user_box {
   padding: 0.25rem 0.25rem 0.4rem 0.25rem;
