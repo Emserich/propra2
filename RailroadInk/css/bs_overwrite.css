@@ -124,7 +124,7 @@ button.bg-dark:focus {
 
 
 .tooltip.show {
-  opacity: 0.85;
+  opacity: 0.9;
 }
 .bs-tooltip-top .arrow::before, .bs-tooltip-auto[x-placement^="top"] .arrow::before {
   border-top-color: #e85a4d;
