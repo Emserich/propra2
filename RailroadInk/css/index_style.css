@@ -3,7 +3,7 @@ Farben:
 
 blau:
 #cfe8f8 -> rgba(207, 232, 248, 1)
-#b5d8f5 ->
+#b5d8f5 -> rgba(181, 216, 245, 1)
 #61acdf -> 
 #3063a7 -> rgba(48, 99, 167, 1)
 
@@ -40,7 +40,7 @@ h3, h5 {
 	/*font-family:verdana, sans-serif;*/
 }
 h4 {
-	color: #343974;
+	color: #e85a4d;
 }
 #gameround {
 	color: #e85a4d;
@@ -62,7 +62,7 @@ h4 {
 }
 
 .rotation_field {
-	background-color: #b5d8f5;
+	background-color: rgba(181, 216, 245, 0.7);
 	border: 2px solid #35302f;
 	border-radius: 20px;
 	padding: 5px;
@@ -243,6 +243,48 @@ h4 {
 	background: url("../images/dice/dice_1_2.png");
 	background-size: 100% 100%;
 	transform: rotate(270deg);
+}
+
+
+
+.user_box {
+	background-color: rgba(181, 216, 245, 0.7);
+	border: 2px solid #35302f;
+	border-radius: 20px;
+	padding: 15px;
+}
+.button_user_box {
+  padding: 0.25rem 0.25rem 0.4rem 0.25rem;
+  font-size: 1.5rem;
+  color: #e85a4d;
+  color: #fff;
+  /*line-height: 0;*/
+  width: 2.3em;
+  height: 2.3em;
+  border: 2px outset #e85a4d; 
+  border-radius: 50%;
+  background-color: #fff;
+  outline: 0;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+.button_user_box:hover {
+  background-color: #e85a4d;
+  border: 2px outset #e85a4d;
+  font-weight: bold;
+  color: #343974;
+}
+.button_user_box:focus {
+  box-shadow: 0 0 0 0.13rem rgba(232, 90, 77, 0.6);
+  outline: 0;
+}
+.button_user_box:active {
+  background-color: #e85a4d;
+  border: 2px outset black;
+  font-weight: bold;
+  color: #343974;
+}
+.button_user_box:active:focus {
+  box-shadow: 0 0 0 0.13rem rgba(232, 90, 77, 0.6);
 }
 
 

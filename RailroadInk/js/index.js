@@ -12,8 +12,13 @@ var currentFieldID =0;
 var currentDiceImg = "";
 var turnData = 	[0, 0, 0, 0];
 var stringData = ""; 	
-var rollButtonCounter = 0;		
-var roleValue=[];		
+var rollButtonCounter = 0;
+var roleValue=[];
+
+// ----------------------------- Tooltips initialisieren -----------------------------
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
 
 // -----------------------------Rotation und Spiegelung-----------------------------
 
