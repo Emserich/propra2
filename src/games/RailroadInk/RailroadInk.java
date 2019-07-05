@@ -97,7 +97,7 @@ public class RailroadInk extends Game {
 	@Override
 	public void execute(User user, String gsonString) {
 		// TODO implement what should happen if the user interacts with the game
-		if(this.gState==GameState.CLOSED) return;
+		//if(this.gState==GameState.CLOSED) return;
 		
 		if(gsonString.equals("CLOSE")){
 			sendGameDataToClients("CLOSE");
@@ -212,6 +212,7 @@ public class RailroadInk extends Game {
 		Field field = new Field(feldnr);
 		
 		//falls SPezialelement platziert wurde in dieser runde kehre zurück
+		
 		if(imageNr>9 && !userboard.isSpecialElementPlacedInThisRound())
 			{
 			sendGameDataToUser(user, "SpecialElementalreadyPlaced");
@@ -237,9 +238,6 @@ public class RailroadInk extends Game {
 		}
 			
 		
-		
-		
-		
 	}
 
 	private String isHost(User user) 
@@ -253,7 +251,9 @@ public class RailroadInk extends Game {
 	}
 	
 	@Override
+	
 	public String getGameData(String eventName, User user) {
+		
 		String gameData = "";
 		if(eventName.equals("PLAYERLEFT")){
 			return playerLeft + " hat das Spiel verlassen!";
@@ -262,11 +262,17 @@ public class RailroadInk extends Game {
 			return "CLOSE";
 		}
 		
+		
 		ArrayList<Board> boardList  = getBoardList();
 
 		for (int i = 0; i < boardList.size(); i++) {
-			gameData += String.valueOf(boardList.get(i));
-			gameData += ',';
+			Board board = boardList.get(i);
+			if (board.getUser().getName() == user.getName())
+			{
+				//TODO Format der Daten ist noch zu definieren
+				//gameData += String.valueOf(board.getFields());
+				gameData += ',';
+			}
 		}
 		
 		if(playerList.size() < 2){
@@ -281,6 +287,7 @@ public class RailroadInk extends Game {
 				gameData += isHost(user);
 				return gameData;
 			}
+			
 			//TODO Fall betrachten, wenn es nicht unentschieden ist
 		}
 
