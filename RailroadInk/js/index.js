@@ -243,7 +243,7 @@ $(document).on("click","#button_restart_game", function () {
 
 	//Spiel neu starten
 	alert('Spiel neu starten');
-	restart();
+	startGame();
 
 });
 
@@ -312,12 +312,15 @@ function turnEnd(){
 	document.getElementById('gameround').innerHTML = 'Runde ' +  turnCounter;
 	sendDataToServer("END_TURN");
 }
+/*
 function restart(){
 	statusWait = true;
 	sendDataToServer("RESTART");
-}
+} */
 function startGame(){
-	sendDataToServer("START");
+	statusWait = true;
+	console.log("Game start");
+	sendDataToServer("RESTART");
 }
 function getRoll(){
 	var diceClass = document.getElementsByClassName("die-list even-roll");
@@ -329,32 +332,42 @@ function getRoll(){
 }
 
 function setVisible(){
-	document.getElementById("restartButton").style.visibility ="visible";	
-	document.getElementById("closeButton").style.visibility ="visible";
-}
+	document.getElementById("button_restart_game").style.visibility ="visible";
+	}
 function translateRoll(){
+	
 	for(i=0;i<3;i++){
 		switch (roleValue[i]){
 			case "1": roleValue[i] ="1_1.png";
+			break;
 			case "2":	roleValue[i] ="1_2.png";
+			break;
 			case "3":	roleValue[i] ="1_3.png";
+			break;
 			case "4":	roleValue[i] ="1_4.png";
+			break;
 			case "5":	roleValue[i] ="1_5.png";
+			break;
 			case "6":	roleValue[i] ="1_6.png";
 			break;
 		}
 	}
 		switch (roleValue[3]){
-			case "1": roleValue[3] ="l_1.png";
+			case "1" : roleValue[3] ="l_1.png";
+			break;
 			case "2":	roleValue[3] ="l_2.png";
+			break;
 			case "3":	roleValue[3] ="l_3.png";
+			break;
 			case "4":	roleValue[3] ="l_4.png";
+			break;
 			case "5":	roleValue[3] ="l_5.png";
+			break;
 			case "6":	roleValue[3] ="l_6.png";
 			break;
 	}
+	
 	var roleValue2 = roleValue.join(",");
-	console.log(roleValue2);
 	sendDataToServer(roleValue2);
 }
 
@@ -375,8 +388,8 @@ function addKi() {
 addListener('standardEvent', function(event) {
 		var stringFromServer = event.data;
 		var arr = stringFromServer.split(',');
-		//console.log(arr);
-		
+		console.log(arr);
+		console.log("standardEvent angekommen");
 		if(arr.length==11){
 			for(var i=0; i<9; i++) { arrFields[i] = +arr[i]; }
 			playerMessage = arr[9];
@@ -391,7 +404,7 @@ addListener('standardEvent', function(event) {
 			rollButtonCounter = 0;
 			roleValue = [];
 			document.getElementById("Player").innerHTML = playerMessage;
-			
+			document.getElementById("ergebnis_button").style.visibility="hidden";
 		}
 		statusWait = false;
 	});
@@ -403,7 +416,7 @@ addEventListener('START', function(event){
 	playerMessage = arr[9];
 	document.getElementById("Player").innerHTML = playerMessage;
 	if(arr[10]=="HOST") setVisible();
-	statusWait = false;
+	statusWait = false;	
 });
 
 //PLAYERLEFT wird ausgelöst wenn ein Spieler auf "Spiel verlassen" klickt
