@@ -96,6 +96,10 @@ public class RailroadInk extends Game {
 	
 	@Override
 	public void execute(User user, String gsonString) {
+		
+		System.out.println("Execute-Methode aufgerufen mit Daten:");
+		System.out.println(user.getName() + ", " + gsonString);
+		
 		// TODO implement what should happen if the user interacts with the game
 		//if(this.gState==GameState.CLOSED) return;
 		
@@ -132,73 +136,14 @@ public class RailroadInk extends Game {
 		for (int i = 0; i < 5; i++) {
 			receivedArray[i] = strArray[i];
 		}
-		int imageNr = Integer.parseInt(receivedArray[0]);
-		String Drehung = receivedArray[1];
-		int Drehanzahl = Integer.parseInt(receivedArray[2]);
-		boolean spiegelung = Boolean.parseBoolean(receivedArray[3]);
-		int feldnr = Integer.parseInt(receivedArray[4]);
+
+		int fieldNr = Integer.parseInt(receivedArray[2]);
+		fieldNr--;
 		
+		RouteElement routeElem = getElementFromJS(gsonString);
 		
-		int GesamtDrehung=0;
-		if (Drehung.equals("r"))
-		{
-			GesamtDrehung= (90 * Drehanzahl) % 360 ;
-		}
-		else if (Drehung.equals("l"))
-		{
-			Drehanzahl = Drehanzahl % 4;
-			GesamtDrehung = 360 - (Drehanzahl * 90);
-		}
-		
-		Orientations orientation = Orientations.ZERO_DEGREES;
-		
-		switch (GesamtDrehung)
-		{
-			case 0: 
-				orientation = Orientations.ZERO_DEGREES;
-			case 90:
-				orientation = Orientations.NINETY_DEGREES;
-			case 180:
-				orientation = Orientations.ONEHUNDREDEIGHTY_DEGREES;
-			case 270:
-				orientation = Orientations.TWOHUNDREDSEVENTY_DEGREES;
-		
-		}
-		
-		RouteElement RouteElem=null;
-		switch (imageNr)
-		{
-			case 1:
-				RouteElem = new RouteElement(orientation, ElementTypes.ROAD, spiegelung);
-			case 2: 
-				RouteElem = new RouteElement(orientation, ElementTypes.ROAD_TURN, spiegelung);
-			case 3:
-				RouteElem = new RouteElement(orientation, ElementTypes.ROAD_TJUNCTION, spiegelung);
-			case 4:
-				RouteElem = new RouteElement(orientation, ElementTypes.RAIL, spiegelung);
-			case 5:
-				RouteElem = new RouteElement(orientation, ElementTypes.RAIL_TURN, spiegelung);
-			case 6:
-				RouteElem = new RouteElement(orientation, ElementTypes.RAIL_TJUNCTION, spiegelung);
-			case 7:
-				RouteElem = new RouteElement(orientation, ElementTypes.OVERPASS, spiegelung);
-			case 8:
-				RouteElem = new RouteElement(orientation, ElementTypes.STATION, spiegelung);
-			case 9:
-				RouteElem = new RouteElement(orientation, ElementTypes.STATION_TURN, spiegelung);
-			case 10:
-				RouteElem = new RouteElement(orientation, ElementTypes.ROAD_CROSSROAD, spiegelung);
-			case 11:
-				RouteElem = new RouteElement(orientation, ElementTypes.RAIL_CROSSROAD, spiegelung);
-			case 12:
-				RouteElem = new RouteElement(orientation, ElementTypes.STATION_1, spiegelung);
-			case 13:
-				RouteElem = new RouteElement(orientation, ElementTypes.STATION_2, spiegelung);
-			case 14:
-				RouteElem = new RouteElement(orientation, ElementTypes.STATION_3, spiegelung);
-			case 15:
-				RouteElem = new RouteElement(orientation, ElementTypes.STATION_4, spiegelung);
-		}
+		//for testing, remove later
+		System.out.println(routeElem);
 		
 		Board userboard = null;;
 		
@@ -209,26 +154,23 @@ public class RailroadInk extends Game {
 			if (userboardit.getUser() == user) userboard = userboardit;
 		}
 		
-		Field field = new Field(feldnr);
+		Field field = userboard.getFields().get(fieldNr);
 		
 		//falls SPezialelement platziert wurde in dieser runde kehre zurück
 		
-		if(imageNr>9 && !userboard.isSpecialElementPlacedInThisRound())
+		if(routeElem.isSpecialElement() && !userboard.isSpecialElementPlacedInThisRound())
 			{
 			sendGameDataToUser(user, "SpecialElementalreadyPlaced");
 			return;
 			}
 		
-		if(userboard.canElementBePlaced(field, RouteElem))
+		if(userboard.canElementBePlaced(field, routeElem))
 		{
-			Iterator<Field> itF = userboard.getFields().iterator();
-			while(itF.hasNext())
-			{
-				Field f = itF.next();
-				if(f == field)
-				{
-					f = new Field(feldnr, RouteElem);
-				}
+			try{
+				field.addElement(routeElem);
+			} catch (IllegalPlayerMoveException e) {
+				e.printStackTrace();
+				sendGameDataToUser(user, "WrongField");
 			}
 		}
 		else 
@@ -367,5 +309,172 @@ public class RailroadInk extends Game {
 	public ArrayList<Board> getBoardList() {
 		return boardList;
 	}	
+	
+	/* -- HELPFUL METHODS FOR THE IMPLEMENTATION -- */
+	
+	private RouteElement getElementFromJS(String jsInput) {
+		//TODO for testing, remove later
+		System.out.println("Methode getElementFromJS mit Parameter " + jsInput + " betreten.");
+		
+		//split the String every time there is a comma
+		String[] info = jsInput.split(",");
+		
+		//the first and third part of the String is information about the turn that we do not need here
+		//the second part yields information about the element type
+		String typeInfo = info[1];
+		//the fourth part stores the rotation
+		int degrees = Integer.parseInt(info[3]);
+		//the last part tells you whether it is mirrored or not
+		boolean isMirrored = false;
+		int mirrorInfo = Integer.parseInt(info[4]);
+		if(mirrorInfo > 0) {
+			isMirrored = true;
+		}
+		
+		//now, process the information
+		//the orientation
+		Orientations orientation = null;
+		degrees = restoreOrientation(degrees);
+		switch(degrees) {
+		case 0:
+			orientation = Orientations.ZERO_DEGREES;
+			break;
+		case 1:
+			orientation = Orientations.NINETY_DEGREES;
+			break;
+		case 2:
+			orientation = Orientations.ONEHUNDREDEIGHTY_DEGREES;
+			break;
+		case 3:
+			orientation = Orientations.TWOHUNDREDSEVENTY_DEGREES;
+			break;
+		default:
+			//undefined behaviour
+		}
+		
+		//the element type
+		ElementTypes type = getTypeFromJsInput(typeInfo);
+		//since the default orientation is sometimes different in JS and game logic representation, we have to add some degrees sometimes
+		switch(type) {
+		case STATION_1:
+		case STATION_2:
+		case STATION_3:
+		case STATION_4:
+		case ROAD_CROSSROAD:
+		case RAIL_CROSSROAD:
+			//in all of the above cases, we don't have to do anything
+			break;
+		case ROAD:
+		case RAIL:
+		case STATION:
+		case STATION_TURN:
+		case OVERPASS:
+			//in the above cases, we have to add ninety degrees
+			orientation = Orientations.addNinetyDegrees(orientation);
+			break;
+		case ROAD_TURN:
+		case ROAD_TJUNCTION:
+		case RAIL_TURN:
+		case RAIL_TJUNCTION:
+			//in the above cases, we have to add one hundred and eighty degrees
+			orientation = Orientations.addOnehundredeightyDegrees(orientation);
+			break;
+		}
+		
+		//now we can create the element and return it
+		RouteElement element = new RouteElement(orientation, type, isMirrored);
+		return element;
+	}
+	
+	private int restoreOrientation(int degrees) {		
+		//we can divide the number by 90 because the scaling does not give any more information
+		degrees /= 90;
+		
+		//now, do something depending on whether the number is positive or negative
+		if(degrees > 0) {
+			//put it in a range of 0 to 3 as more does not make any sense in the context of the game logic
+			degrees %= 4;
+			//put it in counter-clockwise representation
+			//0 or 180 degrees stay the same
+			if(degrees == 1) {
+				//90 degrees clockwise correspond to 270 degrees counter-clockwise
+				degrees = 3;
+			}
+			if(degrees == 3) {
+				//270 degrees clockwise correspond to 90 degrees counter-clockwise
+				degrees = 1;
+			}
+		} else {
+			//if it is below zero, the rotation is counter-clockwise, which is what we want
+			degrees *= -1;
+			//put it in a range of 0 to 3 as more does not make any sense in the context of the game logic
+			degrees %= 4;
+		}
+		
+		//return the result
+		return degrees;
+	}
+
+	private ElementTypes getTypeFromJsInput(String jsInput) {
+		//the result is of type ElementTypes
+		ElementTypes type = null;
+		
+		//get rid of the leading white space
+		jsInput.trim();
+		//we only need the first three characters
+		String typeInfo = jsInput.substring(0, 3);
+		
+		//get the corresponding type depending on the string
+		switch(typeInfo) {
+		case "1_1":
+			type = ElementTypes.RAIL;
+			break;
+		case "1_2":
+			type = ElementTypes.RAIL_TURN;
+			break;
+		case "1_3":
+			type = ElementTypes.RAIL_TJUNCTION;
+			break;
+		case "1_4":
+			type = ElementTypes.ROAD;
+			break;
+		case "1_5":
+			type = ElementTypes.ROAD_TURN;
+			break;
+		case "1_6":
+			type = ElementTypes.ROAD_TJUNCTION;
+			break;
+		case "2_1":
+			type = ElementTypes.STATION;
+			break;
+		case "2_2":
+			type = ElementTypes.STATION_TURN;
+			break;
+		case "2_3":
+			type = ElementTypes.OVERPASS;
+			break;
+		case "l_1":
+			type = ElementTypes.STATION_1;
+			break;
+		case "l_2":
+			type = ElementTypes.STATION_2;
+			break;
+		case "l_3":
+			type = ElementTypes.ROAD_CROSSROAD;
+			break;
+		case "l_4":
+			type = ElementTypes.RAIL_CROSSROAD;
+			break;
+		case "l_5":
+			type = ElementTypes.STATION_3;
+			break;
+		case "l_6":
+			type = ElementTypes.STATION_4;
+			break;
+		}
+		
+		//return the result
+		return type;
+	}
 	
 }

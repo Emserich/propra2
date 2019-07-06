@@ -51,4 +51,34 @@ public enum Orientations {
 		}
 	}
 	
+	public static Orientations addNinetyDegrees(Orientations oldOrien) {
+		switch(oldOrien) {
+		case ZERO_DEGREES:
+			return NINETY_DEGREES;
+		case NINETY_DEGREES:
+			return ONEHUNDREDEIGHTY_DEGREES;
+		case ONEHUNDREDEIGHTY_DEGREES:
+			return TWOHUNDREDSEVENTY_DEGREES;
+		case TWOHUNDREDSEVENTY_DEGREES:
+			return ZERO_DEGREES;
+		default:
+			return null;
+		}
+	}
+	
+	public static Orientations addOnehundredeightyDegrees(Orientations oldOrien) {
+		switch(oldOrien) {
+		case ZERO_DEGREES:
+			return ONEHUNDREDEIGHTY_DEGREES;
+		case NINETY_DEGREES:
+			return TWOHUNDREDSEVENTY_DEGREES;
+		case ONEHUNDREDEIGHTY_DEGREES:
+			return ZERO_DEGREES;
+		case TWOHUNDREDSEVENTY_DEGREES:
+			return NINETY_DEGREES;
+		default:
+			return null;
+		}
+	}
+	
 }

@@ -617,6 +617,16 @@ public class RouteElement {
 		return equals;
 	}
 	
+	public boolean isSpecialElement() {
+		if(this.type == ElementTypes.STATION_1 || this.type == ElementTypes.STATION_2 || this.type == ElementTypes.STATION_3) {
+			return true;
+		}
+		if(this.type == ElementTypes.STATION_4 || this.type == ElementTypes.RAIL_CROSSROAD || this.type == ElementTypes.ROAD_CROSSROAD) {
+			return true;
+		}
+		return false;
+	}
+	
 	public Orientations getOrientation() {
 		return orientation;
 	}
