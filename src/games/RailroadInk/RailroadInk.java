@@ -103,14 +103,31 @@ public class RailroadInk extends Game {
 		// TODO implement what should happen if the user interacts with the game
 		//if(this.gState==GameState.CLOSED) return;
 		
+		
 		if(gsonString.equals("CLOSE")){
 			sendGameDataToClients("CLOSE");
 			closeGame();
 			return;
 		}
 		
-		if (gsonString.equals("RESTART")) {
-			
+		if(gsonString.equals("PLAYERLEFT")) sendGameDataToClients("PLAYERLEFT");
+		
+		if(spectatorList.contains(user)) return;
+		
+		
+		if(gsonString.equals("RESTART")) {
+			if(gState == GameState.RUNNING) {
+				sendGameDataToClients("Cannot restart game once it was started.");
+				return;
+			}
+		}
+		
+		if (gsonString.equals("RESTART") && isHost(user).equals(",HOST")) {
+			if(gState == GameState.RUNNING) 
+			{
+				sendGameDataToClients("Cannot restart game once it was started.");
+				return;
+			}
 			boardList.clear();
 			for(User u : playerList)
 			{
@@ -178,7 +195,7 @@ public class RailroadInk extends Game {
 			sendGameDataToUser(user, "WrongField");
 			return;
 		}
-			
+		
 		
 	}
 
@@ -234,10 +251,6 @@ public class RailroadInk extends Game {
 		}
 
 
-		if (playerList.indexOf(user) == 0)
-			gameData += " (x)";
-		else
-			gameData += " (o)";
 		
 		gameData += isHost(user);
 
