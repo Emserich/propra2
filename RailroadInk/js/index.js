@@ -415,22 +415,16 @@ var stringFromServer = event.data;
 addListener('resultData', function(event){
 	// do stuff
 })
+addListener('NEW_PLAYER', function(event){
+	document.getElementById("Player").innerHTML = "Ein neuer Spieler ist beigetreten!";
+});
 addListener('standardEvent', function(event) {
 		var stringFromServer = event.data;
 		var arr = stringFromServer.split(',');
 		console.log(arr);
 		console.log("standardEvent angekommen");
-		if(arr.length==11){
-			for(var i=0; i<9; i++) { arrFields[i] = +arr[i]; }
-			playerMessage = arr[9];
-			var str = arr[10];
-			console.log(playerMessage);
-			if(str=="HOST"){
-				console.log(arr[10]);
-				setVisible();
-			}
-		
-		}
+		playerMessage = arr[2];
+
 			diceCounter = 0;	
 			turnData = [0, 0, 0, 0];
  			stringData = "";				
@@ -445,10 +439,11 @@ addListener('standardEvent', function(event) {
 addListener('START', function(event){
 	var stringFromServer = event.data;
 	var arr = stringFromServer.split(',');
-	console.log("erfolg");
-	playerMessage = arr[9];
+	console.log(arr.length);
+	playerMessage = arr[1];
 	document.getElementById("Player").innerHTML = playerMessage;
-	if(arr[10]=="HOST") setVisible();
+	if(arr[2]=="HOST") setVisible();
+	console.log(arr[2]);
 	statusWait = false;	
 });
 

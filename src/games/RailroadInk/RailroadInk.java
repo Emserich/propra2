@@ -111,13 +111,13 @@ public class RailroadInk extends Game {
 			return;
 		}
 		
-		if(gsonString.equals("CLOSE")){
+		if(gsonString.equals("CLOSE") && isHost(user).equals(",HOST")){
 			sendGameDataToClients("CLOSE");
 			closeGame();
 			return;
 		}
 		
-		if(gsonString.equals("PLAYERLEFT")) {
+		if(gsonString.equals("CLOSE") && isHost(user).equals(",NOTTHEHOST")) {
 			sendGameDataToClients("PLAYERLEFT");
 		}
 		
@@ -291,6 +291,7 @@ public class RailroadInk extends Game {
 		//the user is only allowed to join the game, if there are less than the max amount of players and they aren't already in the list
 		if (playerList.size() < getMaxPlayerAmount() && !playerList.contains(user)) {
 			playerList.add(user);
+			sendGameDataToClients("NEW_PLAYER");
 			//create a new board for the player
 			Board board = new Board(user);
 			//add it to the list
@@ -301,6 +302,7 @@ public class RailroadInk extends Game {
 		//if there are as many players as allowed, start the game
 		if(playerList.size() == getMaxPlayerAmount()) {
 			this.gState = GameState.RUNNING;
+			sendGameDataToClients("START");
 			//TODO inform the players about this
 		}
 		
