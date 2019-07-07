@@ -149,7 +149,7 @@ public class RailroadInk extends Game {
 				board.initializeFields();
 				boardList.add(board);
 			}
-			allTurnCounters=0;
+			allTurnCounters = 0;
 			
 			
 			//if there are as many players as allowed, start the game
@@ -214,7 +214,7 @@ public class RailroadInk extends Game {
 			userboard.setSpecialElementPlacedInThisRound(false);
 			for(Board b : boardList)
 			{
-				if(b.getturnCounter()==7) allTurnCounters++;
+				if(b.getturnCounter()== 7) allTurnCounters++;
 			}
 			if(allTurnCounters==playerList.size())
 				{
@@ -272,6 +272,23 @@ public class RailroadInk extends Game {
 		if(eventName.equals("CLOSE")){
 			return "CLOSE";
 		}
+		if(eventName.equals("Restart")){
+			return "Cannot restart game once it was started.";
+		}
+		if(eventName.equals("START")) {
+			return "START";
+		}
+		if(eventName.equals("EndofGame")) {
+			return "EndofGame";
+		}
+		if(eventName.equals("EndOfTurn")) {
+			return "EndOfTurn";
+		}
+		
+		if(eventName.equals("NEW_PLAYER")) {
+			return "NEW_PLAYER" + user.getName();
+		}
+		
 		
 		ArrayList<Board> boardList  = getBoardList();
 
