@@ -19,14 +19,18 @@ public class RailroadInk extends Game {
 
 	/* -- ATTRIBUTES -- */
 	
-	//a user object is used to denote the user whose turn it is (might be useless)
-	
 	//two ArrayLists are used to store the players and the spectators
 	private ArrayList<User> playerList = new ArrayList<User>();
 	private ArrayList<User> spectatorList = new ArrayList<User>();
 	
 	//an ArrayList to store the boards of the players
 	private ArrayList<Board> boardList = new ArrayList<Board>();
+	
+	//an ArrayList to store the players that have already finished their turn
+	private ArrayList<User> finishedPlayers = new ArrayList<User>();
+	
+	//an object of the AI-class
+	private ArtificialIntelligence AI;
 	
 	//an integer value counts the turns
 	private int turnCounter = 0;
@@ -97,12 +101,15 @@ public class RailroadInk extends Game {
 	@Override
 	public void execute(User user, String gsonString) {
 		
+		//TODO for testing, remove later
+		System.out.println("");
 		System.out.println("Execute-Methode aufgerufen mit Daten:");
 		System.out.println(user.getName() + ", " + gsonString);
 		
-		// TODO implement what should happen if the user interacts with the game
-		//if(this.gState==GameState.CLOSED) return;
 		
+		if(this.gState==GameState.CLOSED) {
+			return;
+		}
 		
 		if(gsonString.equals("CLOSE")){
 			sendGameDataToClients("CLOSE");
@@ -110,9 +117,13 @@ public class RailroadInk extends Game {
 			return;
 		}
 		
-		if(gsonString.equals("PLAYERLEFT")) sendGameDataToClients("PLAYERLEFT");
+		if(gsonString.equals("PLAYERLEFT")) {
+			sendGameDataToClients("PLAYERLEFT");
+		}
 		
-		if(spectatorList.contains(user)) return;
+		if(spectatorList.contains(user)) {
+			return;
+		}
 		
 		
 		if(gsonString.equals("RESTART")) {
@@ -122,7 +133,7 @@ public class RailroadInk extends Game {
 			}
 		}
 		
-		if (gsonString.equals("RESTART") && isHost(user).equals(",HOST")) {
+		if (gsonString.equals("RESTART") && isHost(user).equals(",HOST")) {;
 			if(gState == GameState.RUNNING) 
 			{
 				sendGameDataToClients("Cannot restart game once it was started.");
@@ -143,26 +154,29 @@ public class RailroadInk extends Game {
 				sendGameDataToClients("standardEvent");
 			}
 			
+			//return because otherwise we'll get exceptions
+			return;
 		}
 		
-		if (gState != GameState.RUNNING)
+		if (gState != GameState.RUNNING) {
 			return;
+		}
 		
+		String [] receivedArray = new String[4];
 		String[] strArray = gsonString.split(",");
-		String [] receivedArray = new String[5];
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < 4; i++) {
 			receivedArray[i] = strArray[i];
 		}
-
-		int fieldNr = Integer.parseInt(receivedArray[2]);
+			
+		int fieldNr = Integer.parseInt(receivedArray[1]);
 		fieldNr--;
 		
 		RouteElement routeElem = getElementFromJS(gsonString);
 		
-		//for testing, remove later
+		//TODO for testing, remove later
 		System.out.println(routeElem);
 		
-		Board userboard = null;;
+		Board userboard = null;
 		
 		Iterator<Board> itB = boardList.iterator();
 		while (itB.hasNext())
@@ -175,9 +189,11 @@ public class RailroadInk extends Game {
 		
 		//falls SPezialelement platziert wurde in dieser runde kehre zurück
 		
-		if(routeElem.isSpecialElement() && !userboard.isSpecialElementPlacedInThisRound())
+		if(routeElem.isSpecialElement() && userboard.isSpecialElementPlacedInThisRound())
 			{
 			sendGameDataToUser(user, "SpecialElementalreadyPlaced");
+			//TODO for testing, remove later
+			System.out.println("Es wurde bereits ein Spezialelement in dieser Runde gesetzt.");
 			return;
 			}
 		
@@ -185,6 +201,9 @@ public class RailroadInk extends Game {
 		{
 			try{
 				field.addElement(routeElem);
+				if(routeElem.isSpecialElement()) {
+					userboard.setSpecialElementPlacedInThisRound(true);
+				}
 			} catch (IllegalPlayerMoveException e) {
 				e.printStackTrace();
 				sendGameDataToUser(user, "WrongField");
@@ -193,6 +212,8 @@ public class RailroadInk extends Game {
 		else 
 		{
 			sendGameDataToUser(user, "WrongField");
+			//TODO for testing, remove later
+			System.out.println("Das Element darf hier nicht platziert werden");
 			return;
 		}
 		
@@ -315,7 +336,7 @@ public class RailroadInk extends Game {
 			if(index != -1) {
 				boardList.remove(index);
 			}
-			//TODO inform the other players about this
+			sendGameDataToClients("PLAYERLEFT");
 		}
 	}
 
@@ -326,20 +347,17 @@ public class RailroadInk extends Game {
 	/* -- HELPFUL METHODS FOR THE IMPLEMENTATION -- */
 	
 	private RouteElement getElementFromJS(String jsInput) {
-		//TODO for testing, remove later
-		System.out.println("Methode getElementFromJS mit Parameter " + jsInput + " betreten.");
 		
 		//split the String every time there is a comma
 		String[] info = jsInput.split(",");
 		
-		//the first and third part of the String is information about the turn that we do not need here
-		//the second part yields information about the element type
-		String typeInfo = info[1];
-		//the fourth part stores the rotation
-		int degrees = Integer.parseInt(info[3]);
+		//the first part yields information about the element type
+		String typeInfo = info[0];
+		//the third part stores the rotation
+		int degrees = Integer.parseInt(info[2]);
 		//the last part tells you whether it is mirrored or not
 		boolean isMirrored = false;
-		int mirrorInfo = Integer.parseInt(info[4]);
+		int mirrorInfo = Integer.parseInt(info[3]);
 		if(mirrorInfo > 0) {
 			isMirrored = true;
 		}

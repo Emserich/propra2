@@ -199,7 +199,7 @@ public class Board {
 		if(!field.isEmpty()) {
 			//if the field is not empty, of course you cannot put an element on it
 			//TODO for testing, remove later
-			System.out.println("Element " + element + " cannot be placed on field " + field + "\nbecause the field is not empty.");
+			//System.out.println("Element " + element + " cannot be placed on field " + field + "\nbecause the field is not empty.");
 			return false;
 		}
 		
