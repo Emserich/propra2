@@ -521,7 +521,7 @@ addListener('QUIT', function(event){
 	
   </head>
 
-  <body onload="insertFieldnumber(); hideButtons();">
+  <body id="game_body" onload="insertFieldnumber(); hideButtons();">
     <div class="container-fluid">
       <div class="row justify-content-center"> 
 
@@ -845,7 +845,7 @@ addListener('QUIT', function(event){
 
 
     <!-- ################## Ergebnis-Modal ################## -->
-    <div class="modal" id="modal_finish" tabindex="-1" role="dialog" aria-labelledby="modal_finish_title" aria-hidden="true">
+    <div class="modal fade" id="modal_finish" tabindex="-1" role="dialog" aria-labelledby="modal_finish_title" aria-hidden="true" data-backdrop="false">
       <div class="modal-dialog modal-xl">
         <div class="modal-content">
           <div class="modal-header">
@@ -975,6 +975,11 @@ addListener('QUIT', function(event){
                   </div>
                 </div>
               </div> <!-- /Spielbrett -->
+
+              <button type="button" class="btn btn-primary" onclick="printFields(field_winner)">printFields</button>
+
+
+
             </div> <!-- /container -->
 
           </div> <!-- /modal-body -->
