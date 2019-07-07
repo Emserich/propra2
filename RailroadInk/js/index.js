@@ -15,6 +15,8 @@ var stringData = "";
 var rollButtonCounter = 0;
 var roleValue=[];
 
+
+
 // ----------------------------- Tooltips initialisieren -----------------------------
 $(function () {
   $('[data-toggle="tooltip"]').tooltip()
@@ -330,9 +332,16 @@ function getRoll(){
 			}	
 		translateRoll();		
 }
-
+function hideButtons(){
+	document.getElementById("button_restart_game").style.visibility ="hidden";
+	document.getElementById("roll-button").style.visibility="hidden";
+	document.getElementById("ergebnis_button").style.visibility="hidden";
+}
 function setVisible(){
 	document.getElementById("button_restart_game").style.visibility ="visible";
+	document.getElementById("roll-button").style.visibility="visible";
+	document.getElementById("button_start_game_human").style.visibility="visible";
+	document.getElementById("button_start_game_ki").style.visibility="visible";
 	}
 function translateRoll(){
 	
@@ -394,18 +403,20 @@ addListener('standardEvent', function(event) {
 			for(var i=0; i<9; i++) { arrFields[i] = +arr[i]; }
 			playerMessage = arr[9];
 			var str = arr[10];
+			console.log(playerMessage);
 			if(str=="HOST"){
 				console.log(arr[10]);
 				setVisible();
 			}
+		
+		}
 			diceCounter = 0;	
 			turnData = [0, 0, 0, 0];
  			stringData = "";				
 			rollButtonCounter = 0;
-			roleValue = [];
+			roleValue = [0,0,0,0];
 			document.getElementById("Player").innerHTML = playerMessage;
-			document.getElementById("ergebnis_button").style.visibility="hidden";
-		}
+			
 		statusWait = false;
 	});
 //START wird ausgelöst wenn ein Spiel erstellt wird,
@@ -413,6 +424,7 @@ addListener('standardEvent', function(event) {
 addEventListener('START', function(event){
 	var stringFromServer = event.data;
 	var arr = stringFromServer.split(',');
+	console.log("erfolg");
 	playerMessage = arr[9];
 	document.getElementById("Player").innerHTML = playerMessage;
 	if(arr[10]=="HOST") setVisible();

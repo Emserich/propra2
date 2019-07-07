@@ -151,7 +151,7 @@ public class RailroadInk extends Game {
 			//if there are as many players as allowed, start the game
 			if(playerList.size() == getMaxPlayerAmount() || playerList.size() >1) {
 				this.gState = GameState.RUNNING;
-				sendGameDataToClients("standardEvent");
+				sendGameDataToClients("START");
 			}
 			
 			//return because otherwise we'll get exceptions
