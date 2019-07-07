@@ -81,4 +81,19 @@ public enum Orientations {
 		}
 	}
 	
+	public static Orientations subtractNinetyDegrees(Orientations oldOrien) {
+		switch(oldOrien) {
+		case ZERO_DEGREES:
+			return TWOHUNDREDSEVENTY_DEGREES;
+		case NINETY_DEGREES:
+			return ZERO_DEGREES;
+		case ONEHUNDREDEIGHTY_DEGREES:
+			return NINETY_DEGREES;
+		case TWOHUNDREDSEVENTY_DEGREES:
+			return ONEHUNDREDEIGHTY_DEGREES;
+		default:
+			return null;
+		}
+	}
+	
 }

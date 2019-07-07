@@ -508,4 +508,114 @@ public class RailroadInk extends Game {
 		return type;
 	}
 	
+	private String boardToJsRepresentation(Board board) {
+		String result = "";
+		
+		for(Field f : board.getFields()) {
+			int pos = f.getPosition();
+			if(f.isEmpty()) {
+				result += "empty," + pos + ",empty,empty";
+			} else {
+				RouteElement e = f.getElement();
+				boolean isMirrored = e.isMirrored();
+				int mirrored = 0;
+				if(isMirrored) {
+					mirrored = 1;
+				}
+				Orientations orien = e.getOrientation();
+				ElementTypes elemType = e.getType();
+				String type = "";
+				switch(elemType) {
+				case ROAD:
+					type = "1_4.png";
+					orien = Orientations.subtractNinetyDegrees(orien);
+					break;
+				case ROAD_TURN:
+					type = "1_5.png";
+					orien = Orientations.addOnehundredeightyDegrees(orien);
+					break;
+				case ROAD_TJUNCTION:
+					type = "1_6.png";
+					orien = Orientations.addOnehundredeightyDegrees(orien);
+					break;
+				case RAIL:
+					type = "1_1.png";
+					orien = Orientations.subtractNinetyDegrees(orien);
+					break;
+				case RAIL_TURN:
+					type = "1_2.png";
+					orien = Orientations.addOnehundredeightyDegrees(orien);
+					break;
+				case RAIL_TJUNCTION:
+					type = "1_3.png";
+					orien = Orientations.addOnehundredeightyDegrees(orien);
+					break;
+				case STATION:
+					type = "2_1.png";
+					orien = Orientations.subtractNinetyDegrees(orien);
+					break;
+				case STATION_TURN:
+					type = "2_2.png";
+					orien = Orientations.subtractNinetyDegrees(orien);
+					break;
+				case OVERPASS:
+					type = "2_3.png";
+					orien = Orientations.subtractNinetyDegrees(orien);
+					break;
+				case STATION_1:
+					type = "l_1.png";
+					break;
+				case STATION_2:
+					type = "l_1.png";
+					break;
+				case STATION_3:
+					type = "l_5.png";
+					break;
+				case STATION_4:
+					type = "l_6.png";
+					break;
+				case ROAD_CROSSROAD:
+					type = "1_3.png";
+					break;
+				case RAIL_CROSSROAD:
+					type = "1_4.png";
+					break;
+				}
+				int orientation = -1;
+				switch(orien) {
+				case ZERO_DEGREES:
+					orientation = 0;
+					break;
+				case NINETY_DEGREES:
+					orientation = -90;
+					break;
+				case ONEHUNDREDEIGHTY_DEGREES:
+					orientation = -180;
+					break;
+				case TWOHUNDREDSEVENTY_DEGREES:
+					orientation = -270;
+					break;
+				}
+				result += type + "," + pos + "," + orientation + "," + mirrored;
+			}
+			result += ";";
+		}
+		
+		return result;
+	}
+	
+	private String calculateResults() {
+		String result = "";
+		
+		ResultCalculator calc = new ResultCalculator();
+		
+		for(Board board : boardList) {
+			String username = board.getUser().getName();
+			int[] res = calc.calculateResult(board);
+			result += username + "," + res[0] + "," + res[1] + "," + res[2] + "," + res[3] + "," + res[4] + "," + res[5] + ";";
+		}
+		
+		return result;
+	}
+	
 }
