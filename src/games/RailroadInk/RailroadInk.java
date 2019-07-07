@@ -253,7 +253,7 @@ public class RailroadInk extends Game {
 
 	private String isHost(User user) 
 	{
-		if(user==creator)
+		if(user == creator)
 			
 			return 	",HOST";
 		else
@@ -284,10 +284,10 @@ public class RailroadInk extends Game {
 		if(eventName.equals("NOTTHEHOST")) {
 			return "PLAYERLEFT" + user.getName();
 		}
-		if(eventName.equals("EndofGame")) {
+		if(eventName.equals("END_TURN")) {
 			return "EndofGame";
 		}
-		if(eventName.equals("EndOfTurn")) {
+		if(eventName.equals("END_TURN")) {
 			return "EndOfTurn";
 		}
 		
