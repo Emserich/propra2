@@ -278,7 +278,6 @@ public class RailroadInk extends Game {
 		if(eventName.equals("START")) {
 			return "START";
 		}
-		
 		if(eventName.equals("EndofGame")) {
 			return "EndofGame";
 		}
@@ -289,6 +288,11 @@ public class RailroadInk extends Game {
 		if(eventName.equals("NEW_PLAYER")) {
 			return "NEW_PLAYER" + user.getName();
 		}
+		if(eventName.equals("WrongField")) {
+			return "Das Element darf hier nicht platziert werden";
+		}
+		
+		
 		
 		
 		ArrayList<Board> boardList  = getBoardList();
