@@ -68,6 +68,27 @@ button.bg-dark:focus {
 }
 
 
+.modal-content {
+    border: 2px solid rgba(232, 90, 77, 0.9);
+}
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1040;
+  width: 100vw;
+  height: 100vh;
+  background-color: #000;
+}
+
+.modal-backdrop.fade {
+  opacity: 0;
+}
+
+.modal-backdrop.show {
+  opacity: 0.5;
+}
+
 
 .form-control:focus {
   color: #495057;
