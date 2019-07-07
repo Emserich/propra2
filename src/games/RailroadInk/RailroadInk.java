@@ -278,6 +278,7 @@ public class RailroadInk extends Game {
 		if(eventName.equals("START")) {
 			return "START";
 		}
+		
 		if(eventName.equals("EndofGame")) {
 			return "EndofGame";
 		}
