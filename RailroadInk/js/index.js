@@ -197,7 +197,7 @@ document.addEventListener("drop", function(event) {
 		img_index++; //ID hochzählen
 		diceCounter++; //Anzahl benutzter Würfel
 
-		$('#'+event.target.id).prepend('<div class="round_nr">5</div>'); //Runde eintragen
+		$('#'+event.target.id).prepend('<div class="round_nr">'+turnCounter+'</div>'); //Runde eintragen
 	
 	}
 });
@@ -283,8 +283,7 @@ function printFields (array) {
 $(document).on("click","#button_finish_round", function () {
 
 	//Fertigstellen des Spielzugs
-	alert('Fertigstellen des Spielzugs');
-	turnEnd();
+	//unten als onCLick-function  
 
 });
 
