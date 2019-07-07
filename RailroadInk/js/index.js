@@ -16,11 +16,14 @@ var rollButtonCounter = 0;
 var roleValue=[];
 
 
-
 // ----------------------------- Tooltips initialisieren -----------------------------
 $(function () {
   $('[data-toggle="tooltip"]').tooltip()
 })
+// ----------------------------- /Tooltips initialisieren -----------------------------
+
+
+
 
 // -----------------------------Rotation und Spiegelung-----------------------------
 
@@ -208,6 +211,10 @@ document.addEventListener("drop", function(event) {
 $(document).on("click","#ergebnis_button", function () {
 	$('#modal_finish').modal('toggle')
 });
+
+$('#modal_finish').on('shown.bs.modal', function () {
+  $('#myInput').trigger('focus')
+})
 // -----------------------------/Ergebnis-Modal-----------------------------
 
 
@@ -333,17 +340,18 @@ function getRoll(){
 		translateRoll();		
 }
 function hideButtons(){
-	document.getElementById("button_restart_game").style.visibility ="hidden";
-	document.getElementById("roll-button").style.visibility="hidden";
-	document.getElementById("ergebnis_button").style.visibility="hidden";
+	$('#col_restart_game').hide();
+	$('#roll-button').hide();
+	// $('#ergebnis_button').hide();
 }
 function setVisible(){
-	document.getElementById("button_restart_game").style.visibility ="visible";
-	document.getElementById("roll-button").style.visibility="visible";
-	document.getElementById("button_start_game_human").style.visibility="visible";
-	document.getElementById("button_start_game_ki").style.visibility="visible";
-	}
-function translateRoll(){
+	$('#col_restart_game').show();
+	$('#roll-button').show();
+
+	$('#button_start_game_human').show();
+	$('#button_start_game_ki').show();
+}
+function translateRoll() {
 	
 	for(i=0;i<3;i++){
 		switch (roleValue[i]){
