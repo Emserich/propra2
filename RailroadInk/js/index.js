@@ -395,28 +395,36 @@ function addKi() {
 	sendDataToServer("ADD_KI");
 	
 }
+function drawWinnerBoard(){
+	for (i=1; i<=49 ; i++){
+	// do stuff
+	}
+}
 // ---------------------------/Hilfsfunktionen-------------------
 
 
 
 
 // ----------------------------EventListener---------------------
+addListener('gameEnd', function(event) {
+var stringFromServer = event.data;
+	playerMessage = stringFromServer;
+	document.getElementById("Player").innerHTML = playerMessage;
+});
+
+addListener('resultData', function(event){
+	// do stuff
+})
+addListener('NEW_PLAYER', function(event){
+	document.getElementById("Player").innerHTML = "Ein neuer Spieler ist beigetreten!";
+});
 addListener('standardEvent', function(event) {
 		var stringFromServer = event.data;
 		var arr = stringFromServer.split(',');
 		console.log(arr);
 		console.log("standardEvent angekommen");
-		if(arr.length==11){
-			for(var i=0; i<9; i++) { arrFields[i] = +arr[i]; }
-			playerMessage = arr[9];
-			var str = arr[10];
-			console.log(playerMessage);
-			if(str=="HOST"){
-				console.log(arr[10]);
-				setVisible();
-			}
-		
-		}
+		playerMessage = arr[2];
+
 			diceCounter = 0;	
 			turnData = [0, 0, 0, 0];
  			stringData = "";				
@@ -428,24 +436,25 @@ addListener('standardEvent', function(event) {
 	});
 //START wird ausgelöst wenn ein Spiel erstellt wird,
 // aber noch nicht genügend Spieler da sind
-addEventListener('START', function(event){
+addListener('START', function(event){
 	var stringFromServer = event.data;
 	var arr = stringFromServer.split(',');
-	console.log("erfolg");
-	playerMessage = arr[9];
+	console.log(arr.length);
+	playerMessage = arr[1];
 	document.getElementById("Player").innerHTML = playerMessage;
-	if(arr[10]=="HOST") setVisible();
+	if(arr[2]=="HOST") setVisible();
+	console.log(arr[2]);
 	statusWait = false;	
 });
 
 //PLAYERLEFT wird ausgelöst wenn ein Spieler auf "Spiel verlassen" klickt
-addEventListener('PLAYERLEFT', function(event){
+addListener('PLAYERLEFT', function(event){
 	var stringFromServer = event.data;
 	playerMessage = stringFromServer;
 	document.getElementById("Player").innerHTML = playerMessage;
 });
 //CLOSE wird ausgelöst wenn der Host das Spiel per "Spiel schließen" Button beendet
-addEventListener('CLOSE', function(event){
+addListener('CLOSE', function(event){
 	document.getElementById("Player").innerHTML = "Spiel wurde vom Host beendet!";
 });
 // ---------------------------/EventListener---------------------
