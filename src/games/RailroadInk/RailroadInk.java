@@ -243,6 +243,8 @@ public class RailroadInk extends Game {
 		}
 		
 		
+		
+		
 		ArrayList<Board> boardList  = getBoardList();
 
 		for (int i = 0; i < boardList.size(); i++) {
@@ -270,10 +272,9 @@ public class RailroadInk extends Game {
 			
 			//TODO Fall betrachten, wenn es nicht unentschieden ist
 		}
-
-
 		
 		gameData += isHost(user);
+		gameData += calculateResults();
 
 		return gameData;
 	}
