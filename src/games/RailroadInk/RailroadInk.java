@@ -38,6 +38,9 @@ public class RailroadInk extends Game {
 	//a String is used to indicate if a player has left
 	private String playerLeft = null;
 	
+	private int allTurnCounters;
+	
+	
 	/* -- METHODS NECESSARY FOR THE SERVER -- */
 	
 	/* -- LOADING THE HTML, CSS AND JS FILE -- */
@@ -146,6 +149,7 @@ public class RailroadInk extends Game {
 				board.initializeFields();
 				boardList.add(board);
 			}
+			allTurnCounters=0;
 			
 			
 			//if there are as many players as allowed, start the game
@@ -196,6 +200,33 @@ public class RailroadInk extends Game {
 			System.out.println("Es wurde bereits ein Spezialelement in dieser Runde gesetzt.");
 			return;
 			}
+		
+		if(userboard.getNumberOfSpecialElements()==3)
+		{
+			sendGameDataToUser(user,"AlREADY 3 SPECIAL ELEMENTS");
+			return;
+		}
+		
+		if(gsonString.equals("END_TURN"))
+		{
+			
+			userboard.endofturn();
+			userboard.setSpecialElementPlacedInThisRound(false);
+			for(Board b : boardList)
+			{
+				if(b.getturnCounter()==7) allTurnCounters++;
+			}
+			if(allTurnCounters==playerList.size())
+				{
+				this.gState = GameState.FINISHED;
+				sendGameDataToClients("EndofGame");
+				}
+			else
+			{
+				sendGameDataToClients("EndOfTurn");
+			}
+			
+		}
 		
 		if(userboard.canElementBePlaced(field, routeElem))
 		{
