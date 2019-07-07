@@ -469,8 +469,7 @@ public class RailroadInk extends Game {
 			break;
 		case "1_4":
 			type = ElementTypes.ROAD;
-			break;
-			
+			break;	
 		case "1_5":
 			type = ElementTypes.ROAD_TURN;
 			break;
