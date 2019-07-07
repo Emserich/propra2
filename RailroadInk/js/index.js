@@ -214,6 +214,65 @@ $(document).on("click","#ergebnis_button", function () {
 
 $('#modal_finish').on('shown.bs.modal', function () {
 })
+
+var field_winner = [
+  	[
+		"1", //Feldnummer
+		"90", //Winkel
+		"0", //Spiegelung
+		"dice_1_2" // Bildname
+	],
+
+	[
+		"5", //Feldnummer
+		"-90", //Winkel
+		"0", //Spiegelung
+		"dice_1_1" // Bildname
+	],
+
+	[
+		"49", //Feldnummer
+		"-180", //Winkel
+		"0", //Spiegelung
+		"special_1" // Bildname
+	]
+
+];
+
+
+function printFields (array) {
+
+	var field_nr = 0;
+	var image_angle = 0;
+	var image_mirror = 0
+	var image_name = "";
+
+
+	for (var i = 0; i < array.length; i++) {
+
+		field_nr = array[i][0];
+		image_angle = array[i][1];
+		image_mirror = array[i][2];
+		image_name = array[i][3];
+
+		var wfield_img = $('<img />').attr({	            
+	            'class': 'dice_rotated',
+	            'src': 'images/dice/' + image_name + '.png',
+	            'draggable':'false'
+	        });
+
+		if (image_mirror == 1) {
+			$(wfield_img).css({'transform': 'rotate('+image_angle+'deg) scale(1, -1)'});
+		}
+		else {
+			$(wfield_img).css({'transform': 'rotate('+image_angle+'deg) scale(1, 1)'});
+		}
+
+		$('#result_field_'+field_nr).html(wfield_img);
+	}
+
+
+}
 // -----------------------------/Ergebnis-Modal-----------------------------
 
 

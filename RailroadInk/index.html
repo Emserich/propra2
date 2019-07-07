@@ -20,7 +20,7 @@
 	
   </head>
 
-  <body onload="insertFieldnumber(); hideButtons();">
+  <body id="game_body" onload="insertFieldnumber(); hideButtons();">
     <div class="container-fluid">
       <div class="row justify-content-center"> 
 
@@ -344,7 +344,7 @@
 
 
     <!-- ################## Ergebnis-Modal ################## -->
-    <div class="modal fade" id="modal_finish" tabindex="-1" role="dialog" aria-labelledby="modal_finish_title" aria-hidden="true" data-backdrop="false">
+    <div class="modal fade" id="modal_finish" tabindex="-1" role="dialog" aria-labelledby="modal_finish_title" aria-hidden="true" data-backdrop="false" style="background-color: rgba(0, 0, 0, 0.5);">
       <div class="modal-dialog modal-xl">
         <div class="modal-content">
           <div class="modal-header">
@@ -474,6 +474,11 @@
                   </div>
                 </div>
               </div> <!-- /Spielbrett -->
+
+              <button type="button" class="btn btn-primary" onclick="printFields(field_winner)">printFields</button>
+
+
+
             </div> <!-- /container -->
 
           </div> <!-- /modal-body -->
