@@ -291,8 +291,16 @@ public class RailroadInk extends Game {
 		if(eventName.equals("WrongField")) {
 			return "Das Element darf hier nicht platziert werden";
 		}
+		if(eventName.equals("SpecialElementalreadyPlaced")) {
+			return "Es wurde bereits ein Spezialelement in dieser Runde gesetzt.";
+		}
+		if(eventName.equals("SpecialElementalreadyPlaced")) {
+			return "Es wurde bereits ein Spezialelement in dieser Runde gesetzt.";
+		}
 		
-		
+		if(eventName.equals("AlREADY 3 SPECIAL ELEMENTS")) {
+			return "";
+		}
 		
 		
 		ArrayList<Board> boardList  = getBoardList();
