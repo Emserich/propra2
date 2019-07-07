@@ -395,12 +395,26 @@ function addKi() {
 	sendDataToServer("ADD_KI");
 	
 }
+function drawWinnerBoard(){
+	for (i=1; i<=49 ; i++){
+	// do stuff
+	}
+}
 // ---------------------------/Hilfsfunktionen-------------------
 
 
 
 
 // ----------------------------EventListener---------------------
+addListener('gameEnd', function(event) {
+var stringFromServer = event.data;
+	playerMessage = stringFromServer;
+	document.getElementById("Player").innerHTML = playerMessage;
+});
+
+addListener('resultData', function(event){
+	// do stuff
+})
 addListener('standardEvent', function(event) {
 		var stringFromServer = event.data;
 		var arr = stringFromServer.split(',');
@@ -428,7 +442,7 @@ addListener('standardEvent', function(event) {
 	});
 //START wird ausgelöst wenn ein Spiel erstellt wird,
 // aber noch nicht genügend Spieler da sind
-addEventListener('START', function(event){
+addListener('START', function(event){
 	var stringFromServer = event.data;
 	var arr = stringFromServer.split(',');
 	console.log("erfolg");
@@ -439,13 +453,13 @@ addEventListener('START', function(event){
 });
 
 //PLAYERLEFT wird ausgelöst wenn ein Spieler auf "Spiel verlassen" klickt
-addEventListener('PLAYERLEFT', function(event){
+addListener('PLAYERLEFT', function(event){
 	var stringFromServer = event.data;
 	playerMessage = stringFromServer;
 	document.getElementById("Player").innerHTML = playerMessage;
 });
 //CLOSE wird ausgelöst wenn der Host das Spiel per "Spiel schließen" Button beendet
-addEventListener('CLOSE', function(event){
+addListener('CLOSE', function(event){
 	document.getElementById("Player").innerHTML = "Spiel wurde vom Host beendet!";
 });
 // ---------------------------/EventListener---------------------
