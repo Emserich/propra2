@@ -278,9 +278,16 @@ public class RailroadInk extends Game {
 		if(eventName.equals("START")) {
 			return "START";
 		}
+		if(eventName.equals("HOST")) {
+			return "CLOSE";
+		}
+		if(eventName.equals("NOTTHEHOST")) {
+			return "PLAYERLEFT";
+		}
 		if(eventName.equals("EndofGame")) {
 			return "EndofGame";
 		}
+		
 		if(eventName.equals("EndOfTurn")) {
 			return "EndOfTurn";
 		}
@@ -299,7 +306,7 @@ public class RailroadInk extends Game {
 		}
 		
 		if(eventName.equals("AlREADY 3 SPECIAL ELEMENTS")) {
-			return "";
+			return " 3 spezielle Elemente wurden schon gesetzt";
 		}
 	
 		ArrayList<Board> boardList  = getBoardList();
