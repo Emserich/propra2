@@ -210,6 +210,8 @@ document.addEventListener("drop", function(event) {
 // -----------------------------Ergebnis-Modal-----------------------------
 $(document).on("click","#ergebnis_button", function () {
 	$('#modal_finish').modal('toggle')
+	getScore();
+	getWinner();	
 });
 
 $('#modal_finish').on('shown.bs.modal', function () {
@@ -450,10 +452,13 @@ function addKI() {
 	sendDataToServer("ADD_KI");
 	document.getElementById("Player").innerHTML = "KI wurde hinzugefügt";
 }
-function drawWinnerBoard(){
-	for (i=1; i<=49 ; i++){
-	// do stuff
-	}
+function getScore(){
+	console.log("score");
+	sendDataToServer("myScore");	
+}
+function getWinner(){
+	console.log("winner");
+	sendDataToServer("winnerData");
 }
 // ---------------------------/Hilfsfunktionen-------------------
 
@@ -465,11 +470,15 @@ addListener('gameEnd', function(event) {
 var stringFromServer = event.data;
 	playerMessage = stringFromServer;
 	document.getElementById("Player").innerHTML = playerMessage;
+	$('#ergebnis_button').show;
 });
 
-addListener('resultData', function(event){
+addListener('winnerData', function(event){
 	// do stuff
-})
+});
+addListener('myScore', function(event) {
+	//do stuff
+});
 addListener('NEW_PLAYER', function(event){
 	document.getElementById("Player").innerHTML = "Ein neuer Spieler ist beigetreten!";
 });
