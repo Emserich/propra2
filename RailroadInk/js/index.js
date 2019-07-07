@@ -283,6 +283,7 @@ function printFields (array) {
 $(document).on("click","#button_finish_round", function () {
 
 	//Fertigstellen des Spielzugs
+	turnEnd();
 	//unten als onCLick-function  
 
 });
@@ -377,15 +378,11 @@ function turnEnd(){
 	turnCounter +=1;
 	document.getElementById('gameround').innerHTML = 'Runde ' +  turnCounter;
 	sendDataToServer("END_TURN");
-}
-/*
-function restart(){
 	statusWait = true;
-	sendDataToServer("RESTART");
-} */
+}
+
 function startGame(){
 	statusWait = true;
-	console.log("Game start");
 	sendDataToServer("RESTART");
 }
 function getRoll(){
@@ -449,9 +446,9 @@ function closeGame(){
 	sendDataToServer("CLOSE");
 }
 
-function addKi() {
+function addKI() {
 	sendDataToServer("ADD_KI");
-	
+	document.getElementById("Player").innerHTML = "KI wurde hinzugefügt";
 }
 function drawWinnerBoard(){
 	for (i=1; i<=49 ; i++){
@@ -498,6 +495,7 @@ addListener('START', function(event){
 	var stringFromServer = event.data;
 	var arr = stringFromServer.split(',');
 	console.log(arr.length);
+	console.log(arr);
 	playerMessage = arr[1];
 	document.getElementById("Player").innerHTML = playerMessage;
 	if(arr[2]=="HOST") setVisible();
