@@ -213,7 +213,6 @@ $(document).on("click","#ergebnis_button", function () {
 });
 
 $('#modal_finish').on('shown.bs.modal', function () {
-  $('#myInput').trigger('focus')
 })
 // -----------------------------/Ergebnis-Modal-----------------------------
 
