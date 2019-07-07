@@ -19,6 +19,8 @@ public class Board {
 	private boolean stationThreePlaced;
 	private boolean stationFourPlaced;
 	
+	private int turnCounter;
+	
 	/* -- CONSTRUCTOR -- */
 	
 	public Board(User user) {
@@ -31,6 +33,8 @@ public class Board {
 		
 		initializeFields();
 		
+		
+		
 		//the variables that check whether the special elements have already been placed have to be initialized
 		//of course, at the beginning, they are not placed
 		this.railCrossroadPlaced = false;
@@ -39,6 +43,16 @@ public class Board {
 		this.stationTwoPlaced = false;
 		this.stationThreePlaced = false;
 		this.stationFourPlaced = false;
+	}
+	
+	public void endofturn()
+	{
+		turnCounter++;
+	}
+	
+	public int getturnCounter()
+	{
+		return turnCounter;
 	}
 	
 	
