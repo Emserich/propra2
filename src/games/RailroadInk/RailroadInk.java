@@ -301,7 +301,7 @@ public class RailroadInk extends Game {
 		if(eventName.equals("AlREADY 3 SPECIAL ELEMENTS")) {
 			return "";
 		}
-		
+	
 		
 		ArrayList<Board> boardList  = getBoardList();
 
