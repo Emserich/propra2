@@ -282,7 +282,7 @@ public class RailroadInk extends Game {
 			return "CLOSE";
 		}
 		if(eventName.equals("NOTTHEHOST")) {
-			return "PLAYERLEFT";
+			return "PLAYERLEFT" + user.getName();
 		}
 		if(eventName.equals("EndofGame")) {
 			return "EndofGame";
