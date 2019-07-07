@@ -302,7 +302,7 @@ public class RailroadInk extends Game {
 			return "";
 		}
 	
-		
+	
 		ArrayList<Board> boardList  = getBoardList();
 
 		for (int i = 0; i < boardList.size(); i++) {
