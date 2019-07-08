@@ -14,6 +14,7 @@ var turnData = 	[0, 0, 0, 0];
 var stringData = ""; 	
 var rollButtonCounter = 0;
 var roleValue=[];
+var resetImage = false;
 
 
 // ----------------------------- Tooltips initialisieren -----------------------------
@@ -187,7 +188,7 @@ document.addEventListener("drop", function(event) {
 		
 		setTurnData();
 		updateGameState();
-		
+		if (resetImage == false){
 		$('#dice_rotated_'+img_index).removeClass("unset");
 		$('#dice_rotated_'+img_index).addClass("set");
 		$('.set').attr('draggable', false);
@@ -198,8 +199,9 @@ document.addEventListener("drop", function(event) {
 		diceCounter++; //Anzahl benutzter Würfel
 
 		$('#'+event.target.id).prepend('<div class="round_nr">'+turnCounter+'</div>'); //Runde eintragen
-	
-	}
+		}
+		//else packe Bild zurück in die Imagebox
+	};
 });
 // -----------------------------/DRAG & DROP-----------------------------
 
@@ -461,6 +463,7 @@ function getWinner(){
 	console.log("winner");
 	sendDataToServer("winnerData");
 }
+
 // ---------------------------/Hilfsfunktionen-------------------
 
 
@@ -567,5 +570,9 @@ addListener('thisRoll', function(event){
 		console.log("aye");
 	$('#dice_row').show();
 	}
-})
+});
+addListener('WrongField',function(event){
+	alert('Das Element darf hier nicht platziert werden');
+	resetImage = true;
+});
 // ---------------------------/EventListener---------------------
