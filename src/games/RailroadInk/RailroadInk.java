@@ -173,7 +173,7 @@ public class RailroadInk extends Game {
 				b.setSpecialElementPlacedInThisRound(false);
 			}
 			
-			return;
+			return;	
 		}
 		if(spectatorList.contains(user)) {
 			return;
