@@ -378,7 +378,7 @@ function turnDataToString(){
 function turnEnd(){
 	document.getElementById('gameround').innerHTML = 'Runde ' +  turnCounter;
 	sendDataToServer("END_TURN");
-	//statusWait = true;
+	statusWait = true;
 }
 
 function startGame(){
@@ -394,6 +394,7 @@ function getRoll(){
 		translateRoll();		
 }
 function hideButtons(){
+	$('#dice_row').hide();
 	$('#col_restart_game').hide();
 	$('#roll-button').hide();
 	$('#ergebnis_button').hide();
@@ -401,7 +402,7 @@ function hideButtons(){
 function setVisible(){
 	$('#col_restart_game').show();
 	$('#roll-button').show();
-
+	$('#dice_row').show();
 	$('#button_start_game_human').show();
 	$('#button_start_game_ki').show();
 }
@@ -439,6 +440,8 @@ function translateRoll() {
 	}
 	
 	var roleValue2 = roleValue.join(",");
+	roleValue2 = "ROLL," + roleValue2;
+	console.log(roleValue2);
 	sendDataToServer(roleValue2);
 }
 
@@ -546,4 +549,21 @@ addListener('CLOSE', function(event){
 	window.location = "/index"; //hier muss man zum eig Start weitergeleitet werden.
 	eventSource.close();
 });
+addListener('thisRoll', function(event){
+	var arrarr = [];
+	stringFromServer = event.data;
+	arr = stringFromServer.split(",");
+	console.log(arr);
+	for (i=1; i<(arr.length-1); i++){
+		arrarr[i] = arr[i].charAt(2);
+	}
+	var diceClass = document.getElementsByClassName("die-list even-roll");
+	
+		for (i=0;i<diceClass.length;i++){
+				diceClass[i].setAttribute("data-roll", arrarr[i]);
+			}	
+	if (arr[6] == "NOTTHEHOST"){
+	$('#dice_row').show();
+	}
+})
 // ---------------------------/EventListener---------------------

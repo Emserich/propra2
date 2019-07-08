@@ -131,7 +131,9 @@ public class RailroadInk extends Game {
 			sendGameDataToUser(user, "winnerData");
 			return;
 		}
-		
+		if(gsonString.contains("ROLL")) {
+			sendGameDataToClients("thisRoll" + ",1_2.png"+ ",1_3.png"+ ",1_4.png"+ ",l_4.png"+ isHost(user));
+		}
 		if(spectatorList.contains(user)) {
 			return;
 		}
@@ -312,6 +314,9 @@ public class RailroadInk extends Game {
 		//}
 		if(eventName.equals("END_TURN")) {
 			return "EndOfTurn";
+		}
+		if(eventName.contains("ROLL")) {
+			return "thisRoll" ;
 		}
 				
 		if(eventName.equals("NEW_PLAYER")) {
