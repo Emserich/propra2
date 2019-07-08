@@ -15,6 +15,7 @@ var stringData = "";
 var rollButtonCounter = 0;
 var roleValue=[];
 var resetImage = false;
+var imageDropped = false;
 
 
 // ----------------------------- Tooltips initialisieren -----------------------------
@@ -64,9 +65,10 @@ $(document).on("click","#roll-button", function () {
 	}
 	else {
 		getRoll();
-		
+		$('#roll-button').hide();
 		}
 	rollButtonCounter++;	
+	
 });
 
 
@@ -172,14 +174,15 @@ document.addEventListener("dragleave", function(event) {
 document.addEventListener("drop", function(event) {
 	event.preventDefault();
 	var data = event.dataTransfer.getData("Text");
-
-	if ( event.target.className == "field" && $('#'+data).hasClass('unset') ) {
-		//checken ob das Element gesetzt werden darf
 		currentDiceImg = document.getElementById(data).src.slice(-7); 
 		currentFieldID = event.target.id;
 		setTurnData();
 		updateGameState();
-		validateDrop();
+	if ( event.target.className == "field" && $('#'+data).hasClass('unset') ) {
+		//checken ob das Element gesetzt werden darf
+		
+		//validateDrop();
+		
 		//Validierung findet immer erst nach drop statt
 		if (resetImage==false){
 			console.log("warum");
@@ -368,9 +371,10 @@ function setTurnData(){
 	turnData[3] = mirror;
 	}
 function updateGameState(){
-	statusWait = true;
+	
 	turnDataToString();
 	sendDataToServer(stringData);
+	console.log(stringData);
 }
 function turnDataToString(){
 	stringData = turnData.join(",");
@@ -463,14 +467,14 @@ function getWinner(){
 	console.log("winner");
 	sendDataToServer("winnerData");
 }
+/*
 function validateDrop(){
-	sendDataToServer("validateDrop");	
-	callback();
+	sendDataToServer("validateDrop");
+	imageDropped = false;
+	imageReset = false;		
 }
-
+*/
 // ---------------------------/Hilfsfunktionen-------------------
-
-
 
 
 // ----------------------------EventListener---------------------
@@ -490,12 +494,12 @@ addListener('winnerData', function(event){
 	for (i=2; i<51; i++){  //weil die ersten beiden elemente user + score sind
 		myArray = score[i].split(",");
 		dummyString += i;
-		document.getElementById(dummystring).src()
+		/*
 		img = myArray[0];
 		field = myArray[1];
 		rotation = myArray[2];
 		mirror = myArray[3];
-
+		*/
 		//draw board
 		dummyString -= i;
 	}
@@ -596,4 +600,8 @@ addListener('CANT_END_TURN',function(event){
 	console.log("cant end");
 	alert('Es müssen weitere Elemente gesetzt werden!');
 });
+addListener('dropped',function(event){
+	document.getElementById("Player").innerHTML = "Element gesetzt!"
+	imageDropped = true;
+})
 // ---------------------------/EventListener---------------------
