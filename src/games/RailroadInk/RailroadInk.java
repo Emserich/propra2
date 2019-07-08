@@ -238,11 +238,13 @@ public class RailroadInk extends Game {
 		
 		/* -- this is the standard case: the player wants to add an element -- */
 		
-		String [] receivedArray = new String[4];
-		String[] strArray = gsonString.split(",");
+		
 		
 		//only go on with this if the Array also has four elements and is not null and so on
-		if(strArray != null && strArray.length == 4) {
+		if(gsonString.contains("validateDrop")) {
+			String [] receivedArray = new String[5];
+			String[] strArray = gsonString.split(",");
+		if(strArray != null && strArray.length == 5) {
 		
 			for (int i = 0; i < 4; i++) {
 				receivedArray[i] = strArray[i];
@@ -302,12 +304,13 @@ public class RailroadInk extends Game {
 				System.out.println("Das Element darf hier nicht platziert werden");
 				return;
 			}
+		  }
 		}
-		
 		/* -- in this case, the player wants to end their turn -- */
 		
 		if(gsonString.equals("END_TURN"))
 		{
+			
 			/*
 			userboard.endofturn();
 			userboard.setSpecialElementPlacedInThisRound(false);
@@ -330,6 +333,7 @@ public class RailroadInk extends Game {
 			
 			//check whether the player is allowed to end their turn
 			if(remainingElements == null || remainingElements.size() == 0) {
+				
 				if(!finishedPlayers.contains(user)) {
 					finishedPlayers.add(user);
 				}
@@ -338,6 +342,7 @@ public class RailroadInk extends Game {
 					finishedPlayers.add(user);
 				}
 			} else {
+				
 				sendGameDataToUser(user, "CANT_END_TURN");
 				return;
 			}
@@ -347,7 +352,7 @@ public class RailroadInk extends Game {
 			if(finishedPlayers.size() == playerList.size()) {
 				//increment the turn counter
 				turnCounter++;
-				sendGameDataToClients("EndOfTurn");
+				sendGameDataToClients("EndOfTurn" + isHost(user));
 				if(turnCounter == 7) {
 					//end the game
 					this.gState = GameState.FINISHED;

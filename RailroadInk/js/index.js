@@ -25,7 +25,6 @@ $(function () {
 
 
 
-
 // -----------------------------Rotation und Spiegelung-----------------------------
 
 // Würfel in Rotation-Box kopieren
@@ -176,19 +175,18 @@ document.addEventListener("drop", function(event) {
 
 	if ( event.target.className == "field" && $('#'+data).hasClass('unset') ) {
 		//checken ob das Element gesetzt werden darf
-		//validateDrop();
-		//if (resetImage)
-
+		currentDiceImg = document.getElementById(data).src.slice(-7); 
+		currentFieldID = event.target.id;
+		setTurnData();
+		updateGameState();
+		validateDrop();
+		//Validierung findet immer erst nach drop statt
+		if (resetImage==false){
+			console.log("warum");
 		event.target.style.border = "";
 		$(".field").css("border","");
 		event.target.appendChild(document.getElementById(data));
-		//Bild des benutzen Würfels
-		currentDiceImg = document.getElementById(data).src.slice(-7); 
-		currentFieldID = event.target.id;
-		
-		setTurnData();
-		updateGameState();
-		
+				
 		$('#dice_rotated_'+img_index).removeClass("unset");
 		$('#dice_rotated_'+img_index).addClass("set");
 		$('.set').attr('draggable', false);
@@ -201,7 +199,8 @@ document.addEventListener("drop", function(event) {
 		$('#'+event.target.id).prepend('<div class="round_nr">'+turnCounter+'</div>'); //Runde eintragen
 		
 		//else packe Bild zurück in die Imagebox
-	};
+		};
+	};	
 });
 // -----------------------------/DRAG & DROP-----------------------------
 
@@ -297,9 +296,7 @@ $(document).on("click","#button_start_game_human", function () {
 
 	//Online-Spiel starten
 	startGame();
-	turnCounter = 1;
-	document.getElementById('gameround').innerHTML = 'Runde ' +  turnCounter;
-
+	
 });
 $(document).on("click","#button_start_game_ki", function () {
 
@@ -377,6 +374,7 @@ function updateGameState(){
 }
 function turnDataToString(){
 	stringData = turnData.join(",");
+	stringData = (stringData + ", validateDrop");
 	}
 function turnEnd(){
 	document.getElementById('gameround').innerHTML = 'Runde ' +  turnCounter;
@@ -434,6 +432,12 @@ function translateRoll() {
 			break;
 			case "3":	roleValue[3] ="2_3.png";
 			break;
+			case "4" : roleValue[3] ="2_3.png";
+			break;
+			case "5":	roleValue[3] ="2_2.png";
+			break;
+			case "6":	roleValue[3] ="2_1.png";
+			break;
 			
 	}
 	
@@ -459,6 +463,10 @@ function getWinner(){
 	console.log("winner");
 	sendDataToServer("winnerData");
 }
+function validateDrop(){
+	sendDataToServer("validateDrop");	
+	callback();
+}
 
 // ---------------------------/Hilfsfunktionen-------------------
 
@@ -475,11 +483,21 @@ var stringFromServer = event.data;
 });
 
 addListener('winnerData', function(event){
-	//bekomme ich hier einen 2D Array [][] ?
+	var myArray = [];
+	var dummyString = "result_field_";
 	var stringFromServer = event.data;
-	var score = stringFromServer.split('#'); // mit welchem Zeichen wird getrennt?
-	for (i=0; i<49; i++){
+	var score = stringFromServer.split(';'); 
+	for (i=2; i<51; i++){  //weil die ersten beiden elemente user + score sind
+		myArray = score[i].split(",");
+		dummyString += i;
+		document.getElementById(dummystring).src()
+		img = myArray[0];
+		field = myArray[1];
+		rotation = myArray[2];
+		mirror = myArray[3];
+
 		//draw board
+		dummyString -= i;
 	}
 });
 addListener('myScore', function(event) {
@@ -490,7 +508,7 @@ addListener('myScore', function(event) {
 	document.getElementById("score_3").innerHTML = score[2];
 	document.getElementById("score_4").innerHTML = score[3];
 	document.getElementById("score_5").innerHTML = score[4];
-	var scoreFinal = score[0] + score[1]+ score[3] + score[4];
+	var scoreFinal = score[5];
 	document.getElementById("score_final").innerHTML = scoreFinal;
 	
 });
@@ -501,17 +519,17 @@ addListener('NEW_PLAYER', function(event){
 addListener('EndOfTurn', function(event) {
 		turnCounter +=1;
 		var stringFromServer = event.data;
-		var arr = stringFromServer.split(',');
+		arr = stringFromServer.split(",");
 		console.log("standardEvent angekommen");
-		playerMessage = arr[1];
-		if (arr[2] == "HOST"){setVisible()};
+		console.log(arr[1]);
+		if (arr[1] == "HOST"){setVisible()};
 
 			diceCounter = 0;	
 			turnData = [0, 0, 0, 0];
  			stringData = "";				
 			rollButtonCounter = 0;
 			roleValue = [0,0,0,0];		
-			document.getElementById("Player").innerHTML = playerMessage;
+			document.getElementById("Player").innerHTML = "Runde " + turnCounter + " wurde gestartet!";
 			
 		statusWait = false;
 	});
@@ -523,8 +541,9 @@ addListener('START', function(event){
 	var arr = stringFromServer.split(',');
 	playerMessage = arr[1];
 	document.getElementById("Player").innerHTML = playerMessage;
+	turnCounter++;
+	document.getElementById('gameround').innerHTML = 'Runde ' +  turnCounter;
 	if(arr[2]=="HOST") setVisible();
-	console.log(arr[2]);
 	statusWait = false;	
 });
 addListener('START_KI', function(event){
@@ -564,12 +583,17 @@ addListener('thisRoll', function(event){
 				diceClass[i].setAttribute("data-roll", arrarr[i]);
 			}	
 	if (arr[5] == "NOTTHEHOST"){
-		console.log("aye");
 	$('#dice_row').show();
 	}
 });
 addListener('WrongField',function(event){
 	alert('Das Element darf hier nicht platziert werden');
 	resetImage = true;
+	console.log("in WrongField" + resetImage);
+});
+
+addListener('CANT_END_TURN',function(event){
+	console.log("cant end");
+	alert('Es müssen weitere Elemente gesetzt werden!');
 });
 // ---------------------------/EventListener---------------------
