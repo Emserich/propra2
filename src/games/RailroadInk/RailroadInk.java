@@ -48,6 +48,12 @@ public class RailroadInk extends Game {
 	private String roll;
 	
 	private int allTurnCounters;
+
+	 ArtificialIntelligence ai;
+	 private RouteElement[] routeelement;
+	 
+	 
+	 
 	
 	
 	/* -- METHODS NECESSARY FOR THE SERVER -- */
@@ -152,6 +158,9 @@ public class RailroadInk extends Game {
 				ElementTypes type = getTypeFromJsInput(typeInfo);
 				RouteElement element = new RouteElement(Orientations.ZERO_DEGREES, type, false);
 				elements.add(element);
+				
+				// pour le KI ici 
+				routeelement[i] = element;
 			}
 			
 			elementsPerTurn.clear();
@@ -171,7 +180,20 @@ public class RailroadInk extends Game {
 		}
 		if(gsonString.equals("ADD_KI")) {
 			this.gState = GameState.RUNNING;
+			ai = new ArtificialIntelligence();
+			
+			// cette route ci a l'orientation, le type.. etc...
+			
+			//ici le KI determine si c'est possible de placer l'element.
+			if(ai.finishTurn(routeelement)) {
+				//->oui c'est possible
+				//place element
+			}else {
+				// -> non c'est n'est pas possible 
+				//not place
+			}
 			sendGameDataToUser(user, "START_KI");
+			
 			return;
 		}
 		if(gsonString.equals("RESTART")) {
@@ -354,6 +376,7 @@ public class RailroadInk extends Game {
 					sendGameDataToClients("EndOfGame");
 					return;
 				}
+				
 				return;
 			}
 			
