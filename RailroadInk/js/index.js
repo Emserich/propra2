@@ -398,7 +398,7 @@ function getRoll(){
 function hideButtons(){
 	$('#col_restart_game').hide();
 	$('#roll-button').hide();
-	// $('#ergebnis_button').hide();
+	$('#ergebnis_button').hide();
 }
 function setVisible(){
 	$('#col_restart_game').show();
@@ -441,7 +441,7 @@ function translateRoll() {
 	}
 	
 	var roleValue2 = roleValue.join(",");
-	sendDataToServer(roleValue2);
+	sendDataToServer("ROLL" + roleValue2);
 }
 
 function closeGame(){
@@ -466,7 +466,7 @@ function getWinner(){
 
 
 // ----------------------------EventListener---------------------
-addListener('gameEnd', function(event) {
+addListener('EndOfGame', function(event) {
 var stringFromServer = event.data;
 	playerMessage = stringFromServer;
 	document.getElementById("Player").innerHTML = playerMessage;
@@ -474,26 +474,40 @@ var stringFromServer = event.data;
 });
 
 addListener('winnerData', function(event){
-	// do stuff
+	//bekomme ich hier einen 2D Array [][] ?
+	var stringFromServer = event.data;
+	var score = stringFromServer.split('#'); // mit welchem Zeichen wird getrennt?
+	for (i=0; i<49; i++){
+		//draw board
+	}
 });
 addListener('myScore', function(event) {
-	//do stuff
+	var stringFromServer = event.data;
+	var score = stringFromServer.split(',');
+	document.getElementById("score_1").innerHTML = score[0];
+	document.getElementById("score_2").innerHTML = score[1];
+	document.getElementById("score_3").innerHTML = score[2];
+	document.getElementById("score_4").innerHTML = score[3];
+	document.getElementById("score_5").innerHTML = score[4];
+	var scoreFinal = score[0] + score[1]+ score[3] + score[4];
+	document.getElementById("score_final").innerHTML = scoreFinal;
+	
 });
 addListener('NEW_PLAYER', function(event){
 	document.getElementById("Player").innerHTML = "Ein neuer Spieler ist beigetreten!";
 });
-addListener('standardEvent', function(event) {
+addListener('EndOfTurn', function(event) {
 		var stringFromServer = event.data;
 		var arr = stringFromServer.split(',');
-		console.log(arr);
 		console.log("standardEvent angekommen");
-		playerMessage = arr[2];
+		playerMessage = arr[1];
+		if (arr[2] == "HOST"){setVisible()};
 
 			diceCounter = 0;	
 			turnData = [0, 0, 0, 0];
  			stringData = "";				
 			rollButtonCounter = 0;
-			roleValue = [0,0,0,0];
+			roleValue = [0,0,0,0];		
 			document.getElementById("Player").innerHTML = playerMessage;
 			
 		statusWait = false;
@@ -503,8 +517,6 @@ addListener('standardEvent', function(event) {
 addListener('START', function(event){
 	var stringFromServer = event.data;
 	var arr = stringFromServer.split(',');
-	console.log(arr.length);
-	console.log(arr);
 	playerMessage = arr[1];
 	document.getElementById("Player").innerHTML = playerMessage;
 	if(arr[2]=="HOST") setVisible();

@@ -123,6 +123,12 @@ public class RailroadInk extends Game {
 		if(gsonString.equals("CLOSE") && isHost(user).equals(",NOTTHEHOST")) {
 			sendGameDataToClients("PLAYERLEFT");
 		}
+		if(gsonString.equals("myScore")) {
+			sendGameDataToUser(user, "myScore");
+		}
+		if(gsonString.equals("winnerData")) {
+			sendGameDataToUser(user, "winnerData");
+		}
 		
 		if(spectatorList.contains(user)) {
 			return;
@@ -276,7 +282,7 @@ public class RailroadInk extends Game {
 			return "Cannot restart game once it was started.";
 		}
 		if(eventName.equals("START")) {
-			return "START";
+			return "START" + ",Spiel gestartet!"+ isHost(user);
 		}
 		if(eventName.equals("HOST")) {
 			return "CLOSE";
@@ -284,11 +290,11 @@ public class RailroadInk extends Game {
 		if(eventName.equals("NOTTHEHOST")) {
 			return "PLAYERLEFT" + user.getName();
 		}
+		//if(eventName.equals("END_TURN")) {
+			//return "EndofGame";
+		//}
 		if(eventName.equals("END_TURN")) {
-			return "EndofGame";
-		}
-		if(eventName.equals("END_TURN")) {
-			return "EndOfTurn";
+			return "EndOfTurn" + ",nächste Runde" + isHost(user);
 		}
 		
 		if(eventName.equals("NEW_PLAYER")) {
@@ -307,6 +313,13 @@ public class RailroadInk extends Game {
 		if(eventName.equals("AlREADY 3 SPECIAL ELEMENTS")) {
 			return " 3 spezielle Elemente wurden schon gesetzt";
 		}
+		if(eventName.equals("myScore")) {
+			return "myScore";
+		}
+		if(eventName.equals("winnerData")) {
+			return "winnerData";
+		}
+	
 	
 		ArrayList<Board> boardList  = getBoardList();
 
@@ -328,7 +341,7 @@ public class RailroadInk extends Game {
 
 		if (this.gState == GameState.FINISHED) {
 			if (turnCounter == 7){
-				gameData += "Unentschieden!";
+				gameData += "Spiel beendet!";
 				gameData += isHost(user);
 				return gameData;
 			}
