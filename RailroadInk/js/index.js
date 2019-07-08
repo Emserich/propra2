@@ -16,7 +16,8 @@ var rollButtonCounter = 0;
 var roleValue=[];
 var resetImage = false;
 var imageDropped = false;
-var winnerString = '';
+var winnerString = ''; //String des Gewinners, wird vom Server übergeben
+var activeImageID = ''; //Hilfsvariable, speichert die in die Rotationsbox geladene Strecke
 
 
 // ----------------------------- Tooltips initialisieren -----------------------------
@@ -31,11 +32,13 @@ $(function () {
 
 // Würfel in Rotation-Box kopieren
 $(document).on("click",".dice_img", function () {
-	// $('#rotation_image').html($(this));
+
+	activeImageID = $(this).attr('id');
+	alert(activeImageID);
 
 	if (!$(this).hasClass('img_used')) {
 
-		$(this).addClass('img_used');
+		// $(this).addClass('img_used');
 
 		if ($(this).is('#d2_2') || $(this).is('#d2_5')) {
 			$('#mirror_row').show();
@@ -190,6 +193,8 @@ document.addEventListener("drop", function(event) {
 		event.target.style.border = "";
 		$(".field").css("border","");
 		event.target.appendChild(document.getElementById(data));
+
+		$('#'+activeImageID).addClass('img_used');
 				
 		$('#dice_rotated_'+img_index).removeClass("unset");
 		$('#dice_rotated_'+img_index).addClass("set");
@@ -286,9 +291,7 @@ $(document).on("click","#button_finish_round", function () {
 
 	//Fertigstellen des Spielzugs
 	turnEnd();
-	if (turnCounter > 7) {
-		$('#button_finish_round').hide();
-	}
+	
 });
 
 $(document).on("click","#button_start_game_human", function () {
@@ -296,6 +299,7 @@ $(document).on("click","#button_start_game_human", function () {
 	//Online-Spiel starten
 	startGame();
 	$('#button_finish_round').show();
+
 	
 });
 $(document).on("click","#button_start_game_ki", function () {
@@ -313,7 +317,6 @@ $(document).on("click","#button_restart_game", function () {
 	//Spiel neu starten
 	alert('Spiel neu starten');
 	startGame();
-	$('#button_finish_round').hide();
 
 });
 
@@ -381,6 +384,9 @@ function turnDataToString(){
 	}
 function turnEnd(){
 	document.getElementById('gameround').innerHTML = 'Runde ' +  turnCounter;
+	if (turnCounter > 7) {
+		$('#button_finish_round').hide();
+	}
 	sendDataToServer("END_TURN");
 	statusWait = true;
 }
@@ -388,6 +394,8 @@ function turnEnd(){
 function startGame(){
 	statusWait = true;
 	sendDataToServer("RESTART");
+	$('.dice_cube').removeClass("img_used"); //Strecken wieder wählbar machen
+	$('.special .dice_image').removeClass("img_used");
 }
 function getRoll(){
 	var diceClass2 = document.getElementsByClassName("die-list even-roll");
@@ -522,6 +530,10 @@ addListener('NEW_PLAYER', function(event){
 
 addListener('EndOfTurn', function(event) {
 		turnCounter +=1;
+		if (turnCounter > 7) {
+			$('#button_finish_round').hide();
+		}
+		$('.dice_cube').removeClass("img_used"); //Strecken wieder wählbar machen
 		var stringFromServer = event.data;
 		arr = stringFromServer.split(",");
 		console.log("standardEvent angekommen");
@@ -547,6 +559,8 @@ addListener('START', function(event){
 	document.getElementById("Player").innerHTML = playerMessage;
 	turnCounter++;
 	document.getElementById('gameround').innerHTML = 'Runde ' +  turnCounter;
+	$('.dice_cube').removeClass("img_used"); //Strecken wieder wählbar machen
+	$('.special .dice_image').removeClass("img_used");
 	if(arr[2]=="HOST") setVisible();
 	statusWait = false;	
 });
@@ -555,6 +569,8 @@ addListener('START_KI', function(event){
 	var arr = stringFromServer.split(',');
 	playerMessage = arr[1];
 	document.getElementById("Player").innerHTML = playerMessage;
+	$('.dice_cube').removeClass("img_used"); //Strecken wieder wählbar machen
+	$('.special .dice_image').removeClass("img_used");
 	if(arr[2]=="HOST") setVisible();
 	console.log(arr[2]);
 	statusWait = false;	
