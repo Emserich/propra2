@@ -194,7 +194,8 @@ document.addEventListener("drop", function(event) {
 		$(".field").css("border","");
 		event.target.appendChild(document.getElementById(data));
 
-		$('#'+activeImageID).addClass('img_used');
+		$('#'+activeImageID).addClass('img_used'); //Macht die zuletzt in die Rotationsbox geladene Strecke unselectable
+		activeImageID = '';
 				
 		$('#dice_rotated_'+img_index).removeClass("unset");
 		$('#dice_rotated_'+img_index).addClass("set");
@@ -534,6 +535,7 @@ addListener('EndOfTurn', function(event) {
 			$('#button_finish_round').hide();
 		}
 		$('.dice_cube').removeClass("img_used"); //Strecken wieder wählbar machen
+		activeImageID = '';
 		var stringFromServer = event.data;
 		arr = stringFromServer.split(",");
 		console.log("standardEvent angekommen");
