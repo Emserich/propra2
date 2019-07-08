@@ -32,7 +32,7 @@
               <img src="images/logo.png" width="100%" height="auto">
             </div>
           </div>
-
+		  
           <div class="row" id="dice_row">
             <div class="col-md-12 text-center">
               <div class="dice">
@@ -122,10 +122,16 @@
               </div> <!-- /dice -->
             </div>
           </div> <!-- /row -->
-
+        
           <div class="row mt-2">
             <div class="col-md-12 text-center">
               <button class="btn btn-sm btn-primary" type="button" id="roll-button">Komm ficken</button>
+            </div>
+          </div>
+
+          <div class="row mt-3">
+            <div class="col-md-12 text-center">
+              <button type="button" class="btn btn-primary btn-lg btn-block" id="button_finish_round">Zug beenden!</button>
             </div>
           </div>
 
@@ -148,14 +154,6 @@
               </div>
             </div>
           </div>
-
-
-          <div class="row mt-2">
-            <div class="col-md-12 text-center">
-              <button type="button" class="btn btn-primary btn-lg btn-block" id="button_finish_round">Runde abschließen!</button>
-            </div>
-          </div>
-
           
 
         </div><!-- /Spalte links -->
@@ -263,7 +261,7 @@
             </div>
           </div>
 
-          <button class="btn btn-primary" onclick="toggleFieldnumber()">Toggle FieldNr</button>
+          <!-- <button class="btn btn-primary" id="button_toggleFieldnumber" onclick="toggleFieldnumber()">Toggle FieldNr</button> -->
 
           
 
@@ -385,7 +383,7 @@
               </div>
 
               <div class="text-center my-4">
-                <h5>Der Sieger ist <b>Florian Thomas</b> mit 300 Punkten:</h5>              
+                <h5 id="headingWinner">Der Sieger ist <b>NOTLOADED</b> mit NOTLOADED Punkten:</h5>
               </div>
 
               <div class="col_board"> <!-- Spielbrett -->
@@ -475,7 +473,7 @@
                 </div>
               </div> <!-- /Spielbrett -->
 
-              <button type="button" class="btn btn-primary" onclick="printFields(field_winner)">printFields</button>
+              <button type="button" class="btn btn-primary" onclick="printWinner()">printWinner</button>
 
 
 

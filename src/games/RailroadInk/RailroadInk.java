@@ -261,15 +261,19 @@ public class RailroadInk extends Game {
 		
 		/* -- this is the standard case: the player wants to add an element -- */
 		
-		String [] receivedArray = new String[4];
-		String[] strArray = gsonString.split(",");
+		
 		
 		//only go on with this if the Array also has four elements and is not null and so on
-		if(strArray != null && strArray.length == 4) {
+		if(gsonString.contains("validateDrop")) {
+			boolean validate = true;
+			System.out.println(validate + " aus validateDrop");
+			String [] receivedArray = new String[5];
+			String[] strArray = gsonString.split(",");
+		if(strArray != null && strArray.length == 5) {
 		
 			for (int i = 0; i < 4; i++) {
 				receivedArray[i] = strArray[i];
-			}
+				}
 			
 			int fieldNr = Integer.parseInt(receivedArray[1]);
 			fieldNr--;
@@ -288,12 +292,14 @@ public class RailroadInk extends Game {
 				sendGameDataToUser(user, "SpecialElementalreadyPlaced");
 				//TODO for testing, remove later
 				System.out.println("Es wurde bereits ein Spezialelement in dieser Runde gesetzt.");
+				validate = false;
 				return;
 				}
 		
 			if(userboard.getNumberOfSpecialElements()==3)
 			{
 				sendGameDataToUser(user,"AlREADY 3 SPECIAL ELEMENTS");
+				validate = false;
 				return;
 			}
 			
@@ -315,6 +321,7 @@ public class RailroadInk extends Game {
 				} catch (IllegalPlayerMoveException e) {
 					e.printStackTrace();
 					sendGameDataToUser(user, "WrongField");
+					validate = false;
 					return;
 				}
 			}
@@ -323,46 +330,37 @@ public class RailroadInk extends Game {
 				sendGameDataToUser(user, "WrongField");
 				//TODO for testing, remove later
 				System.out.println("Das Element darf hier nicht platziert werden");
+				validate = false;
 				return;
 			}
+				if (validate == true) {
+					sendGameDataToUser(user, "dropped");
+					return;
+				}
+		  }
 		}
-		
 		/* -- in this case, the player wants to end their turn -- */
 		
 		if(gsonString.equals("END_TURN"))
 		{
-			/*
-			userboard.endofturn();
-			userboard.setSpecialElementPlacedInThisRound(false);
-			for(Board b : boardList)
-			{
-				if(b.getturnCounter()== 7) allTurnCounters++;
-			}
-			if(allTurnCounters==playerList.size())
-				{
-				this.gState = GameState.FINISHED;
-				sendGameDataToClients("EndofGame");
-				return;
-				}
-			else
-			{ 
-				sendGameDataToClients("EndOfTurn");
-			}
-			return;
-			*/
+					
 			
 			//check whether the player is allowed to end their turn
 			if(remainingElements == null || remainingElements.size() == 0) {
+				
 				if(!finishedPlayers.contains(user)) {
 					finishedPlayers.add(user);
 				}
 			} else if(!userboard.movesLeft((RouteElement[])remainingElements.toArray())) {
+				
 				if(!finishedPlayers.contains(user)) {
 					finishedPlayers.add(user);
 				}
 			} else {
+				
 				sendGameDataToUser(user, "CANT_END_TURN");
-				return;
+				
+				
 			}
 			
 			
@@ -370,7 +368,7 @@ public class RailroadInk extends Game {
 			if(finishedPlayers.size() == playerList.size()) {
 				//increment the turn counter
 				turnCounter++;
-				sendGameDataToClients("EndOfTurn");
+				sendGameDataToClients("EndOfTurn" + isHost(user));
 				if(turnCounter == 7) {
 					//end the game
 					this.gState = GameState.FINISHED;
@@ -380,9 +378,9 @@ public class RailroadInk extends Game {
 				
 				return;
 			}
-			
+				
 		}
-		
+			
 	}
 
 	private String isHost(User user) 
@@ -425,8 +423,11 @@ public class RailroadInk extends Game {
 		if(eventName.equals("NOTTHEHOST")) {
 			return "PLAYERLEFT" + user.getName();
 		}
-		if(eventName.equals("END_TURN")) {
+		if(eventName.equals("EndOfTurn")) {
 			return "EndOfTurn";
+		}
+		if(eventName.equals("dropped")) {
+			return "dropped";
 		}
 		if(eventName.equals("thisRoll")) {
 			return "thisRoll," + roll + isHost(user);

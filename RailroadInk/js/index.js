@@ -15,6 +15,8 @@ var stringData = "";
 var rollButtonCounter = 0;
 var roleValue=[];
 var resetImage = false;
+var imageDropped = false;
+var winnerString = '';
 
 
 // ----------------------------- Tooltips initialisieren -----------------------------
@@ -22,7 +24,6 @@ $(function () {
   $('[data-toggle="tooltip"]').tooltip()
 })
 // ----------------------------- /Tooltips initialisieren -----------------------------
-
 
 
 
@@ -65,9 +66,10 @@ $(document).on("click","#roll-button", function () {
 	}
 	else {
 		getRoll();
-		
+		$('#roll-button').hide();
 		}
 	rollButtonCounter++;	
+	
 });
 
 
@@ -173,22 +175,22 @@ document.addEventListener("dragleave", function(event) {
 document.addEventListener("drop", function(event) {
 	event.preventDefault();
 	var data = event.dataTransfer.getData("Text");
-
+		currentDiceImg = document.getElementById(data).src.slice(-7); 
+		currentFieldID = event.target.id;
+		setTurnData();
+		updateGameState();
 	if ( event.target.className == "field" && $('#'+data).hasClass('unset') ) {
 		//checken ob das Element gesetzt werden darf
+		
 		//validateDrop();
-		//if (resetImage)
-
+		
+		//Validierung findet immer erst nach drop statt
+		if (resetImage==false){
+			console.log("warum");
 		event.target.style.border = "";
 		$(".field").css("border","");
 		event.target.appendChild(document.getElementById(data));
-		//Bild des benutzen Würfels
-		currentDiceImg = document.getElementById(data).src.slice(-7); 
-		currentFieldID = event.target.id;
-		
-		setTurnData();
-		updateGameState();
-		
+				
 		$('#dice_rotated_'+img_index).removeClass("unset");
 		$('#dice_rotated_'+img_index).addClass("set");
 		$('.set').attr('draggable', false);
@@ -201,7 +203,8 @@ document.addEventListener("drop", function(event) {
 		$('#'+event.target.id).prepend('<div class="round_nr">'+turnCounter+'</div>'); //Runde eintragen
 		
 		//else packe Bild zurück in die Imagebox
-	};
+		};
+	};	
 });
 // -----------------------------/DRAG & DROP-----------------------------
 
@@ -220,49 +223,45 @@ $('#modal_finish').on('shown.bs.modal', function () {
 	getWinner();	
 })
 
-var field_winner = [
-  	[
-		"1", //Feldnummer
-		"90", //Winkel
-		"0", //Spiegelung
-		"dice_1_2" // Bildname
-	],
-
-	[
-		"5", //Feldnummer
-		"-90", //Winkel
-		"0", //Spiegelung
-		"dice_1_1" // Bildname
-	],
-
-	[
-		"49", //Feldnummer
-		"-180", //Winkel
-		"0", //Spiegelung
-		"special_1" // Bildname
-	]
-
-];
 
 
-function printFields (array) {
-
-	var field_nr = 0;
-	var image_angle = 0;
-	var image_mirror = 0
-	var image_name = "";
+winnerString = "Florian;980;1_2.png,1,-90,1;1_1.png,2,-90,0;1_3.png,3,0,0;l_6.png,9,0,1"; //NUR ZUM TESTEN 
 
 
-	for (var i = 0; i < array.length; i++) {
+function printWinner() {
 
-		field_nr = array[i][0];
-		image_angle = array[i][1];
-		image_mirror = array[i][2];
-		image_name = array[i][3];
+	var winnerArray = winnerString.split(';');
+
+	var winnerName = winnerArray[0];
+	var winnerPoints = winnerArray[1];
+
+	$('#headingWinner').html('Der Sieger ist <b>'+winnerName+'</b> mit '+winnerPoints+' Punkten:');
+
+
+	for (var i = 2; i < winnerArray.length; i++) {
+
+		var fieldArray = winnerArray[i].split(',');		
+
+		var image_name = '';
+		if (fieldArray[0].charAt(0) == '1' || fieldArray[0].charAt(0) == '2') {
+			image_name = 'dice_'+fieldArray[0];
+		}
+		else if ((fieldArray[0].charAt(0) == 'l')) {
+			image_name = 'specia'+fieldArray[0];
+		} 
+		else {
+			alert('Bilddatei mit der Endung '+fieldArray[0]+' nicht gefunden!');
+		}
+
+		var field_nr = fieldArray[1];
+		var image_angle = fieldArray[2];
+		var image_mirror = fieldArray[3];
+
+		// alert('Bild: '+image_name+', Feld: '+field_nr+', Winkel: '+image_angle+', Spiegelung: '+image_mirror);
 
 		var wfield_img = $('<img />').attr({	            
 	            'class': 'dice_rotated',
-	            'src': 'images/dice/' + image_name + '.png',
+	            'src': 'images/dice/' + image_name,
 	            'draggable':'false'
 	        });
 
@@ -275,8 +274,6 @@ function printFields (array) {
 
 		$('#result_field_'+field_nr).html(wfield_img);
 	}
-
-
 }
 // -----------------------------/Ergebnis-Modal-----------------------------
 
@@ -289,17 +286,17 @@ $(document).on("click","#button_finish_round", function () {
 
 	//Fertigstellen des Spielzugs
 	turnEnd();
-	//unten als onCLick-function  
-
+	if (turnCounter > 7) {
+		$('#button_finish_round').hide();
+	}
 });
 
 $(document).on("click","#button_start_game_human", function () {
 
 	//Online-Spiel starten
 	startGame();
-	turnCounter = 1;
-	document.getElementById('gameround').innerHTML = 'Runde ' +  turnCounter;
-
+	$('#button_finish_round').show();
+	
 });
 $(document).on("click","#button_start_game_ki", function () {
 
@@ -307,6 +304,7 @@ $(document).on("click","#button_start_game_ki", function () {
 	addKI();
 	turnCounter = 1;
 	document.getElementById('gameround').innerHTML = 'Runde ' +  turnCounter;
+	$('#button_finish_round').show();
 
 });
 
@@ -315,6 +313,7 @@ $(document).on("click","#button_restart_game", function () {
 	//Spiel neu starten
 	alert('Spiel neu starten');
 	startGame();
+	$('#button_finish_round').hide();
 
 });
 
@@ -371,12 +370,14 @@ function setTurnData(){
 	turnData[3] = mirror;
 	}
 function updateGameState(){
-	statusWait = true;
+	
 	turnDataToString();
 	sendDataToServer(stringData);
+	console.log(stringData);
 }
 function turnDataToString(){
 	stringData = turnData.join(",");
+	stringData = (stringData + ", validateDrop");
 	}
 function turnEnd(){
 	document.getElementById('gameround').innerHTML = 'Runde ' +  turnCounter;
@@ -397,9 +398,10 @@ function getRoll(){
 		translateRoll();		
 }
 function hideButtons(){
-	$('#dice_row').hide();
-	$('#col_restart_game').hide();
+	$('#dice_row').hide();	
 	$('#roll-button').hide();
+	$('#button_finish_round').hide();
+	$('#col_restart_game').hide();
 	$('#ergebnis_button').hide();
 }
 function setVisible(){
@@ -434,6 +436,12 @@ function translateRoll() {
 			break;
 			case "3":	roleValue[3] ="2_3.png";
 			break;
+			case "4" : roleValue[3] ="2_3.png";
+			break;
+			case "5":	roleValue[3] ="2_2.png";
+			break;
+			case "6":	roleValue[3] ="2_1.png";
+			break;
 			
 	}
 	
@@ -459,10 +467,14 @@ function getWinner(){
 	console.log("winner");
 	sendDataToServer("winnerData");
 }
-
+/*
+function validateDrop(){
+	sendDataToServer("validateDrop");
+	imageDropped = false;
+	imageReset = false;		
+}
+*/
 // ---------------------------/Hilfsfunktionen-------------------
-
-
 
 
 // ----------------------------EventListener---------------------
@@ -475,11 +487,21 @@ var stringFromServer = event.data;
 });
 
 addListener('winnerData', function(event){
-	//bekomme ich hier einen 2D Array [][] ?
+	var myArray = [];
+	var dummyString = "result_field_";
 	var stringFromServer = event.data;
-	var score = stringFromServer.split('#'); // mit welchem Zeichen wird getrennt?
-	for (i=0; i<49; i++){
+	var score = stringFromServer.split(';'); 
+	for (i=2; i<51; i++){  //weil die ersten beiden elemente user + score sind
+		myArray = score[i].split(",");
+		dummyString += i;
+		/*
+		img = myArray[0];
+		field = myArray[1];
+		rotation = myArray[2];
+		mirror = myArray[3];
+		*/
 		//draw board
+		dummyString -= i;
 	}
 });
 addListener('myScore', function(event) {
@@ -490,7 +512,7 @@ addListener('myScore', function(event) {
 	document.getElementById("score_3").innerHTML = score[2];
 	document.getElementById("score_4").innerHTML = score[3];
 	document.getElementById("score_5").innerHTML = score[4];
-	var scoreFinal = score[0] + score[1]+ score[3] + score[4];
+	var scoreFinal = score[5];
 	document.getElementById("score_final").innerHTML = scoreFinal;
 	
 });
@@ -501,17 +523,17 @@ addListener('NEW_PLAYER', function(event){
 addListener('EndOfTurn', function(event) {
 		turnCounter +=1;
 		var stringFromServer = event.data;
-		var arr = stringFromServer.split(',');
+		arr = stringFromServer.split(",");
 		console.log("standardEvent angekommen");
-		playerMessage = arr[1];
-		if (arr[2] == "HOST"){setVisible()};
+		console.log(arr[1]);
+		if (arr[1] == "HOST"){setVisible()};
 
 			diceCounter = 0;	
 			turnData = [0, 0, 0, 0];
  			stringData = "";				
 			rollButtonCounter = 0;
 			roleValue = [0,0,0,0];		
-			document.getElementById("Player").innerHTML = playerMessage;
+			document.getElementById("Player").innerHTML = "Runde " + turnCounter + " wurde gestartet!";
 			
 		statusWait = false;
 	});
@@ -523,8 +545,9 @@ addListener('START', function(event){
 	var arr = stringFromServer.split(',');
 	playerMessage = arr[1];
 	document.getElementById("Player").innerHTML = playerMessage;
+	turnCounter++;
+	document.getElementById('gameround').innerHTML = 'Runde ' +  turnCounter;
 	if(arr[2]=="HOST") setVisible();
-	console.log(arr[2]);
 	statusWait = false;	
 });
 addListener('START_KI', function(event){
@@ -564,12 +587,21 @@ addListener('thisRoll', function(event){
 				diceClass[i].setAttribute("data-roll", arrarr[i]);
 			}	
 	if (arr[5] == "NOTTHEHOST"){
-		console.log("aye");
 	$('#dice_row').show();
 	}
 });
 addListener('WrongField',function(event){
 	alert('Das Element darf hier nicht platziert werden');
 	resetImage = true;
+	console.log("in WrongField" + resetImage);
 });
+
+addListener('CANT_END_TURN',function(event){
+	console.log("cant end");
+	alert('Es müssen weitere Elemente gesetzt werden!');
+});
+addListener('dropped',function(event){
+	document.getElementById("Player").innerHTML = "Element gesetzt!"
+	imageDropped = true;
+})
 // ---------------------------/EventListener---------------------
