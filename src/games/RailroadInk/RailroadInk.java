@@ -193,6 +193,7 @@ public class RailroadInk extends Game {
 				// -> non c'est n'est pas possible 
 				//not place
 			}
+			
 			sendGameDataToUser(user, "START_KI");
 			
 			return;
