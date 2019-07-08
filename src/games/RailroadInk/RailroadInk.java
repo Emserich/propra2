@@ -185,7 +185,8 @@ public class RailroadInk extends Game {
 			// cette route ci a l'orientation, le type.. etc...
 			
 			//ici le KI determine si c'est possible de placer l'element.
-			if(ai.finishTurn(routeelement)) {
+			if(ai.finishTurn(routeelement))
+			{
 				//->oui c'est possible
 				//place element
 			}else {
