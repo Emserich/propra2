@@ -286,14 +286,16 @@ $(document).on("click","#button_finish_round", function () {
 
 	//Fertigstellen des Spielzugs
 	turnEnd();
-	//unten als onCLick-function  
-
+	if (turnCounter > 7) {
+		$('#button_finish_round').hide();
+	}
 });
 
 $(document).on("click","#button_start_game_human", function () {
 
 	//Online-Spiel starten
 	startGame();
+	$('#button_finish_round').show();
 	
 });
 $(document).on("click","#button_start_game_ki", function () {
@@ -302,6 +304,7 @@ $(document).on("click","#button_start_game_ki", function () {
 	addKI();
 	turnCounter = 1;
 	document.getElementById('gameround').innerHTML = 'Runde ' +  turnCounter;
+	$('#button_finish_round').show();
 
 });
 
@@ -310,6 +313,7 @@ $(document).on("click","#button_restart_game", function () {
 	//Spiel neu starten
 	alert('Spiel neu starten');
 	startGame();
+	$('#button_finish_round').hide();
 
 });
 
@@ -394,9 +398,10 @@ function getRoll(){
 		translateRoll();		
 }
 function hideButtons(){
-	$('#dice_row').hide();
-	$('#col_restart_game').hide();
+	$('#dice_row').hide();	
 	$('#roll-button').hide();
+	$('#button_finish_round').hide();
+	$('#col_restart_game').hide();
 	$('#ergebnis_button').hide();
 }
 function setVisible(){
