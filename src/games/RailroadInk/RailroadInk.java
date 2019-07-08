@@ -177,20 +177,7 @@ public class RailroadInk extends Game {
 			return;
 		}
 		
-		String [] receivedArray = new String[4];
-		String[] strArray = gsonString.split(",");
-		for (int i = 0; i < 4; i++) {
-			receivedArray[i] = strArray[i];
-		}
-			
-		int fieldNr = Integer.parseInt(receivedArray[1]);
-		fieldNr--;
-		
-		RouteElement routeElem = getElementFromJS(gsonString);
-		
-		//TODO for testing, remove later
-		System.out.println(routeElem);
-		
+		//get the board of the user
 		Board userboard = null;
 		
 		Iterator<Board> itB = boardList.iterator();
@@ -200,23 +187,65 @@ public class RailroadInk extends Game {
 			if (userboardit.getUser() == user) userboard = userboardit;
 		}
 		
-		Field field = userboard.getFields().get(fieldNr);
+		/* -- this is the standard case: the player wants to add an element -- */
 		
-		//falls SPezialelement platziert wurde in dieser runde kehre zurück
+		String [] receivedArray = new String[4];
+		String[] strArray = gsonString.split(",");
 		
-		if(routeElem.isSpecialElement() && userboard.isSpecialElementPlacedInThisRound())
-			{
-			sendGameDataToUser(user, "SpecialElementalreadyPlaced");
-			//TODO for testing, remove later
-			System.out.println("Es wurde bereits ein Spezialelement in dieser Runde gesetzt.");
-			return;
+		//only go on with this if the Array also has four elements and is not null and so on
+		if(strArray != null && strArray.length == 4) {
+		
+			for (int i = 0; i < 4; i++) {
+				receivedArray[i] = strArray[i];
 			}
+			
+			int fieldNr = Integer.parseInt(receivedArray[1]);
+			fieldNr--;
 		
-		if(userboard.getNumberOfSpecialElements()==3)
-		{
-			sendGameDataToUser(user,"AlREADY 3 SPECIAL ELEMENTS");
-			return;
+			RouteElement routeElem = getElementFromJS(gsonString);
+		
+			//TODO for testing, remove later
+			System.out.println(routeElem);
+		
+			Field field = userboard.getFields().get(fieldNr);
+		
+			//falls SPezialelement platziert wurde in dieser runde kehre zurück
+		
+			if(routeElem.isSpecialElement() && userboard.isSpecialElementPlacedInThisRound())
+				{
+				sendGameDataToUser(user, "SpecialElementalreadyPlaced");
+				//TODO for testing, remove later
+				System.out.println("Es wurde bereits ein Spezialelement in dieser Runde gesetzt.");
+				return;
+				}
+		
+			if(userboard.getNumberOfSpecialElements()==3)
+			{
+				sendGameDataToUser(user,"AlREADY 3 SPECIAL ELEMENTS");
+				return;
+			}
+			
+			if(userboard.canElementBePlaced(field, routeElem))
+			{
+				try{
+					field.addElement(routeElem);
+					if(routeElem.isSpecialElement()) {
+						userboard.setSpecialElementPlacedInThisRound(true);
+					}
+				} catch (IllegalPlayerMoveException e) {
+					e.printStackTrace();
+					sendGameDataToUser(user, "WrongField");
+				}
+			}
+			else 
+			{
+				sendGameDataToUser(user, "WrongField");
+				//TODO for testing, remove later
+				System.out.println("Das Element darf hier nicht platziert werden");
+				return;
+			}
 		}
+		
 		
 		if(gsonString.equals("END_TURN"))
 		{
@@ -238,27 +267,6 @@ public class RailroadInk extends Game {
 			}
 				return;
 		}
-		
-		if(userboard.canElementBePlaced(field, routeElem))
-		{
-			try{
-				field.addElement(routeElem);
-				if(routeElem.isSpecialElement()) {
-					userboard.setSpecialElementPlacedInThisRound(true);
-				}
-			} catch (IllegalPlayerMoveException e) {
-				e.printStackTrace();
-				sendGameDataToUser(user, "WrongField");
-			}
-		}
-		else 
-		{
-			sendGameDataToUser(user, "WrongField");
-			//TODO for testing, remove later
-			System.out.println("Das Element darf hier nicht platziert werden");
-			return;
-		}
-		
 		
 	}
 
