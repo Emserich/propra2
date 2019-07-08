@@ -159,7 +159,7 @@ public class RailroadInk extends Game {
 				RouteElement element = new RouteElement(Orientations.ZERO_DEGREES, type, false);
 				elements.add(element);
 				
-				// pour le KI ici 
+				//  Roll for KI
 				routeelement[i] = element;
 			}
 			
@@ -182,16 +182,12 @@ public class RailroadInk extends Game {
 			this.gState = GameState.RUNNING;
 			ai = new ArtificialIntelligence();
 			
-			// cette route ci a l'orientation, le type.. etc...
-			
 			//ici le KI determine si c'est possible de placer l'element.
 			if(ai.finishTurn(routeelement))
 			{
-				//->oui c'est possible
-				//place element
-			}else {
-				// -> non c'est n'est pas possible 
-				//not place
+				//create an array of elements for ki 
+				ArrayList<RouteElement> routeelement = new ArrayList<RouteElement>();
+				elementsPerTurn.add(routeelement);
 			}
 			
 			sendGameDataToUser(user, "START_KI");
@@ -224,6 +220,10 @@ public class RailroadInk extends Game {
 				//create an array of elements for each player
 				ArrayList<RouteElement> elements = new ArrayList<RouteElement>();
 				elementsPerTurn.add(elements);
+				
+				
+				
+				
 			}
 			
 			turnCounter = 0;
