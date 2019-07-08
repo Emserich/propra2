@@ -35,6 +35,9 @@ public class RailroadInk extends Game {
 	//an object of the AI-class
 	private ArtificialIntelligence AI;
 	
+	//an ArrayList for the results
+	private ArrayList<Result> results = new ArrayList<Result>();
+	
 	//an integer value counts the turns
 	private int turnCounter = 0;
 	
@@ -161,9 +164,6 @@ public class RailroadInk extends Game {
 				b.setSpecialElementPlacedInThisRound(false);
 			}
 			
-			//increment the turn counter
-			turnCounter++;
-			
 			return;
 		}
 		if(spectatorList.contains(user)) {
@@ -189,6 +189,7 @@ public class RailroadInk extends Game {
 			}
 			boardList.clear();
 			elementsPerTurn.clear();
+			results.clear();
 			for(User u : playerList)
 			{
 				//create boards for each player
@@ -332,12 +333,7 @@ public class RailroadInk extends Game {
 				if(!finishedPlayers.contains(user)) {
 					finishedPlayers.add(user);
 				}
-			} else {
-				sendGameDataToUser(user, "CANT_END_TURN");
-				return;
-			}
-			
-			if(!userboard.movesLeft((RouteElement[])remainingElements.toArray())) {
+			} else if(!userboard.movesLeft((RouteElement[])remainingElements.toArray())) {
 				if(!finishedPlayers.contains(user)) {
 					finishedPlayers.add(user);
 				}
@@ -346,9 +342,18 @@ public class RailroadInk extends Game {
 				return;
 			}
 			
+			
 			//check whether all players have ended their turns
 			if(finishedPlayers.size() == playerList.size()) {
+				//increment the turn counter
+				turnCounter++;
 				sendGameDataToClients("EndOfTurn");
+				if(turnCounter == 7) {
+					//end the game
+					this.gState = GameState.FINISHED;
+					sendGameDataToClients("EndOfGame");
+					return;
+				}
 				return;
 			}
 			
@@ -420,13 +425,25 @@ public class RailroadInk extends Game {
 			return " 3 spezielle Elemente wurden schon gesetzt";
 		}
 		if(eventName.equals("myScore")) {
-			return "myScore" +calculateResults();
+			return "myScore" + calculateSingleResults(user);
 		}
 		if(eventName.equals("winnerData")) {
-			//soll Boarddaten des Siegers liefern!
-			return "winnerData";
+			int index = -1;
+			int highestScore = -1000;
+			Result highestResult = null;
+			for(Result r : results) {
+				int score = r.getScore();
+				if(score > highestScore) {
+					highestScore = score;
+					index = results.indexOf(r);
+					highestResult = r;
+				}
+			}
+			return "winnerData;" + highestResult.getUser().getName() + ";" + highestResult.getScore() + "," + highestResult.getBoard();
 		}
-	
+		if(eventName.equals("EndOfGame")) {
+			return "EndOfGame" + ",Das Spiel ist beendet.";
+		}
 	
 		ArrayList<Board> boardList  = getBoardList();
 
@@ -583,10 +600,14 @@ public class RailroadInk extends Game {
 			break;
 		case ROAD:
 		case RAIL:
-		case STATION:
 		case STATION_TURN:
 		case OVERPASS:
 			//in the above cases, we have to add ninety degrees
+			orientation = Orientations.addNinetyDegrees(orientation);
+			break;
+		case STATION:
+			orientation = Orientations.addNinetyDegrees(orientation);
+			orientation = Orientations.addNinetyDegrees(orientation);
 			orientation = Orientations.addNinetyDegrees(orientation);
 			break;
 		case ROAD_TURN:
@@ -699,6 +720,7 @@ public class RailroadInk extends Game {
 		
 		for(Field f : board.getFields()) {
 			int pos = f.getPosition();
+			pos++;
 			if(f.isEmpty()) {
 				result += "empty," + pos + ",empty,empty";
 			} else {
@@ -816,6 +838,25 @@ public class RailroadInk extends Game {
 		}
 		roll = dices;
 		sendGameDataToClients("thisRoll");
+	}
+	
+	private String calculateSingleResults(User user) {
+		String result = "";
+		
+		ResultCalculator calc = new ResultCalculator();
+		
+		int index = playerList.indexOf(user);
+		Board board = boardList.get(index);
+		
+		String username = board.getUser().getName();
+		int[] res = calc.calculateResult(board);
+		result += username + "," + res[0] + "," + res[1] + "," + res[2] + "," + res[3] + "," + res[4] + "," + res[5] + ";";
+		
+		String boardRepresentation = boardToJsRepresentation(board);
+		Result resClass = new Result(user, res, boardRepresentation);
+		results.add(resClass);
+		
+		return result;
 	}
 	
 }

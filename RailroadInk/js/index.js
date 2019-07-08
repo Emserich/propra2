@@ -175,10 +175,10 @@ document.addEventListener("drop", function(event) {
 	var data = event.dataTransfer.getData("Text");
 
 	if ( event.target.className == "field" && $('#'+data).hasClass('unset') ) {
-		// document.getElementById("demo").style.color = "";
+		//checken ob das Element gesetzt werden darf
+		//validateDrop();
+		//if (resetImage)
 
-		// $('#'+event.target.id).append('<div class="round_nr">&#10003;</div>');
-		document.getElementById("Player").innerHTML = event.target.id //nur zum Test
 		event.target.style.border = "";
 		$(".field").css("border","");
 		event.target.appendChild(document.getElementById(data));
@@ -188,7 +188,7 @@ document.addEventListener("drop", function(event) {
 		
 		setTurnData();
 		updateGameState();
-		if (resetImage == false){
+		
 		$('#dice_rotated_'+img_index).removeClass("unset");
 		$('#dice_rotated_'+img_index).addClass("set");
 		$('.set').attr('draggable', false);
@@ -199,7 +199,7 @@ document.addEventListener("drop", function(event) {
 		diceCounter++; //Anzahl benutzter Würfel
 
 		$('#'+event.target.id).prepend('<div class="round_nr">'+turnCounter+'</div>'); //Runde eintragen
-		}
+		
 		//else packe Bild zurück in die Imagebox
 	};
 });
@@ -212,11 +212,12 @@ document.addEventListener("drop", function(event) {
 // -----------------------------Ergebnis-Modal-----------------------------
 $(document).on("click","#ergebnis_button", function () {
 	$('#modal_finish').modal('toggle')
-	getScore();
-	getWinner();	
+		
 });
 
 $('#modal_finish').on('shown.bs.modal', function () {
+	getScore();
+	getWinner();	
 })
 
 var field_winner = [
@@ -427,18 +428,13 @@ function translateRoll() {
 		}
 	}
 		switch (roleValue[3]){
-			case "1" : roleValue[3] ="l_1.png";
+			case "1" : roleValue[3] ="2_1.png";
 			break;
-			case "2":	roleValue[3] ="l_2.png";
+			case "2":	roleValue[3] ="2_2.png";
 			break;
-			case "3":	roleValue[3] ="l_3.png";
+			case "3":	roleValue[3] ="2_3.png";
 			break;
-			case "4":	roleValue[3] ="l_4.png";
-			break;
-			case "5":	roleValue[3] ="l_5.png";
-			break;
-			case "6":	roleValue[3] ="l_6.png";
-			break;
+			
 	}
 	
 	var roleValue2 = roleValue.join(",");
@@ -475,6 +471,7 @@ var stringFromServer = event.data;
 	playerMessage = stringFromServer;
 	document.getElementById("Player").innerHTML = playerMessage;
 	$('#ergebnis_button').show;
+	$('#modal_finish').modal('toggle');
 });
 
 addListener('winnerData', function(event){
