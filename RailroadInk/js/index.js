@@ -225,12 +225,12 @@ $('#modal_finish').on('shown.bs.modal', function () {
 
 
 
-winnerString = "Florian;980;1_2.png,1,-90,1;1_1.png,2,-90,0;1_3.png,3,0,0;l_6.png,9,0,1"; //NUR ZU TESTEN, wird in HTML an printWinner übergegeben 
+winnerString = "Florian;980;1_2.png,1,-90,1;1_1.png,2,-90,0;1_3.png,3,0,0;l_6.png,9,0,1"; //NUR ZUM TESTEN 
 
 
-function printWinner (str) {
+function printWinner() {
 
-	var winnerArray = str.split(';');
+	var winnerArray = winnerString.split(';');
 
 	var winnerName = winnerArray[0];
 	var winnerPoints = winnerArray[1];
