@@ -38,6 +38,9 @@ public class RailroadInk extends Game {
 	//a String is used to indicate if a player has left
 	private String playerLeft = null;
 	
+	//a String to pass on the dices for the current roll
+	private String roll;
+	
 	private int allTurnCounters;
 	
 	
@@ -107,7 +110,7 @@ public class RailroadInk extends Game {
 		//TODO for testing, remove later
 		System.out.println("");
 		System.out.println("Execute-Methode aufgerufen mit Daten:");
-		System.out.println(user.getName() + ", " + gsonString);
+		System.out.println(user.getName() + "-" + gsonString);
 		
 		
 		if(this.gState==GameState.CLOSED) {
@@ -122,6 +125,7 @@ public class RailroadInk extends Game {
 		
 		if(gsonString.equals("CLOSE") && isHost(user).equals(",NOTTHEHOST")) {
 			sendGameDataToClients("PLAYERLEFT");
+			return;
 		}
 		if(gsonString.equals("myScore")) {
 			sendGameDataToUser(user, "myScore");
@@ -132,7 +136,11 @@ public class RailroadInk extends Game {
 			return;
 		}
 		if(gsonString.contains("ROLL")) {
-			sendGameDataToClients("thisRoll" + ",1_2.png"+ ",1_3.png"+ ",1_4.png"+ ",l_4.png"+ isHost(user));
+			System.out.println("hallo");
+			roll(gsonString);
+			
+			//sendGameDataToClients("thisRoll");
+			return;
 		}
 		if(spectatorList.contains(user)) {
 			return;
@@ -237,6 +245,7 @@ public class RailroadInk extends Game {
 				} catch (IllegalPlayerMoveException e) {
 					e.printStackTrace();
 					sendGameDataToUser(user, "WrongField");
+					return;
 				}
 			}
 			else 
@@ -262,6 +271,7 @@ public class RailroadInk extends Game {
 				{
 				this.gState = GameState.FINISHED;
 				sendGameDataToClients("EndofGame");
+				return;
 				}
 			else
 			{ 
@@ -309,14 +319,13 @@ public class RailroadInk extends Game {
 		if(eventName.equals("NOTTHEHOST")) {
 			return "PLAYERLEFT" + user.getName();
 		}
-		//if(eventName.equals("END_TURN")) {
-			//return "EndofGame";  <---------Warum?
-		//}
 		if(eventName.equals("END_TURN")) {
 			return "EndOfTurn";
 		}
-		if(eventName.contains("ROLL")) {
-			return "thisRoll" ;
+		if(eventName.equals("thisRoll")) {
+			System.out.println(eventName);
+			System.out.println("thisRoll" + roll + isHost(user));
+			return "thisRoll," + roll + isHost(user);
 		}
 				
 		if(eventName.equals("NEW_PLAYER")) {
@@ -372,8 +381,8 @@ public class RailroadInk extends Game {
 			//TODO Fall betrachten, wenn es nicht unentschieden ist
 		}
 		
-		gameData += isHost(user);
-		gameData += calculateResults();
+		//gameData += isHost(user);
+		//gameData += calculateResults();
 
 		return gameData;
 	}
@@ -718,6 +727,20 @@ public class RailroadInk extends Game {
 		}
 		
 		return result;
+	}
+	
+	private void roll(String gsonString) {
+		String dices = "";
+		String[] info = gsonString.split(",");
+		for(int i = 1; i < info.length; i++) {
+			String typeInfo = info[i];
+			dices += typeInfo;
+			if(i != 4) {
+				dices += ",";
+			}
+		}
+		roll = dices;
+		sendGameDataToClients("thisRoll");
 	}
 	
 }

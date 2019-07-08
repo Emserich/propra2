@@ -386,10 +386,10 @@ function startGame(){
 	sendDataToServer("RESTART");
 }
 function getRoll(){
-	var diceClass = document.getElementsByClassName("die-list even-roll");
+	var diceClass2 = document.getElementsByClassName("die-list even-roll");
 	
-		for (i=0;i<diceClass.length;i++){
-				roleValue[i] = diceClass[i].getAttribute("data-roll");
+		for (i=0;i<diceClass2.length;i++){
+				roleValue[i] = diceClass2[i].getAttribute("data-roll");
 			}	
 		translateRoll();		
 }
@@ -551,18 +551,20 @@ addListener('CLOSE', function(event){
 });
 addListener('thisRoll', function(event){
 	var arrarr = [];
-	stringFromServer = event.data;
-	arr = stringFromServer.split(",");
+	var stringFromServer = event.data;
+	var arr = stringFromServer.split(",");
 	console.log(arr);
 	for (i=1; i<(arr.length-1); i++){
 		arrarr[i] = arr[i].charAt(2);
 	}
 	var diceClass = document.getElementsByClassName("die-list even-roll");
+	console.log(diceClass.length);
 	
-		for (i=0;i<diceClass.length;i++){
+		for (i=0;i<4;i++){
 				diceClass[i].setAttribute("data-roll", arrarr[i]);
 			}	
-	if (arr[6] == "NOTTHEHOST"){
+	if (arr[5] == "NOTTHEHOST"){
+		console.log("aye");
 	$('#dice_row').show();
 	}
 })
