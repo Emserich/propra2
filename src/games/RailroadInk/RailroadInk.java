@@ -125,16 +125,21 @@ public class RailroadInk extends Game {
 		}
 		if(gsonString.equals("myScore")) {
 			sendGameDataToUser(user, "myScore");
+			return;
 		}
 		if(gsonString.equals("winnerData")) {
 			sendGameDataToUser(user, "winnerData");
+			return;
 		}
 		
 		if(spectatorList.contains(user)) {
 			return;
 		}
-		
-		
+		if(gsonString.equals("ADD_KI")) {
+			this.gState = GameState.RUNNING;
+			sendGameDataToUser(user, "START_KI");
+			return;
+		}
 		if(gsonString.equals("RESTART")) {
 			if(gState == GameState.RUNNING) {
 				sendGameDataToClients("Cannot restart game once it was started.");
@@ -228,10 +233,10 @@ public class RailroadInk extends Game {
 				sendGameDataToClients("EndofGame");
 				}
 			else
-			{
+			{ 
 				sendGameDataToClients("EndOfTurn");
 			}
-			
+				return;
 		}
 		
 		if(userboard.canElementBePlaced(field, routeElem))
@@ -287,16 +292,20 @@ public class RailroadInk extends Game {
 		if(eventName.equals("HOST")) {
 			return "CLOSE";
 		}
+		if(eventName.equals("START_KI")) {
+			//to do: packe KI ins Spiel!
+			return "START" + ",Spiel gegen KI gestartet!" + isHost(user);
+		}
 		if(eventName.equals("NOTTHEHOST")) {
 			return "PLAYERLEFT" + user.getName();
 		}
 		//if(eventName.equals("END_TURN")) {
-			//return "EndofGame";
+			//return "EndofGame";  <---------Warum?
 		//}
 		if(eventName.equals("END_TURN")) {
-			return "EndOfTurn" + ",nächste Runde" + isHost(user);
+			return "EndOfTurn";
 		}
-		
+				
 		if(eventName.equals("NEW_PLAYER")) {
 			return "NEW_PLAYER" + user.getName();
 		}
@@ -314,9 +323,10 @@ public class RailroadInk extends Game {
 			return " 3 spezielle Elemente wurden schon gesetzt";
 		}
 		if(eventName.equals("myScore")) {
-			return "myScore";
+			return "myScore" +calculateResults();
 		}
 		if(eventName.equals("winnerData")) {
+			//soll Boarddaten des Siegers liefern!
 			return "winnerData";
 		}
 	

@@ -302,7 +302,6 @@ $(document).on("click","#button_start_game_ki", function () {
 
 	//Spiel gegen KI
 	addKI();
-	startGame();
 	turnCounter = 1;
 	document.getElementById('gameround').innerHTML = 'Runde ' +  turnCounter;
 
@@ -377,10 +376,9 @@ function turnDataToString(){
 	stringData = turnData.join(",");
 	}
 function turnEnd(){
-	turnCounter +=1;
 	document.getElementById('gameround').innerHTML = 'Runde ' +  turnCounter;
 	sendDataToServer("END_TURN");
-	statusWait = true;
+	//statusWait = true;
 }
 
 function startGame(){
@@ -441,7 +439,7 @@ function translateRoll() {
 	}
 	
 	var roleValue2 = roleValue.join(",");
-	sendDataToServer("ROLL" + roleValue2);
+	sendDataToServer(roleValue2);
 }
 
 function closeGame(){
@@ -496,7 +494,9 @@ addListener('myScore', function(event) {
 addListener('NEW_PLAYER', function(event){
 	document.getElementById("Player").innerHTML = "Ein neuer Spieler ist beigetreten!";
 });
+
 addListener('EndOfTurn', function(event) {
+		turnCounter +=1;
 		var stringFromServer = event.data;
 		var arr = stringFromServer.split(',');
 		console.log("standardEvent angekommen");
@@ -512,9 +512,19 @@ addListener('EndOfTurn', function(event) {
 			
 		statusWait = false;
 	});
+
 //START wird ausgelöst wenn ein Spiel erstellt wird,
 // aber noch nicht genügend Spieler da sind
 addListener('START', function(event){
+	var stringFromServer = event.data;
+	var arr = stringFromServer.split(',');
+	playerMessage = arr[1];
+	document.getElementById("Player").innerHTML = playerMessage;
+	if(arr[2]=="HOST") setVisible();
+	console.log(arr[2]);
+	statusWait = false;	
+});
+addListener('START_KI', function(event){
 	var stringFromServer = event.data;
 	var arr = stringFromServer.split(',');
 	playerMessage = arr[1];
@@ -533,5 +543,7 @@ addListener('PLAYERLEFT', function(event){
 //CLOSE wird ausgelöst wenn der Host das Spiel per "Spiel schließen" Button beendet
 addListener('CLOSE', function(event){
 	document.getElementById("Player").innerHTML = "Spiel wurde vom Host beendet!";
+	window.location = "/index"; //hier muss man zum eig Start weitergeleitet werden.
+	eventSource.close();
 });
 // ---------------------------/EventListener---------------------
