@@ -16,6 +16,7 @@ var rollButtonCounter = 0;
 var roleValue=[];
 var resetImage = false;
 var imageDropped = false;
+var winnerString = '';
 
 
 // ----------------------------- Tooltips initialisieren -----------------------------
@@ -222,49 +223,45 @@ $('#modal_finish').on('shown.bs.modal', function () {
 	getWinner();	
 })
 
-var field_winner = [
-  	[
-		"1", //Feldnummer
-		"90", //Winkel
-		"0", //Spiegelung
-		"dice_1_2" // Bildname
-	],
-
-	[
-		"5", //Feldnummer
-		"-90", //Winkel
-		"0", //Spiegelung
-		"dice_1_1" // Bildname
-	],
-
-	[
-		"49", //Feldnummer
-		"-180", //Winkel
-		"0", //Spiegelung
-		"special_1" // Bildname
-	]
-
-];
 
 
-function printFields (array) {
-
-	var field_nr = 0;
-	var image_angle = 0;
-	var image_mirror = 0
-	var image_name = "";
+winnerString = "Florian;980;1_2.png,1,-90,1;1_1.png,2,-90,0;1_3.png,3,0,0;l_6.png,9,0,1"; //NUR ZU TESTEN, wird in HTML an printWinner übergegeben 
 
 
-	for (var i = 0; i < array.length; i++) {
+function printWinner (str) {
 
-		field_nr = array[i][0];
-		image_angle = array[i][1];
-		image_mirror = array[i][2];
-		image_name = array[i][3];
+	var winnerArray = str.split(';');
+
+	var winnerName = winnerArray[0];
+	var winnerPoints = winnerArray[1];
+
+	alert(winnerName +': '+ winnerPoints);
+
+
+	for (var i = 2; i < winnerArray.length; i++) {
+
+		var fieldArray = winnerArray[i].split(',');		
+
+		var image_name = '';
+		if (fieldArray[0].charAt(0) == '1' || fieldArray[0].charAt(0) == '2') {
+			image_name = 'dice_'+fieldArray[0];
+		}
+		else if ((fieldArray[0].charAt(0) == 'l')) {
+			image_name = 'specia'+fieldArray[0];
+		} 
+		else {
+			alert('Bilddatei mit der Endung '+fieldArray[0]+' nicht gefunden!');
+		}
+
+		var field_nr = fieldArray[1];
+		var image_angle = fieldArray[2];
+		var image_mirror = fieldArray[3];
+
+		// alert('Bild: '+image_name+', Feld: '+field_nr+', Winkel: '+image_angle+', Spiegelung: '+image_mirror);
 
 		var wfield_img = $('<img />').attr({	            
 	            'class': 'dice_rotated',
-	            'src': 'images/dice/' + image_name + '.png',
+	            'src': 'images/dice/' + image_name,
 	            'draggable':'false'
 	        });
 
@@ -277,8 +274,6 @@ function printFields (array) {
 
 		$('#result_field_'+field_nr).html(wfield_img);
 	}
-
-
 }
 // -----------------------------/Ergebnis-Modal-----------------------------
 

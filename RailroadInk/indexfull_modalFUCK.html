@@ -533,8 +533,8 @@ addListener('QUIT', function(event){
               <img src="images/logo.png" width="100%" height="auto">
             </div>
           </div>
-
-          <div class="row">
+		  
+          <div class="row" id="dice_row">
             <div class="col-md-12 text-center">
               <div class="dice">
                 <ol class="die-list even-roll" data-roll="1" id="die-1">
@@ -623,7 +623,7 @@ addListener('QUIT', function(event){
               </div> <!-- /dice -->
             </div>
           </div> <!-- /row -->
-
+        
           <div class="row mt-2">
             <div class="col-md-12 text-center">
               <button class="btn btn-sm btn-primary" type="button" id="roll-button">Komm ficken</button>
@@ -653,7 +653,7 @@ addListener('QUIT', function(event){
 
           <div class="row mt-2">
             <div class="col-md-12 text-center">
-              <button type="button" class="btn btn-primary btn-lg btn-block" id="button_finish_round" onclick="turnEnd();">Runde abschließen!</button>
+              <button type="button" class="btn btn-primary btn-lg btn-block" id="button_finish_round">Runde abschließen!</button>
             </div>
           </div>
 
@@ -861,27 +861,27 @@ addListener('QUIT', function(event){
               <div class="row score_row">
                 <div class="col-auto">
                   <img class="score_img" src="images/score/score_1.png">
-                  <span class="score_text">= 42</span>
+                  <span class="score_text" id="score_1">= 42</span>
                 </div>
                 <div class="col-auto">
                   <img class="score_img" src="images/score/score_2.png">
-                  <span class="score_text">= 42</span>
+                  <span class="score_text" id="score_2">= 42</span>
                 </div>
                 <div class="col-auto">
                   <img class="score_img" src="images/score/score_3.png">
-                  <span class="score_text">= 42</span>
+                  <span class="score_text" id="score_3">= 42</span>
                 </div>
                 <div class="col-auto">
                   <img class="score_img" src="images/score/score_4.png">
-                  <span class="score_text">= 42</span>
+                  <span class="score_text" id="score_4">= 42</span>
                 </div>
                 <div class="col-auto">
                   <img class="score_img" src="images/score/score_5.png">
-                  <span class="score_text">= 42</span>
+                  <span class="score_text" id="score_5">= 42</span>
                 </div>
                 <div class="col-auto ml-auto">
                   <img class="score_img" src="images/score/score_final.png">
-                  <span class="score_text_final">210 Punkte</span>
+                  <span class="score_text_final" id="score_final">210 Punkte</span>
                 </div>
               </div>
 
@@ -976,7 +976,7 @@ addListener('QUIT', function(event){
                 </div>
               </div> <!-- /Spielbrett -->
 
-              <button type="button" class="btn btn-primary" onclick="printFields(field_winner)">printFields</button>
+              <button type="button" class="btn btn-primary" onclick="printFields(winnerString)">printFields</button>
 
 
 
