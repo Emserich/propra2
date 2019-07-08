@@ -235,7 +235,7 @@ function printWinner (str) {
 	var winnerName = winnerArray[0];
 	var winnerPoints = winnerArray[1];
 
-	alert(winnerName +': '+ winnerPoints);
+	$('#headingWinner').html('Der Sieger ist <b>'+winnerName+'</b> mit '+winnerPoints+' Punkten:');
 
 
 	for (var i = 2; i < winnerArray.length; i++) {
