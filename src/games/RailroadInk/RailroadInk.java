@@ -29,6 +29,9 @@ public class RailroadInk extends Game {
 	//an ArrayList to store the players that have already finished their turn
 	private ArrayList<User> finishedPlayers = new ArrayList<User>();
 	
+	//an Arraylist to store the route elements of the turn for each player
+	private ArrayList<ArrayList<RouteElement>> elementsPerTurn = new ArrayList<ArrayList<RouteElement>>();
+	
 	//an object of the AI-class
 	private ArtificialIntelligence AI;
 	
@@ -136,10 +139,31 @@ public class RailroadInk extends Game {
 			return;
 		}
 		if(gsonString.contains("ROLL")) {
-			System.out.println("hallo");
 			roll(gsonString);
 			
-			//sendGameDataToClients("thisRoll");
+			//store the route elements in an Array for each player
+			ArrayList<RouteElement> elements = new ArrayList<RouteElement>();
+			String[] info = gsonString.split(",");
+			for(int i = 1; i < info.length; i++) {
+				String typeInfo = info[i];
+				ElementTypes type = getTypeFromJsInput(typeInfo);
+				RouteElement element = new RouteElement(Orientations.ZERO_DEGREES, type, false);
+				elements.add(element);
+			}
+			
+			elementsPerTurn.clear();
+			for(int j = 0; j < playerList.size(); j++) {
+				elementsPerTurn.add(elements);
+			}
+			
+			//go through each board and set some variable false again
+			for(Board b : boardList) {
+				b.setSpecialElementPlacedInThisRound(false);
+			}
+			
+			//increment the turn counter
+			turnCounter++;
+			
 			return;
 		}
 		if(spectatorList.contains(user)) {
@@ -157,19 +181,27 @@ public class RailroadInk extends Game {
 			}
 		}
 		
-		if (gsonString.equals("RESTART") && isHost(user).equals(",HOST")) {;
+		if (gsonString.equals("RESTART") && isHost(user).equals(",HOST")) {
 			if(gState == GameState.RUNNING) 
 			{
 				sendGameDataToClients("Cannot restart game once it was started.");
 				return;
 			}
 			boardList.clear();
+			elementsPerTurn.clear();
 			for(User u : playerList)
 			{
+				//create boards for each player
 				Board board = new Board(u);
 				board.initializeFields();
 				boardList.add(board);
+				
+				//create an array of elements for each player
+				ArrayList<RouteElement> elements = new ArrayList<RouteElement>();
+				elementsPerTurn.add(elements);
 			}
+			
+			turnCounter = 0;
 			allTurnCounters = 0;
 			
 			
@@ -187,6 +219,8 @@ public class RailroadInk extends Game {
 			return;
 		}
 		
+		/* -- acquiring information about the player -- */
+		
 		//get the board of the user
 		Board userboard = null;
 		
@@ -196,6 +230,10 @@ public class RailroadInk extends Game {
 			Board userboardit = itB.next();
 			if (userboardit.getUser() == user) userboard = userboardit;
 		}
+		
+		//get the elements they can place in this turn
+		int index = playerList.indexOf(user);
+		ArrayList<RouteElement> remainingElements = elementsPerTurn.get(index);
 		
 		/* -- this is the standard case: the player wants to add an element -- */
 		
@@ -242,6 +280,14 @@ public class RailroadInk extends Game {
 					if(routeElem.isSpecialElement()) {
 						userboard.setSpecialElementPlacedInThisRound(true);
 					}
+					//if we end up here, the element has been added
+					int indexOfElem = -1;
+					for(RouteElement other : remainingElements) {
+						if(routeElem.sameType(other)) {
+							indexOfElem = remainingElements.indexOf(other);
+						}
+					}
+					remainingElements.remove(indexOfElem);
 				} catch (IllegalPlayerMoveException e) {
 					e.printStackTrace();
 					sendGameDataToUser(user, "WrongField");
@@ -257,10 +303,11 @@ public class RailroadInk extends Game {
 			}
 		}
 		
+		/* -- in this case, the player wants to end their turn -- */
 		
 		if(gsonString.equals("END_TURN"))
 		{
-			
+			/*
 			userboard.endofturn();
 			userboard.setSpecialElementPlacedInThisRound(false);
 			for(Board b : boardList)
@@ -277,7 +324,34 @@ public class RailroadInk extends Game {
 			{ 
 				sendGameDataToClients("EndOfTurn");
 			}
+			return;
+			*/
+			
+			//check whether the player is allowed to end their turn
+			if(remainingElements == null || remainingElements.size() == 0) {
+				if(!finishedPlayers.contains(user)) {
+					finishedPlayers.add(user);
+				}
+			} else {
+				sendGameDataToUser(user, "CANT_END_TURN");
 				return;
+			}
+			
+			if(!userboard.movesLeft((RouteElement[])remainingElements.toArray())) {
+				if(!finishedPlayers.contains(user)) {
+					finishedPlayers.add(user);
+				}
+			} else {
+				sendGameDataToUser(user, "CANT_END_TURN");
+				return;
+			}
+			
+			//check whether all players have ended their turns
+			if(finishedPlayers.size() == playerList.size()) {
+				sendGameDataToClients("EndOfTurn");
+				return;
+			}
+			
 		}
 		
 	}
@@ -312,6 +386,9 @@ public class RailroadInk extends Game {
 		if(eventName.equals("HOST")) {
 			return "CLOSE";
 		}
+		if(eventName.equals("CANT_END_TURN")) {
+			return "CANT_END_TURN";
+		}
 		if(eventName.equals("START_KI")) {
 			//to do: packe KI ins Spiel!
 			return "START" + ",Spiel gegen KI gestartet!" + isHost(user);
@@ -323,8 +400,6 @@ public class RailroadInk extends Game {
 			return "EndOfTurn";
 		}
 		if(eventName.equals("thisRoll")) {
-			System.out.println(eventName);
-			System.out.println("thisRoll" + roll + isHost(user));
 			return "thisRoll," + roll + isHost(user);
 		}
 				
