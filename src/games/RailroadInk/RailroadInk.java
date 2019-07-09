@@ -147,7 +147,7 @@ public class RailroadInk extends Game {
 			sendGameDataToUser(user, "winnerData");
 			return;
 		}
-		if(gsonString.contains("ROLL")) {
+		if(gsonString.equals("ROLL")) {
 			roll(gsonString);
 			
 			//store the route elements in an Array for each player
@@ -358,7 +358,7 @@ public class RailroadInk extends Game {
 					finishedPlayers.add(user);
 				}
 			} else {
-				
+								
 				sendGameDataToUser(user, "CANT_END_TURN");
 				
 				

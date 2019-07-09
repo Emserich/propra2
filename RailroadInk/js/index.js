@@ -69,6 +69,8 @@ $(document).on("click","#roll-button", function () {
 	}
 	else {
 		getRoll();
+		
+		translateRoll();
 		$('#roll-button').hide();
 		}
 	rollButtonCounter++;	
@@ -404,7 +406,7 @@ function getRoll(){
 		for (i=0;i<diceClass2.length;i++){
 				roleValue[i] = diceClass2[i].getAttribute("data-roll");
 			}	
-		translateRoll();		
+				
 }
 function hideButtons(){
 	$('#dice_row').hide();	
@@ -456,7 +458,7 @@ function translateRoll() {
 	
 	var roleValue2 = roleValue.join(",");
 	roleValue2 = "ROLL," + roleValue2;
-	console.log(roleValue2);
+	console.log("translateRoll");
 	sendDataToServer(roleValue2);
 }
 
