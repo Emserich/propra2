@@ -479,7 +479,7 @@ public class RailroadInk extends Game {
 			return " 3 spezielle Elemente wurden schon gesetzt";
 		}
 		if(eventName.equals("myScore")) {
-			return "myScore" + calculateSingleResults(user);
+			return "myScore," + calculateSingleResults(user);
 		}
 		if(eventName.equals("winnerData")) {
 			int index = -1;

@@ -234,22 +234,22 @@ $('#modal_finish').on('shown.bs.modal', function () {
 
 
 
-winnerString = "Florian;980;1_2.png,1,-90,1;1_1.png,2,-90,0;1_3.png,3,0,0;l_6.png,9,0,1"; //NUR ZUM TESTEN 
+
 
 
 function printWinner() {
 
-	var winnerArray = winnerString.split(';');
-
-	var winnerName = winnerArray[0];
-	var winnerPoints = winnerArray[1];
+	//var winnerArray = winnerString.split(';');
+	
+	var winnerName = score[0];
+	var winnerPoints = score[1];
 
 	$('#headingWinner').html('Der Sieger ist <b>'+winnerName+'</b> mit '+winnerPoints+' Punkten:');
 
 
-	for (var i = 2; i < winnerArray.length; i++) {
+	for (var i = 2; i < score.length; i++) {
 
-		var fieldArray = winnerArray[i].split(',');		
+		var fieldArray = score[i].split(',');		
 
 		var image_name = '';
 		if (fieldArray[0].charAt(0) == '1' || fieldArray[0].charAt(0) == '2') {
@@ -521,32 +521,37 @@ var arr = stringFromServer.split(",")
 });
 
 addListener('winnerData', function(event){
-	var myArray = [];
-	var dummyString = "result_field_";
+	//var myArray = [];
+	//var dummyString = "result_field_";
 	var stringFromServer = event.data;
 	var score = stringFromServer.split(';'); 
+	playerMessage = score[1];
+	document.getElementById("Player").innerHTML = playerMessage + " hat das Spiel gewonnen!";
+	printWinner();
+	/*
 	for (i=2; i<51; i++){  //weil die ersten beiden elemente user + score sind
 		myArray = score[i].split(",");
 		dummyString += i;
-		/*
+		
 		img = myArray[0];
 		field = myArray[1];
 		rotation = myArray[2];
 		mirror = myArray[3];
-		*/
-		//draw board
+		
+		
 		dummyString -= i;
-	}
+} */
 });
 addListener('myScore', function(event) {
 	var stringFromServer = event.data;
 	var score = stringFromServer.split(',');
-	document.getElementById("score_1").innerHTML = score[0];
-	document.getElementById("score_2").innerHTML = score[1];
-	document.getElementById("score_3").innerHTML = score[2];
-	document.getElementById("score_4").innerHTML = score[3];
-	document.getElementById("score_5").innerHTML = score[4];
-	document.getElementById("score_final").innerHTML = score[5];
+	document.getElementById("modal_finish_title").innerHTML = score[1];
+	document.getElementById("score_1").innerHTML = score[2];
+	document.getElementById("score_2").innerHTML = score[3];
+	document.getElementById("score_3").innerHTML = score[4];
+	document.getElementById("score_4").innerHTML = score[5];
+	document.getElementById("score_5").innerHTML = score[6];
+	document.getElementById("score_final").innerHTML = score[7];
 	
 });
 addListener('NEW_PLAYER', function(event){
