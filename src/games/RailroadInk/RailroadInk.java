@@ -33,7 +33,7 @@ public class RailroadInk extends Game {
 	private ArrayList<ArrayList<RouteElement>> elementsPerTurn = new ArrayList<ArrayList<RouteElement>>();
 	
 	//an object of the AI-class
-	private ArtificialIntelligence AI;
+	private ArtificialIntelligence AI = null;
 	
 	//an ArrayList for the results
 	private ArrayList<Result> results = new ArrayList<Result>();
@@ -45,16 +45,7 @@ public class RailroadInk extends Game {
 	private String playerLeft = null;
 	
 	//a String to pass on the dices for the current roll
-	private String roll;
-	
-	private int allTurnCounters;
-
-	 ArtificialIntelligence ai;
-	 private RouteElement[] routeelement;
-	 
-	 
-	 
-	
+	private String roll;	
 	
 	/* -- METHODS NECESSARY FOR THE SERVER -- */
 	
@@ -132,6 +123,7 @@ public class RailroadInk extends Game {
 		if(gsonString.equals("CLOSE") && isHost(user).equals(",HOST")){
 			sendGameDataToClients("CLOSE");
 			closeGame();
+			AI = null;
 			return;
 		}
 		
@@ -147,8 +139,11 @@ public class RailroadInk extends Game {
 			sendGameDataToUser(user, "winnerData");
 			return;
 		}
-		if(gsonString.equals("ROLL")) {
+		if(gsonString.contains("ROLL")) {
 			roll(gsonString);
+			
+			//reset the finished players
+			finishedPlayers.clear();
 			
 			//store the route elements in an Array for each player
 			ArrayList<RouteElement> elements = new ArrayList<RouteElement>();
@@ -158,9 +153,12 @@ public class RailroadInk extends Game {
 				ElementTypes type = getTypeFromJsInput(typeInfo);
 				RouteElement element = new RouteElement(Orientations.ZERO_DEGREES, type, false);
 				elements.add(element);
-				
-				//  Roll for KI
-				routeelement[i] = element;
+			}
+			
+			//TODO for testing, remove later
+			System.out.println("Elements for this turn:");
+			for(RouteElement e : elements) {
+				System.out.println(e);
 			}
 			
 			elementsPerTurn.clear();
@@ -173,25 +171,53 @@ public class RailroadInk extends Game {
 				b.setSpecialElementPlacedInThisRound(false);
 			}
 			
+			//if there is an AI, let it make its turn
+			if(AI != null) {
+				int index = playerList.indexOf(AI.getBoard().getUser());
+				if(index == -1) {
+					System.out.println("The remaining elements of the AI player could not be found.");
+					return;
+				}
+				ArrayList<RouteElement> elementsForThisTurn = elementsPerTurn.get(index);
+				RouteElement[] remainingElements = (RouteElement[]) elementsForThisTurn.toArray();
+				if(AI.finishTurn(remainingElements)) {
+					//in this case, the AI was able to finish its turn
+					finishedPlayers.add(AI.getBoard().getUser());
+					System.out.println("The AI finished its turn.");
+				} else {
+					//in this case, the AI was not able to finish its turn
+					System.out.println("The AI was not able to finish its turn.");
+					return;
+				}
+			}
 			return;	
 		}
 		if(spectatorList.contains(user)) {
 			return;
 		}
 		if(gsonString.equals("ADD_KI")) {
-			this.gState = GameState.RUNNING;
-			ai = new ArtificialIntelligence();
 			
-			//ici le KI determine si c'est possible de placer l'element.
-			if(ai.finishTurn(routeelement))
-			{
-				//create an array of elements for ki 
-				ArrayList<RouteElement> routeelement = new ArrayList<RouteElement>();
-				elementsPerTurn.add(routeelement);
+			//if the game is already running, just return
+			if(this.gState == GameState.RUNNING) {
+				return;
 			}
 			
-			sendGameDataToUser(user, "START_KI");
+			AI = new ArtificialIntelligence();
 			
+			//add the user of the ai to the player list if it's not full yet
+			User aiPlayer = AI.getBoard().getUser();
+			if(playerList.size() < getMaxPlayerAmount()) {
+				//if it is not full, add it to the list, start the game and inform the host
+				playerList.add(aiPlayer);
+				sendGameDataToUser(user, "START_KI");
+				startGame();
+				this.gState = GameState.RUNNING;
+				return;
+			}
+			
+			//in this case, there are as many players as allowed, therefore just start the game
+			startGame();
+			sendGameDataToClients("START");
 			return;
 		}
 		if(gsonString.equals("RESTART")) {
@@ -207,28 +233,8 @@ public class RailroadInk extends Game {
 				sendGameDataToClients("Cannot restart game once it was started.");
 				return;
 			}
-			boardList.clear();
-			elementsPerTurn.clear();
-			results.clear();
-			for(User u : playerList)
-			{
-				//create boards for each player
-				Board board = new Board(u);
-				board.initializeFields();
-				boardList.add(board);
-				
-				//create an array of elements for each player
-				ArrayList<RouteElement> elements = new ArrayList<RouteElement>();
-				elementsPerTurn.add(elements);
-				
-				
-				
-				
-			}
 			
-			turnCounter = 0;
-			allTurnCounters = 0;
-			
+			startGame();
 			
 			//if there are as many players as allowed, start the game
 			if(playerList.size() == getMaxPlayerAmount() || playerList.size() >1) {
@@ -262,114 +268,131 @@ public class RailroadInk extends Game {
 		
 		/* -- this is the standard case: the player wants to add an element -- */
 		
-		
-		
 		//only go on with this if the Array also has four elements and is not null and so on
 		if(gsonString.contains("validateDrop")) {
 			boolean validate = true;
 			System.out.println(validate + " aus validateDrop");
 			String [] receivedArray = new String[5];
 			String[] strArray = gsonString.split(",");
-		if(strArray != null && strArray.length == 5) {
-		
-			for (int i = 0; i < 4; i++) {
-				receivedArray[i] = strArray[i];
-				}
 			
-			int fieldNr = Integer.parseInt(receivedArray[1]);
-			fieldNr--;
-		
-			RouteElement routeElem = getElementFromJS(gsonString);
-		
 			//TODO for testing, remove later
-			System.out.println(routeElem);
-		
-			Field field = userboard.getFields().get(fieldNr);
-		
-			//falls SPezialelement platziert wurde in dieser runde kehre zurück
-		
-			if(routeElem.isSpecialElement() && userboard.isSpecialElementPlacedInThisRound())
-				{
-				sendGameDataToUser(user, "SpecialElementalreadyPlaced");
-				//TODO for testing, remove later
-				System.out.println("Es wurde bereits ein Spezialelement in dieser Runde gesetzt.");
-				validate = false;
-				return;
-				}
-		
-			if(userboard.getNumberOfSpecialElements()==3)
-			{
-				sendGameDataToUser(user,"AlREADY 3 SPECIAL ELEMENTS");
-				validate = false;
-				return;
+			System.out.println("---------- TURN NO. " + turnCounter + " ----------");
+			System.out.println("Player " + user.getName());
+			System.out.println("Remaining Elements:");
+			for(RouteElement e : remainingElements) {
+				System.out.println(e);
 			}
+			System.out.println("---------- TURN NO. " + turnCounter + " ----------");
 			
-			if(userboard.canElementBePlaced(field, routeElem))
-			{
-				try{
-					field.addElement(routeElem);
-					if(routeElem.isSpecialElement()) {
-						userboard.setSpecialElementPlacedInThisRound(true);
-					}
-					//if we end up here, the element has been added
-					int indexOfElem = -1;
-					for(RouteElement other : remainingElements) {
-						if(routeElem.sameType(other)) {
-							indexOfElem = remainingElements.indexOf(other);
-						}
-					}
-					remainingElements.remove(indexOfElem);
-				} catch (IllegalPlayerMoveException e) {
-					e.printStackTrace();
-					sendGameDataToUser(user, "WrongField");
+			if(strArray != null && strArray.length == 5) {
+		
+				for (int i = 0; i < 4; i++) {
+					receivedArray[i] = strArray[i];
+				}
+			
+				int fieldNr = Integer.parseInt(receivedArray[1]);
+				fieldNr--;
+		
+				RouteElement routeElem = getElementFromJS(gsonString);
+		
+				//TODO for testing, remove later
+				System.out.println(routeElem);
+		
+				Field field = userboard.getFields().get(fieldNr);
+		
+				//falls SPezialelement platziert wurde in dieser runde kehre zurück
+		
+				if(routeElem.isSpecialElement() && userboard.isSpecialElementPlacedInThisRound())
+				{
+					sendGameDataToUser(user, "SpecialElementalreadyPlaced");
+					//TODO for testing, remove later
+					System.out.println("Es wurde bereits ein Spezialelement in dieser Runde gesetzt.");
 					validate = false;
 					return;
 				}
-			}
-			else 
-			{
-				sendGameDataToUser(user, "WrongField");
-				//TODO for testing, remove later
-				System.out.println("Das Element darf hier nicht platziert werden");
-				validate = false;
-				return;
-			}
+		
+				if(userboard.getNumberOfSpecialElements()==3)
+				{
+					sendGameDataToUser(user,"AlREADY 3 SPECIAL ELEMENTS");
+					validate = false;
+					return;
+				}
+				
+				if(userboard.canElementBePlaced(field, routeElem))
+				{
+					try{
+						field.addElement(routeElem);
+						if(routeElem.isSpecialElement()) {
+							userboard.setSpecialElementPlacedInThisRound(true);
+						}
+						//if we end up here, the element has been added
+						int indexOfElem = -1;
+						for(RouteElement other : remainingElements) {
+							if(routeElem.sameType(other)) {
+								indexOfElem = remainingElements.indexOf(other);
+							}
+						}
+						remainingElements.remove(indexOfElem);
+					} catch (IllegalPlayerMoveException e) {
+						e.printStackTrace();
+						sendGameDataToUser(user, "WrongField");
+						validate = false;
+						return;
+					}
+				}
+				else 
+				{
+					sendGameDataToUser(user, "WrongField");
+					//TODO for testing, remove later
+					System.out.println("Das Element darf hier nicht platziert werden");
+					validate = false;
+					return;
+				}
 				if (validate == true) {
 					sendGameDataToUser(user, "dropped");
 					return;
 				}
-		  }
+			}
 		}
+		
 		/* -- in this case, the player wants to end their turn -- */
 		
 		if(gsonString.equals("END_TURN"))
 		{
 					
-			
+			try {
+			RouteElement[] elementsArray = (RouteElement[]) remainingElements.toArray();
 			//check whether the player is allowed to end their turn
 			if(remainingElements == null || remainingElements.size() == 0) {
-				
+				System.out.println("The remaining elements are empty or null");
 				if(!finishedPlayers.contains(user)) {
+					System.out.println("The player was added to those who are finished.");
 					finishedPlayers.add(user);
 				}
-			} else if(!userboard.movesLeft((RouteElement[])remainingElements.toArray())) {
-				
+			} else if(!userboard.movesLeft(elementsArray)) {
+				System.out.println("The user does not have any moves left.");
 				if(!finishedPlayers.contains(user)) {
+					System.out.println("The player was added to those who are finished.");
 					finishedPlayers.add(user);
 				}
 			} else {
-								
+				System.out.println("The player cannot end their turn.");
 				sendGameDataToUser(user, "CANT_END_TURN");
-				
-				
 			}
 			
+			
+			//TODO for testing, remove later
+			System.out.println("Finished Players:");
+			for(User p : finishedPlayers) {
+				System.out.println(p.getName());
+			}
 			
 			//check whether all players have ended their turns
 			if(finishedPlayers.size() == playerList.size()) {
 				//increment the turn counter
 				turnCounter++;
-				sendGameDataToClients("EndOfTurn" + isHost(user));
+				//sendGameDataToClients("EndOfTurn" + isHost(user));
+				sendGameDataToClients("EndOfTurn");
 				if(turnCounter == 7) {
 					//end the game
 					this.gState = GameState.FINISHED;
@@ -378,6 +401,10 @@ public class RailroadInk extends Game {
 				}
 				
 				return;
+			}
+			
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 				
 		}
@@ -425,6 +452,7 @@ public class RailroadInk extends Game {
 			return "PLAYERLEFT" + user.getName();
 		}
 		if(eventName.equals("EndOfTurn")) {
+			System.out.println("EndOfTurn");
 			return "EndOfTurn";
 		}
 		if(eventName.equals("dropped")) {
@@ -883,6 +911,29 @@ public class RailroadInk extends Game {
 		results.add(resClass);
 		
 		return result;
+	}
+	
+	private void startGame() {
+		//clear each list
+		boardList.clear();
+		elementsPerTurn.clear();
+		results.clear();
+		
+		//create new items for each player
+		for(User u : playerList)
+		{
+			//create a board for each player
+			Board board = new Board(u);
+			board.initializeFields();
+			boardList.add(board);
+			
+			//create an array of elements for each player
+			ArrayList<RouteElement> elements = new ArrayList<RouteElement>();
+			elementsPerTurn.add(elements);
+		}
+		
+		//set the turn counter to zero
+		turnCounter = 0;
 	}
 	
 }
