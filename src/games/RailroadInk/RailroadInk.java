@@ -453,7 +453,7 @@ public class RailroadInk extends Game {
 		}
 		if(eventName.equals("EndOfTurn")) {
 			System.out.println("EndOfTurn");
-			return "EndOfTurn";
+			return "EndOfTurn"  + isHost(user);
 		}
 		if(eventName.equals("dropped")) {
 			return "dropped";

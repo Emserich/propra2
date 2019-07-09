@@ -34,7 +34,7 @@ $(function () {
 $(document).on("click",".dice_img", function () {
 
 	activeImageID = $(this).attr('id');
-	alert(activeImageID);
+	//alert(activeImageID);
 
 	if (!$(this).hasClass('img_used')) {
 
@@ -71,7 +71,7 @@ $(document).on("click","#roll-button", function () {
 		getRoll();
 		
 		translateRoll();
-		//$('#roll-button').hide();
+		$('#roll-button').hide();
 		}
 	rollButtonCounter++;	
 	
@@ -492,9 +492,10 @@ function validateDrop(){
 // ----------------------------EventListener---------------------
 addListener('EndOfGame', function(event) {
 var stringFromServer = event.data;
-	playerMessage = stringFromServer;
+var arr = stringFromServer.split(",")
+	playerMessage = arr[1];
 	document.getElementById("Player").innerHTML = playerMessage;
-	$('#ergebnis_button').show;
+	$('#ergebnis_button').show();
 	$('#modal_finish').modal('toggle');
 });
 
@@ -542,7 +543,8 @@ addListener('EndOfTurn', function(event) {
 		arr = stringFromServer.split(",");
 		console.log("standardEvent angekommen");
 		console.log(arr[1]);
-		if (arr[1] == "HOST"){setVisible()};
+		if (arr[1] == "HOST")
+		{setVisible()};
 
 			diceCounter = 0;	
 			turnData = [0, 0, 0, 0];
