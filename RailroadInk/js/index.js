@@ -301,7 +301,7 @@ $(document).on("click","#button_start_game_human", function () {
 
 	//Online-Spiel starten
 	startGame();
-	$('#button_finish_round').show();
+	
 
 	
 });
@@ -523,8 +523,8 @@ addListener('myScore', function(event) {
 	document.getElementById("score_3").innerHTML = score[2];
 	document.getElementById("score_4").innerHTML = score[3];
 	document.getElementById("score_5").innerHTML = score[4];
-	var scoreFinal = score[5];
-	document.getElementById("score_final").innerHTML = scoreFinal;
+	
+	document.getElementById("score_final").innerHTML = score[5];
 	
 });
 addListener('NEW_PLAYER', function(event){
@@ -566,6 +566,7 @@ addListener('START', function(event){
 	$('.dice_cube').removeClass("img_used"); //Strecken wieder wählbar machen
 	$('.special .dice_image').removeClass("img_used");
 	if(arr[2]=="HOST") setVisible();
+	$('#button_finish_round').show();
 	statusWait = false;	
 });
 addListener('START_KI', function(event){
