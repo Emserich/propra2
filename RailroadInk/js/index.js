@@ -180,13 +180,13 @@ document.addEventListener("dragleave", function(event) {
 document.addEventListener("drop", function(event) {
 	event.preventDefault();
 	var data = event.dataTransfer.getData("Text");
+		
+	if ( event.target.className == "field" && $('#'+data).hasClass('unset') ) {
+		//checken ob das Element gesetzt werden darf
 		currentDiceImg = document.getElementById(data).src.slice(-7); 
 		currentFieldID = event.target.id;
 		setTurnData();
 		updateGameState();
-	if ( event.target.className == "field" && $('#'+data).hasClass('unset') ) {
-		//checken ob das Element gesetzt werden darf
-		
 		
 		
 		//Validierung findet immer erst nach drop statt
@@ -479,13 +479,7 @@ function getWinner(){
 	console.log("winner");
 	sendDataToServer("winnerData");
 }
-/*
-function validateDrop(){
-	sendDataToServer("validateDrop");
-	imageDropped = false;
-	imageReset = false;		
-}
-*/
+
 // ---------------------------/Hilfsfunktionen-------------------
 
 
@@ -562,12 +556,14 @@ addListener('START', function(event){
 	var stringFromServer = event.data;
 	var arr = stringFromServer.split(',');
 	playerMessage = arr[1];
+	console.log(arr);
 	document.getElementById("Player").innerHTML = playerMessage;
 	turnCounter++;
 	document.getElementById('gameround').innerHTML = 'Runde ' +  turnCounter;
 	$('.dice_cube').removeClass("img_used"); //Strecken wieder wählbar machen
 	$('.special .dice_image').removeClass("img_used");
 	if(arr[2]=="HOST") setVisible();
+	console.log(arr[2]);
 	$('#button_finish_round').show();
 	statusWait = false;	
 });
