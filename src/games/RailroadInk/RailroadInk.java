@@ -179,7 +179,7 @@ public class RailroadInk extends Game {
 					return;
 				}
 				ArrayList<RouteElement> elementsForThisTurn = elementsPerTurn.get(index);
-				RouteElement[] remainingElements = (RouteElement[]) elementsForThisTurn.toArray();
+				RouteElement[] remainingElements = listToArray(elementsForThisTurn);
 				if(AI.finishTurn(remainingElements)) {
 					//in this case, the AI was able to finish its turn
 					finishedPlayers.add(AI.getBoard().getUser());
@@ -361,7 +361,7 @@ public class RailroadInk extends Game {
 		{
 					
 			try {
-			RouteElement[] elementsArray = (RouteElement[]) remainingElements.toArray();
+			RouteElement[] elementsArray = listToArray(remainingElements);
 			//check whether the player is allowed to end their turn
 			if(remainingElements == null || remainingElements.size() == 0) {
 				System.out.println("The remaining elements are empty or null");
@@ -934,6 +934,14 @@ public class RailroadInk extends Game {
 		
 		//set the turn counter to zero
 		turnCounter = 0;
+	}
+	
+	private RouteElement[] listToArray(ArrayList<RouteElement> list) {
+		RouteElement[] array = new RouteElement[list.size()];
+		for(int i = 0; i < list.size(); i++) {
+			array[i] = list.get(i);
+		}
+		return array;
 	}
 	
 }
