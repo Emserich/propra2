@@ -71,7 +71,7 @@ $(document).on("click","#roll-button", function () {
 		getRoll();
 		
 		translateRoll();
-		$('#roll-button').hide();
+		//$('#roll-button').hide();
 		}
 	rollButtonCounter++;	
 	
@@ -187,7 +187,7 @@ document.addEventListener("drop", function(event) {
 	if ( event.target.className == "field" && $('#'+data).hasClass('unset') ) {
 		//checken ob das Element gesetzt werden darf
 		
-		//validateDrop();
+		
 		
 		//Validierung findet immer erst nach drop statt
 		if (resetImage==false){
@@ -460,6 +460,7 @@ function translateRoll() {
 	roleValue2 = "ROLL," + roleValue2;
 	console.log("translateRoll");
 	sendDataToServer(roleValue2);
+	
 }
 
 function closeGame(){
@@ -523,7 +524,6 @@ addListener('myScore', function(event) {
 	document.getElementById("score_3").innerHTML = score[2];
 	document.getElementById("score_4").innerHTML = score[3];
 	document.getElementById("score_5").innerHTML = score[4];
-	
 	document.getElementById("score_final").innerHTML = score[5];
 	
 });
@@ -598,14 +598,17 @@ addListener('thisRoll', function(event){
 	var stringFromServer = event.data;
 	var arr = stringFromServer.split(",");
 	console.log(arr);
-	for (i=1; i<(arr.length-1); i++){
-		arrarr[i] = arr[i].charAt(2);
-	}
-	var diceClass = document.getElementsByClassName("die-list even-roll");
-	console.log(diceClass.length);
 	
-		for (i=0;i<4;i++){
-				diceClass[i].setAttribute("data-roll", arrarr[i]);
+	
+		for (i=0; i<(arr.length); i++){
+		arrarr[i] = arr[i].charAt(2);
+		}
+		var diceClass = document.getElementsByClassName("die-list even-roll");
+		console.log(diceClass.length);
+	
+	
+		for (j=0;j<4;j++){
+				diceClass[j].setAttribute("data-roll", arrarr[j+1]);
 			}	
 	if (arr[5] == "NOTTHEHOST"){
 	$('#dice_row').show();
