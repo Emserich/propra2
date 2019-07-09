@@ -18,6 +18,7 @@ var resetImage = false;
 var imageDropped = false;
 var winnerString = ''; //String des Gewinners, wird vom Server übergeben
 var activeImageID = ''; //Hilfsvariable, speichert die in die Rotationsbox geladene Strecke
+var data ="";
 
 
 // ----------------------------- Tooltips initialisieren -----------------------------
@@ -178,9 +179,9 @@ document.addEventListener("dragleave", function(event) {
    Append the dragged element into the drop element
 */
 document.addEventListener("drop", function(event) {
+
 	event.preventDefault();
-	var data = event.dataTransfer.getData("Text");
-		
+	data = event.dataTransfer.getData("Text");
 	if ( event.target.className == "field" && $('#'+data).hasClass('unset') ) {
 		//checken ob das Element gesetzt werden darf
 		currentDiceImg = document.getElementById(data).src.slice(-7); 
@@ -188,9 +189,9 @@ document.addEventListener("drop", function(event) {
 		setTurnData();
 		updateGameState();
 		
-		
+		/*
 		//Validierung findet immer erst nach drop statt
-		if (resetImage==false){
+		if (resetImage===false){
 			console.log("warum");
 		event.target.style.border = "";
 		$(".field").css("border","");
@@ -211,7 +212,7 @@ document.addEventListener("drop", function(event) {
 		$('#'+event.target.id).prepend('<div class="round_nr">'+turnCounter+'</div>'); //Runde eintragen
 		
 		//else packe Bild zurück in die Imagebox
-		};
+		}; */
 	};	
 });
 // -----------------------------/DRAG & DROP-----------------------------
@@ -479,7 +480,33 @@ function getWinner(){
 	console.log("winner");
 	sendDataToServer("winnerData");
 }
+function drop4real(currentFieldID, data){
+	console.log(currentFieldID);
+	console.log(data);
+		//Validierung findet immer erst nach drop statt
+		if (resetImage===false){
+			console.log("warum");
+		document.getElementById(currentFieldID).style.border = "";
+		$(".field").css("border","");
+		document.getElementById(currentFieldID).appendChild(document.getElementById(data));
 
+		$('#'+activeImageID).addClass('img_used'); //Macht die zuletzt in die Rotationsbox geladene Strecke unselectable
+		activeImageID = '';
+				
+		$('#dice_rotated_'+img_index).removeClass("unset");
+		$('#dice_rotated_'+img_index).addClass("set");
+		$('.set').attr('draggable', false);
+		
+
+		$('.rotation_field').hide();
+		img_index++; //ID hochzählen
+		diceCounter++; //Anzahl benutzter Würfel
+
+		$('#'+currentFieldID).prepend('<div class="round_nr">'+turnCounter+'</div>'); //Runde eintragen
+		
+		//else packe Bild zurück in die Imagebox
+		};
+}
 // ---------------------------/Hilfsfunktionen-------------------
 
 
@@ -625,5 +652,7 @@ addListener('CANT_END_TURN',function(event){
 addListener('dropped',function(event){
 	document.getElementById("Player").innerHTML = "Element gesetzt!"
 	imageDropped = true;
+	resetImage=false;
+	drop4real(currentFieldID, data);
 })
 // ---------------------------/EventListener---------------------
