@@ -323,7 +323,7 @@ public class RailroadInk extends Game {
 					return;
 				}
 		
-				if(userboard.getNumberOfSpecialElements()==3)
+				if(routeElem.isSpecialElement() && userboard.getNumberOfSpecialElements()==3)
 				{
 					sendGameDataToUser(user,"specMaxError");
 					validate = false;
@@ -336,6 +336,7 @@ public class RailroadInk extends Game {
 						field.addElement(routeElem);
 						if(routeElem.isSpecialElement()) {
 							userboard.setSpecialElementPlacedInThisRound(true);
+							userboard.specialElementAdded();
 							sendGameDataToUser(user,"dropped");
 							return;
 						}

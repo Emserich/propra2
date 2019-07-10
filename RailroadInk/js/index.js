@@ -236,13 +236,11 @@ $('#modal_finish').on('shown.bs.modal', function () {
 
 
 
-
+/* alles in winnerData atm
 function printWinner() {
 
-	//var winnerArray = winnerString.split(';');
-	
-	var winnerName = score[0];
 	var winnerPoints = score[1];
+	console.log(score);
 
 	$('#headingWinner').html('Der Sieger ist <b>'+winnerName+'</b> mit '+winnerPoints+' Punkten:');
 
@@ -284,6 +282,7 @@ function printWinner() {
 		$('#result_field_'+field_nr).html(wfield_img);
 	}
 }
+*/
 // -----------------------------/Ergebnis-Modal-----------------------------
 
 
@@ -521,27 +520,57 @@ var arr = stringFromServer.split(",")
 });
 
 addListener('winnerData', function(event){
-	//var myArray = [];
-	//var dummyString = "result_field_";
+
 	var stringFromServer = event.data;
 	var score = stringFromServer.split(';'); 
 	console.log(score);
-	playerMessage = score[0];
+	var winnerName = score[0].split(",");
+	playerMessage = winnerName[1];
 	document.getElementById("Player").innerHTML = playerMessage + " hat das Spiel gewonnen!";
-	printWinner();
-	/*
-	for (i=2; i<51; i++){  //weil die ersten beiden elemente user + score sind
-		myArray = score[i].split(",");
-		dummyString += i;
-		
-		img = myArray[0];
-		field = myArray[1];
-		rotation = myArray[2];
-		mirror = myArray[3];
-		
-		
-		dummyString -= i;
-} */
+	var winnerPoints = score[1];
+	
+
+	$('#headingWinner').html('Der Sieger ist <b>'+winnerName+'</b> mit '+winnerPoints+' Punkten:');
+
+
+	for (var i = 2; i < score.length; i++) {
+
+		var fieldArray = score[i].split(',');		
+
+		var image_name = '';
+		if (fieldArray[0].charAt(0) == '1' || fieldArray[0].charAt(0) == '2') {
+			image_name = 'dice_'+fieldArray[0];
+		}
+		else if ((fieldArray[0].charAt(0) == 'l')) {
+			image_name = 'specia'+fieldArray[0];
+		} 
+		else {
+			//alert('Bilddatei mit der Endung '+fieldArray[0]+' nicht gefunden!');
+			image_name = '../field.png' //test
+		}
+
+		var field_nr = fieldArray[1];
+		var image_angle = fieldArray[2];
+		var image_mirror = fieldArray[3];
+
+		// alert('Bild: '+image_name+', Feld: '+field_nr+', Winkel: '+image_angle+', Spiegelung: '+image_mirror);
+
+		var wfield_img = $('<img />').attr({	            
+	            'class': 'dice_rotated',
+	            'src': 'images/dice/' + image_name,
+	            'draggable':'false'
+	        });
+
+		if (image_mirror == 1) {
+			image_angle += 180; //test
+			$(wfield_img).css({'transform': 'rotate('+image_angle+'deg) scale(1, -1)'});
+		}
+		else {
+			$(wfield_img).css({'transform': 'rotate('+image_angle+'deg) scale(1, 1)'});
+		}
+
+		$('#result_field_'+field_nr).html(wfield_img);
+	}
 });
 addListener('myScore', function(event) {
 	var stringFromServer = event.data;
