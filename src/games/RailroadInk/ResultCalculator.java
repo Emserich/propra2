@@ -163,12 +163,12 @@ public class ResultCalculator {
 		/*
 		//TODO for testing, remove later
 		if(position != -1) {
-			System.out.println("\nLongest Road:\n");
+			//System.out.println("\nLongest Road:\n");
 			Network longestRoad = networks.get(position);
 			for(Field f : longestRoad.getLongestRoad()) {
 				System.out.println(f);
 			}
-			System.out.println("\n----------\n");
+			//System.out.println("\n----------\n");
 		}
 		*/
 		//return the result
@@ -204,12 +204,12 @@ public class ResultCalculator {
 		/*
 		//TODO for testing, remove later
 		if(position != -1) {
-			System.out.println("\nLongest Track:\n");
+			//System.out.println("\nLongest Track:\n");
 			Network longestTrack = networks.get(position);
 			for(Field f : longestTrack.getLongestTrack()) {
 				System.out.println(f);
 			}
-			System.out.println("\n----------\n");
+			//System.out.println("\n----------\n");
 		}
 		*/
 		
