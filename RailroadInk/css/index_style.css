@@ -264,6 +264,7 @@ h4 {
 .user_box h4 {
 	color: #e85a4d;
 	background-color: rgba(255,255,255, 0.93);
+	border: 1px solid #35302f;
 	border-radius: 7px;
 	padding: 0.1em 0px;
 }

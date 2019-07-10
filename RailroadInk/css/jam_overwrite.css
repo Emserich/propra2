@@ -23,13 +23,23 @@ body {
 /* DELETE THIS  */
 #Player{
 	background-color: yellow;
-	margin-top :25px;
+	/*margin-top :25px;*/
 	/*height : 37px;*/
 	/*width : 589px;*/
-	border-style : solid;
-	border-color : black;
-	color : black;
+	/*border-style : solid;*/
+	/*border-color : black;*/
+	/*color : black;*/
 }
+#Player{
+	color: #35302f;
+	background-color: rgba(255,255,255, 1);
+	border: 1px solid #35302f;
+	border-radius: 7px;
+	padding: 0.1em 0px;
+	font-size: 1.2rem;
+	margin: 0px;
+}
+
 #restartButton{
 	height : 39px;
 	width : 90px;
