@@ -165,12 +165,18 @@ public class RailroadInk extends Game {
 			
 			elementsPerTurn.clear();
 			for(int j = 0; j < playerList.size(); j++) {
-				elementsPerTurn.add(elements);
+				ArrayList<RouteElement> elementsForThisPlayer = new ArrayList<RouteElement>();
+				for(RouteElement e : elements) {
+					elementsForThisPlayer.add(e);
+				}
+				elementsPerTurn.add(elementsForThisPlayer);
 			}
 			
 			//go through each board and set some variable false again
 			for(Board b : boardList) {
+				System.out.println(b.isSpecialElementPlacedInThisRound());
 				b.setSpecialElementPlacedInThisRound(false);
+				System.out.println(b.isSpecialElementPlacedInThisRound());
 			}
 			
 			//if there is an AI, let it make its turn
@@ -305,9 +311,11 @@ public class RailroadInk extends Game {
 				Field field = userboard.getFields().get(fieldNr);
 		
 				//falls SPezialelement platziert wurde in dieser runde kehre zurück
-		
+				
+				System.out.println(userboard.isSpecialElementPlacedInThisRound());
 				if(routeElem.isSpecialElement() && userboard.isSpecialElementPlacedInThisRound())
 				{
+					System.out.println("Jetzt fliegt ein specError");
 					sendGameDataToUser(user, "specError");
 					//TODO for testing, remove later
 					//System.out.println("Es wurde bereits ein Spezialelement in dieser Runde gesetzt.");
@@ -396,13 +404,20 @@ public class RailroadInk extends Game {
 				//increment the turn counter
 				turnCounter++;
 				//sendGameDataToClients("EndOfTurn" + isHost(user));
-				sendGameDataToClients("EndOfTurn");
 				if(turnCounter == 7) {
+					//calculate the results of each player
+					for(User player : playerList) {
+						calculateSingleResults(player);
+					}
+					
+					//end the turn and ultimately end the game
+					sendGameDataToClients("EndOfTurn");
 					//end the game
 					this.gState = GameState.FINISHED;
 					sendGameDataToClients("EndOfGame");
 					return;
 				}
+				sendGameDataToClients("EndOfTurn");
 				
 				return;
 			}
@@ -481,53 +496,20 @@ public class RailroadInk extends Game {
 		}
 		if(eventName.equals("myScore")) {
 			//TODO for testing, there is a try-catch-block, remove later
+			String result = "";
 			try {
-			//check if there is an AI player
-			if(AI != null) {
-				//if there is one, calculate the result of the AI but only if it has not been done yet
-				boolean resultHasBeenCalculated = false;
-				boolean resultsInitialized = true;
-				if(results == null) {
-					System.out.println("results has not been initialized.");
-					resultsInitialized = false;
-				}
-				if(results.size() == 0) {
-					System.out.println("There were no results when the result of the AI was calculated.");
-				}
-				if(resultsInitialized) {
-					for(Result r : results) {
-						if(r.getUser() == AI.getBoard().getUser()) {
-							resultHasBeenCalculated = true;
-						}
+				Result userResult = null;
+				for(Result r : results) {
+					if(r.getUser() == user) {
+						userResult = r;
 					}
 				}
-				if(!resultHasBeenCalculated) {
-					calculateSingleResults(AI.getBoard().getUser());
-				}
-			}
-			/*
-			//calculate the score of the player if it has not been done yet
-			String result = "";
-			Result userResult = null;
-			boolean resultHasBeenCalculated = false;
-			for(Result r : results) {
-				if(r.getUser() == user) {
-					resultHasBeenCalculated = true;
-					userResult = r;
-				}
-				if(!resultHasBeenCalculated) {
-					result = calculateSingleResults(user);
-				} else {
-					int[] res = userResult.getResults();
-					result += user.getName() + "," + res[0] + "," + res[1] + "," + res[2] + "," + res[3] + "," + res[4] + "," + res[5] + ";";
-				}
-			}
-			return "myScore," + result;
-			*/
+				int[] res = userResult.getResults();
+				result += user.getName() + "," + res[0] + "," + res[1] + "," + res[2] + "," + res[3] + "," + res[4] + "," + res[5] + ";";
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			return "myScore," + calculateSingleResults(user);
+			return "myScore," + result;
 		}
 		if(eventName.equals("winnerData")) {
 			//TODO for testing, there is a try-catch-block, remove later

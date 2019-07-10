@@ -110,6 +110,7 @@ public class ArtificialIntelligence {
 			//add it to the field
 			try {
 				f.addElement(element);
+				System.out.println("The AI has just placed an element on its board.");
 			} catch (IllegalPlayerMoveException e) {
 				//something went wrong, return false
 				return false;
