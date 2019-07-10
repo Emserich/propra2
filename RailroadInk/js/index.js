@@ -525,7 +525,8 @@ addListener('winnerData', function(event){
 	//var dummyString = "result_field_";
 	var stringFromServer = event.data;
 	var score = stringFromServer.split(';'); 
-	playerMessage = score[1];
+	console.log(score);
+	playerMessage = score[0];
 	document.getElementById("Player").innerHTML = playerMessage + " hat das Spiel gewonnen!";
 	printWinner();
 	/*
@@ -669,6 +670,7 @@ addListener('specMaxError', function(event){
 	document.getElementById("Player").innerHTML = arr[1];
 })
 addListener('specError', function(event){
+	console.log("specError");
 	var stringFromServer = event.data;
 	var arr = stringFromServer.split(",");
 	alert(arr[1]);

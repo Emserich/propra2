@@ -336,6 +336,8 @@ public class RailroadInk extends Game {
 						field.addElement(routeElem);
 						if(routeElem.isSpecialElement()) {
 							userboard.setSpecialElementPlacedInThisRound(true);
+							sendGameDataToUser(user,"dropped");
+							return;
 						}
 						//if we end up here, the element has been added
 						int indexOfElem = -1;
