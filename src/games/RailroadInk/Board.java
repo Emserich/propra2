@@ -213,7 +213,7 @@ public class Board {
 		if(!field.isEmpty()) {
 			//if the field is not empty, of course you cannot put an element on it
 			//TODO for testing, remove later
-			System.out.println("Element " + element + " cannot be placed on field " + field + "\nbecause the field is not empty.");
+			//System.out.println("Element " + element + " cannot be placed on field " + field + "\nbecause the field is not empty.");
 			return false;
 		}
 		
@@ -381,8 +381,8 @@ public class Board {
 						if(topNeighbourRailConnection == Directions.SOUTH) {
 							//in this case, the element has a connection that does not allow us to place the element
 							//TODO for testing, remove later
-							System.out.println("Element " + element + " cannot be placed on field " + field + ",");
-							System.out.println("because of the top neighbour: Cannot place a road connecting to a rail.");
+							//System.out.println("Element " + element + " cannot be placed on field " + field + ",");
+							//System.out.println("because of the top neighbour: Cannot place a road connecting to a rail.");
 							//therefore, return false
 							return false;
 						}
@@ -408,8 +408,8 @@ public class Board {
 						if(rightNeighbourRailConnection == Directions.WEST) {
 							//in this case, the element has a connection that does not allow us to place the element
 							//TODO for testing, remove later
-							System.out.println("Element " + element + " cannot be placed on field " + field + ",");
-							System.out.println("because of the right neighbour: Cannot place a road connecting to a rail.");
+							//System.out.println("Element " + element + " cannot be placed on field " + field + ",");
+							//System.out.println("because of the right neighbour: Cannot place a road connecting to a rail.");
 							//therefore, return false
 							return false;
 						}
@@ -435,8 +435,8 @@ public class Board {
 						if(bottomNeighbourRailConnection == Directions.NORTH) {
 							//in this case, the element has a connection that does not allow us to place the element
 							//TODO for testing, remove later
-							System.out.println("Element " + element + " cannot be placed on field " + field + ",");
-							System.out.println("because of the bottom neighbour: Cannot place a road connecting to a rail.");
+							//System.out.println("Element " + element + " cannot be placed on field " + field + ",");
+							//System.out.println("because of the bottom neighbour: Cannot place a road connecting to a rail.");
 							//therefore, return false
 							return false;
 						}
@@ -462,8 +462,8 @@ public class Board {
 						if(leftNeighbourRailConnection == Directions.EAST) {
 							//in this case, the element has a connection that does not allow us to place the element
 							//TODO for testing, remove later
-							System.out.println("Element " + element + " cannot be placed on field " + field + ",");
-							System.out.println("because of the left neighbour: Cannot place a road connecting to a rail.");
+							//System.out.println("Element " + element + " cannot be placed on field " + field + ",");
+							//System.out.println("because of the left neighbour: Cannot place a road connecting to a rail.");
 							//therefore, return false
 							return false;
 						}
@@ -503,8 +503,8 @@ public class Board {
 						if(topNeighbourRoadConnection == Directions.SOUTH) {
 							//in this case, the element has a connection that does not allow us to place the element 
 							//TODO for testing, remove later
-							System.out.println("Element " + element + " cannot be placed on field " + field + ",");
-							System.out.println("because of the top neighbour: Cannot place a rail connecting to a road.");
+							//System.out.println("Element " + element + " cannot be placed on field " + field + ",");
+							//System.out.println("because of the top neighbour: Cannot place a rail connecting to a road.");
 							//therefore, return false
 							return false;
 						}
@@ -530,8 +530,8 @@ public class Board {
 						if(rightNeighbourRoadConnection == Directions.WEST) {
 							//in this case, the element has a connection that does not allow us to place the element
 							//TODO for testing, remove later 
-							System.out.println("Element " + element + " cannot be placed on field " + field + ",");
-							System.out.println("because of the right neighbour: Cannot place a rail connecting to a road.");
+							//System.out.println("Element " + element + " cannot be placed on field " + field + ",");
+							//System.out.println("because of the right neighbour: Cannot place a rail connecting to a road.");
 							//therefore, return false
 							return false;
 						}
@@ -557,8 +557,8 @@ public class Board {
 						if(bottomNeighbourRoadConnection == Directions.NORTH) {
 							//in this case, the element has a connection that does not allow us to place the element
 							//TODO for testing, remove later
-							System.out.println("Element " + element + " cannot be placed on field " + field + ",");
-							System.out.println("because of the bottom neighbour: Cannot place a rail connecting to a road.");
+							//System.out.println("Element " + element + " cannot be placed on field " + field + ",");
+							//System.out.println("because of the bottom neighbour: Cannot place a rail connecting to a road.");
 							//therefore, return false
 							return false;
 						}
@@ -584,8 +584,8 @@ public class Board {
 						if(leftNeighbourRoadConnection == Directions.EAST) {
 							//in this case, the element has a connection that does not allow us to place the element
 							//TODO for testing, remove later
-							System.out.println("Element " + element + " cannot be placed on field " + field + ",");
-							System.out.println("because of the left neighbour: Cannot place a rail connecting to a road.");
+							//System.out.println("Element " + element + " cannot be placed on field " + field + ",");
+							//System.out.println("because of the left neighbour: Cannot place a rail connecting to a road.");
 							//therefore, return false
 							return false;
 						}
@@ -612,11 +612,11 @@ public class Board {
 		if(connectionExists) {
 			//if so, return true
 			//TODO for testing, remove later
-			System.out.println("The element " + element + " can be placed on field " + field + ".");
+			//System.out.println("The element " + element + " can be placed on field " + field + ".");
 			return true;
 		} else {
 			//TODO for testing, remove later
-			System.out.println("There are no matching connections for element " + element + "\non field " + field + ".");
+			//System.out.println("There are no matching connections for element " + element + "\non field " + field + ".");
 			return false;
 		}
 	}

@@ -65,7 +65,8 @@ public class ResultCalculator {
 			findLongestRoad(n);
 			findLongestTrack(n);
 			
-			System.out.println(n);
+			//TODO for testing, remove later
+			//System.out.println(n);
 			
 		}
 		
@@ -101,6 +102,10 @@ public class ResultCalculator {
 		
 		//the final score is also stored in the result
 		result[5] = score;
+		
+		//TODO for testing, remove later
+		System.out.println(result[0] + ","+ result[1] + ","  + result[2] + "," + result[3] + "," + result[4] + ","+ result[5]);
+		System.out.println("------------------");
 		
 		//return the result
 		return result;
@@ -155,6 +160,7 @@ public class ResultCalculator {
 			}
 		}
 		
+		/*
 		//TODO for testing, remove later
 		if(position != -1) {
 			System.out.println("\nLongest Road:\n");
@@ -164,7 +170,7 @@ public class ResultCalculator {
 			}
 			System.out.println("\n----------\n");
 		}
-			
+		*/
 		//return the result
 		return longestRoadLength;
 	}
@@ -195,6 +201,7 @@ public class ResultCalculator {
 			}
 		}
 		
+		/*
 		//TODO for testing, remove later
 		if(position != -1) {
 			System.out.println("\nLongest Track:\n");
@@ -204,6 +211,7 @@ public class ResultCalculator {
 			}
 			System.out.println("\n----------\n");
 		}
+		*/
 		
 		//return the result 
 		return longestTrackLength;
@@ -232,12 +240,14 @@ public class ResultCalculator {
 			}
 		}
 		
+		/*
 		//TODO for testing, remove later
 		System.out.println("\nUsed Central Fields:\n");
 		for(Field f : result) {
 			System.out.println(f);
 		}
 		System.out.println("\n");
+		*/
 		
 		//return the result
 		return result;
@@ -266,7 +276,7 @@ public class ResultCalculator {
 			networks.add(network);
 			
 			//TODO for testing, remove later
-			System.out.println("Errors:\n");
+			//System.out.println("Errors:\n");
 			
 			//a variable used to check whether we are going for roads or rails (only interesting for overpasses)
 			boolean road = true;
@@ -288,7 +298,7 @@ public class ResultCalculator {
 			growNetwork(board, network, startingPoint, road);
 	
 			//TODO remove later
-			System.out.println("\n----------\n");
+			//System.out.println("\n----------\n");
 		}
 
 		
@@ -488,7 +498,7 @@ public class ResultCalculator {
 				if(neighbour.isEmpty()) {
 					network.addError();
 					//TODO for testing, remove later
-					System.out.println(field + ", Direction: " + roadConnections[i]);
+					//System.out.println(field + ", Direction: " + roadConnections[i]);
 					//and obviously, the network cannot grow any further
 					continue;
 				}
@@ -536,7 +546,7 @@ public class ResultCalculator {
 					//moreover, it counts as an error
 					network.addError();
 					//TODO for testing, remove later
-					System.out.println(field + ", Direction: " + roadConnections[i]);
+					//System.out.println(field + ", Direction: " + roadConnections[i]);
 					continue;
 				}
 				
@@ -624,7 +634,7 @@ public class ResultCalculator {
 				if(neighbour.isEmpty()) {
 					network.addError();
 					//TODO for testing, remove later
-					System.out.println(field + ", Direction: " + railConnections[i]);
+					//System.out.println(field + ", Direction: " + railConnections[i]);
 					//and obviously, the network cannot grow any further
 					continue;
 				}
@@ -672,7 +682,7 @@ public class ResultCalculator {
 					//moreover, it counts as an error
 					network.addError();
 					//TODO for testing, remove later
-					System.out.println(field + ", Direction: " + railConnections[i]);
+					//System.out.println(field + ", Direction: " + railConnections[i]);
 					continue;
 				}
 				
@@ -781,7 +791,7 @@ public class ResultCalculator {
 				boolean removed = fieldsCopy.remove(f);
 				//if the element has not been removed, at least inform about this, as it is very weird behaviour
 				if(!removed) {
-					System.out.println(f + "could not be removed from the list of fields");
+					//System.out.println(f + "could not be removed from the list of fields");
 				}
 			}
 		}
@@ -1067,7 +1077,7 @@ public class ResultCalculator {
 				boolean removed = fieldsCopy.remove(f);
 				//if the element has not been removed, at least inform about this, as it is very weird behaviour
 				if(!removed) {
-					System.out.println(f + "could not be removed from the list of fields");
+					//System.out.println(f + "could not be removed from the list of fields");
 				}
 			}
 		}

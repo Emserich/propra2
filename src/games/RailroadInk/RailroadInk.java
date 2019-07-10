@@ -155,11 +155,13 @@ public class RailroadInk extends Game {
 				elements.add(element);
 			}
 			
+			/*
 			//TODO for testing, remove later
 			System.out.println("Elements for this turn:");
 			for(RouteElement e : elements) {
 				System.out.println(e);
 			}
+			*/
 			
 			elementsPerTurn.clear();
 			for(int j = 0; j < playerList.size(); j++) {
@@ -271,10 +273,11 @@ public class RailroadInk extends Game {
 		//only go on with this if the Array also has four elements and is not null and so on
 		if(gsonString.contains("validateDrop")) {
 			boolean validate = true;
-			System.out.println(validate + " aus validateDrop");
+			//System.out.println(validate + " aus validateDrop");
 			String [] receivedArray = new String[5];
 			String[] strArray = gsonString.split(",");
 			
+			/*
 			//TODO for testing, remove later
 			System.out.println("---------- TURN NO. " + turnCounter + " ----------");
 			System.out.println("Player " + user.getName());
@@ -283,6 +286,7 @@ public class RailroadInk extends Game {
 				System.out.println(e);
 			}
 			System.out.println("---------- TURN NO. " + turnCounter + " ----------");
+			*/
 			
 			if(strArray != null && strArray.length == 5) {
 		
@@ -296,7 +300,7 @@ public class RailroadInk extends Game {
 				RouteElement routeElem = getElementFromJS(gsonString);
 		
 				//TODO for testing, remove later
-				System.out.println(routeElem);
+				//System.out.println(routeElem);
 		
 				Field field = userboard.getFields().get(fieldNr);
 		
@@ -306,7 +310,7 @@ public class RailroadInk extends Game {
 				{
 					sendGameDataToUser(user, "specError");
 					//TODO for testing, remove later
-					System.out.println("Es wurde bereits ein Spezialelement in dieser Runde gesetzt.");
+					//System.out.println("Es wurde bereits ein Spezialelement in dieser Runde gesetzt.");
 					validate = false;
 					return;
 				}
@@ -364,7 +368,7 @@ public class RailroadInk extends Game {
 			RouteElement[] elementsArray = listToArray(remainingElements);
 			//check whether the player is allowed to end their turn
 			if(remainingElements == null || remainingElements.size() == 0) {
-				System.out.println("The remaining elements are empty or null");
+				//System.out.println("The remaining elements are empty or null");
 				if(!finishedPlayers.contains(user)) {
 					System.out.println("The player was added to those who are finished.");
 					finishedPlayers.add(user);
@@ -543,8 +547,13 @@ public class RailroadInk extends Game {
 				e.printStackTrace();
 			}
 			//TODO for testing, remove later
+			if(results.size() != 0) {
+				for(Result r : results) {
+					System.out.println(r.getBoard());
+				}
+			}
 			System.out.println("winnerData;" + highestResult.getUser().getName() + ";" + highestResult.getScore() + ";" + highestResult.getBoard());
-			return "winnerData;" + highestResult.getUser().getName() + ";" + highestResult.getScore() + ";" + highestResult.getBoard();
+			return "winnerData," + highestResult.getUser().getName() + ";" + highestResult.getScore() + ";" + highestResult.getBoard();
 		}
 		if(eventName.equals("EndOfGame")) {
 			return "EndOfGame" + ",Das Spiel ist beendet.";
@@ -741,7 +750,7 @@ public class RailroadInk extends Game {
 	
 	private int restoreOrientation(int degrees) {		
 		//TODO for testing, remove later
-		System.out.println("Orientation received from the client: " + degrees);
+		//System.out.println("Orientation received from the client: " + degrees);
 		
 		//we can divide the number by 90 because the scaling does not give any more information
 		degrees /= 90;
@@ -772,10 +781,10 @@ public class RailroadInk extends Game {
 		}
 		
 		//TODO for testing, remove later
-		System.out.println("The value of the variable we return: " + degrees);
-		int testDegrees = degrees * 90;
-		testDegrees *= -1;
-		System.out.println("Orientation calculated by the server: " + testDegrees);
+		//System.out.println("The value of the variable we return: " + degrees);
+		//int testDegrees = degrees * 90;
+		//testDegrees *= -1;
+		//System.out.println("Orientation calculated by the server: " + testDegrees);
 		
 		
 		//return the result
