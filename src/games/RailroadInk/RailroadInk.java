@@ -304,7 +304,7 @@ public class RailroadInk extends Game {
 		
 				if(routeElem.isSpecialElement() && userboard.isSpecialElementPlacedInThisRound())
 				{
-					sendGameDataToUser(user, "SpecialElementalreadyPlaced");
+					sendGameDataToUser(user, "specError");
 					//TODO for testing, remove later
 					System.out.println("Es wurde bereits ein Spezialelement in dieser Runde gesetzt.");
 					validate = false;
@@ -313,7 +313,7 @@ public class RailroadInk extends Game {
 		
 				if(userboard.getNumberOfSpecialElements()==3)
 				{
-					sendGameDataToUser(user,"AlREADY 3 SPECIAL ELEMENTS");
+					sendGameDataToUser(user,"specMaxError");
 					validate = false;
 					return;
 				}
@@ -468,15 +468,12 @@ public class RailroadInk extends Game {
 		if(eventName.equals("WrongField")) {
 			return "Das Element darf hier nicht platziert werden";
 		}
-		if(eventName.equals("SpecialElementalreadyPlaced")) {
-			return "Es wurde bereits ein Spezialelement in dieser Runde gesetzt.";
-		}
-		if(eventName.equals("SpecialElementalreadyPlaced")) {
-			return "Es wurde bereits ein Spezialelement in dieser Runde gesetzt.";
+		if(eventName.equals("specError")) {
+			return "specError,"+ "Es wurde bereits ein Spezialelement in dieser Runde gesetzt.";
 		}
 		
-		if(eventName.equals("AlREADY 3 SPECIAL ELEMENTS")) {
-			return " 3 spezielle Elemente wurden schon gesetzt";
+		if(eventName.equals("specMaxError")) {
+			return "specMaxError,"+ " 3 Spezialelemente wurden schon gesetzt";
 		}
 		if(eventName.equals("myScore")) {
 			return "myScore," + calculateSingleResults(user);

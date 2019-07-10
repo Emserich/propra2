@@ -660,4 +660,16 @@ addListener('dropped',function(event){
 	resetImage=false;
 	drop4real(currentFieldID, data);
 })
+addListener('specMaxError', function(event){
+	var stringFromServer = event.data;
+	var arr = stringFromServer.split(",");
+	alert(arr[1]);
+	document.getElementById("Player").innerHTML = arr[1];
+})
+addListener('specError', function(event){
+	var stringFromServer = event.data;
+	var arr = stringFromServer.split(",");
+	alert(arr[1]);
+	document.getElementById("Player").innerHTML = "Specialelement diese Runde schon gesetzt!";
+})
 // ---------------------------/EventListener---------------------
