@@ -387,10 +387,10 @@ function turnDataToString(){
 	stringData = (stringData + ", validateDrop");
 	}
 function turnEnd(){
-	document.getElementById('gameround').innerHTML = 'Runde ' +  turnCounter;
-	if (turnCounter > 7) {
-		$('#button_finish_round').hide();
-	}
+	
+	
+	$('#button_finish_round').hide();
+	document.getElementById("Player").innerHTML = "Warten auf andere Spieler...";
 	sendDataToServer("END_TURN");
 	statusWait = true;
 }
@@ -578,6 +578,7 @@ addListener('EndOfTurn', function(event) {
 			rollButtonCounter = 0;
 			roleValue = [0,0,0,0];		
 			document.getElementById("Player").innerHTML = "Runde " + turnCounter + " wurde gestartet!";
+			document.getElementById('gameround').innerHTML = 'Runde ' +  turnCounter;
 			
 		statusWait = false;
 	});
