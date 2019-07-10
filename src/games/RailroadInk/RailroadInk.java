@@ -476,6 +476,37 @@ public class RailroadInk extends Game {
 			return "specMaxError,"+ " 3 Spezialelemente wurden schon gesetzt";
 		}
 		if(eventName.equals("myScore")) {
+			//check if there is an AI player
+			/*if(AI != null) {
+				//if there is one, calculate the result of the AI but only if it has not been done yet
+				boolean resultHasBeenCalculated = false;
+				for(Result r : results) {
+					if(r.getUser() == AI.getBoard().getUser()) {
+						resultHasBeenCalculated = true;
+					}
+				}
+				if(!resultHasBeenCalculated) {
+					calculateSingleResults(AI.getBoard().getUser());
+				}
+			}
+			//calculate the score of the player if it has not been done yet
+			String result = "";
+			Result userResult = null;
+			boolean resultHasBeenCalculated = false;
+			for(Result r : results) {
+				if(r.getUser() == user) {
+					resultHasBeenCalculated = true;
+					userResult = r;
+				}
+				if(!resultHasBeenCalculated) {
+					result = calculateSingleResults(user);
+				} else {
+					int[] res = userResult.getResults();
+					result += user.getName() + "," + res[0] + "," + res[1] + "," + res[2] + "," + res[3] + "," + res[4] + "," + res[5] + ";";
+				}
+			}
+			return "myScore," + result;
+			*/
 			return "myScore," + calculateSingleResults(user);
 		}
 		if(eventName.equals("winnerData")) {
@@ -496,6 +527,8 @@ public class RailroadInk extends Game {
 			return "EndOfGame" + ",Das Spiel ist beendet.";
 		}
 	
+		System.out.println("Im unbekannten Teil von getGameDate gelandet");
+		
 		ArrayList<Board> boardList  = getBoardList();
 
 		for (int i = 0; i < boardList.size(); i++) {
@@ -676,6 +709,9 @@ public class RailroadInk extends Game {
 	}
 	
 	private int restoreOrientation(int degrees) {		
+		//TODO for testing, remove later
+		System.out.println("Orientation received from the client: " + degrees);
+		
 		//we can divide the number by 90 because the scaling does not give any more information
 		degrees /= 90;
 		
@@ -685,13 +721,17 @@ public class RailroadInk extends Game {
 			degrees %= 4;
 			//put it in counter-clockwise representation
 			//0 or 180 degrees stay the same
+			boolean orientationChanged = false;
 			if(degrees == 1) {
 				//90 degrees clockwise correspond to 270 degrees counter-clockwise
 				degrees = 3;
+				orientationChanged = true;
 			}
 			if(degrees == 3) {
 				//270 degrees clockwise correspond to 90 degrees counter-clockwise
-				degrees = 1;
+				if(!orientationChanged) {
+					degrees = 1;
+				}
 			}
 		} else {
 			//if it is below zero, the rotation is counter-clockwise, which is what we want
@@ -699,6 +739,13 @@ public class RailroadInk extends Game {
 			//put it in a range of 0 to 3 as more does not make any sense in the context of the game logic
 			degrees %= 4;
 		}
+		
+		//TODO for testing, remove later
+		System.out.println("The value of the variable we return: " + degrees);
+		int testDegrees = degrees * 90;
+		testDegrees *= -1;
+		System.out.println("Orientation calculated by the server: " + testDegrees);
+		
 		
 		//return the result
 		return degrees;
