@@ -628,6 +628,7 @@ addListener('thisRoll', function(event){
 	var arrarr = [];
 	var stringFromServer = event.data;
 	var arr = stringFromServer.split(",");
+	$('#button_finish_round').show();
 	console.log(arr);
 	
 	
