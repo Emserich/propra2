@@ -359,7 +359,7 @@ public class RailroadInk extends Game {
 		
 		if(gsonString.equals("END_TURN"))
 		{
-					
+			//TODO for testing, there is a try-catch-block, remove later
 			try {
 			RouteElement[] elementsArray = listToArray(remainingElements);
 			//check whether the player is allowed to end their turn
@@ -476,19 +476,32 @@ public class RailroadInk extends Game {
 			return "specMaxError,"+ " 3 Spezialelemente wurden schon gesetzt";
 		}
 		if(eventName.equals("myScore")) {
+			//TODO for testing, there is a try-catch-block, remove later
+			try {
 			//check if there is an AI player
-			/*if(AI != null) {
+			if(AI != null) {
 				//if there is one, calculate the result of the AI but only if it has not been done yet
 				boolean resultHasBeenCalculated = false;
-				for(Result r : results) {
-					if(r.getUser() == AI.getBoard().getUser()) {
-						resultHasBeenCalculated = true;
+				boolean resultsInitialized = true;
+				if(results == null) {
+					System.out.println("results has not been initialized.");
+					resultsInitialized = false;
+				}
+				if(results.size() == 0) {
+					System.out.println("There were no results when the result of the AI was calculated.");
+				}
+				if(resultsInitialized) {
+					for(Result r : results) {
+						if(r.getUser() == AI.getBoard().getUser()) {
+							resultHasBeenCalculated = true;
+						}
 					}
 				}
 				if(!resultHasBeenCalculated) {
 					calculateSingleResults(AI.getBoard().getUser());
 				}
 			}
+			/*
 			//calculate the score of the player if it has not been done yet
 			String result = "";
 			Result userResult = null;
@@ -507,21 +520,31 @@ public class RailroadInk extends Game {
 			}
 			return "myScore," + result;
 			*/
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			return "myScore," + calculateSingleResults(user);
 		}
 		if(eventName.equals("winnerData")) {
-			int index = -1;
-			int highestScore = -1000;
+			//TODO for testing, there is a try-catch-block, remove later
+			System.out.println("getGameData mit Parameter winnerData aufgerufen.");
+			System.out.println("Anzahl verfügbarer Ergebnisse: " + results.size());
 			Result highestResult = null;
-			for(Result r : results) {
-				int score = r.getScore();
-				if(score > highestScore) {
-					highestScore = score;
-					index = results.indexOf(r);
-					highestResult = r;
+			try {
+				int highestScore = -1000;
+				for(Result r : results) {
+					int score = r.getScore();
+					if(score > highestScore) {
+						highestScore = score;
+						highestResult = r;
+					}
 				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-			return "winnerData;" + highestResult.getUser().getName() + ";" + highestResult.getScore() + "," + highestResult.getBoard();
+			//TODO for testing, remove later
+			System.out.println("winnerData;" + highestResult.getUser().getName() + ";" + highestResult.getScore() + ";" + highestResult.getBoard());
+			return "winnerData;" + highestResult.getUser().getName() + ";" + highestResult.getScore() + ";" + highestResult.getBoard();
 		}
 		if(eventName.equals("EndOfGame")) {
 			return "EndOfGame" + ",Das Spiel ist beendet.";
@@ -684,15 +707,23 @@ public class RailroadInk extends Game {
 			break;
 		case ROAD:
 		case RAIL:
-		case STATION_TURN:
 		case OVERPASS:
 			//in the above cases, we have to add ninety degrees
 			orientation = Orientations.addNinetyDegrees(orientation);
 			break;
 		case STATION:
+			//in this case, we have to add 270 degres
 			orientation = Orientations.addNinetyDegrees(orientation);
 			orientation = Orientations.addNinetyDegrees(orientation);
 			orientation = Orientations.addNinetyDegrees(orientation);
+			break;
+		case STATION_TURN:
+			//in this case, we have to do something depending on whether the element is mirrored or not
+			if(isMirrored) {
+				orientation = Orientations.addNinetyDegrees(orientation);
+			} else {
+				orientation = Orientations.subtractNinetyDegrees(orientation);
+			}
 			break;
 		case ROAD_TURN:
 		case ROAD_TJUNCTION:
