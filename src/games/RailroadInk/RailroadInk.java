@@ -905,7 +905,7 @@ public class RailroadInk extends Game {
 					type = "l_1.png";
 					break;
 				case STATION_2:
-					type = "l_1.png";
+					type = "l_2.png";
 					break;
 				case STATION_3:
 					type = "l_5.png";

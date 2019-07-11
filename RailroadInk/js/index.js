@@ -530,7 +530,7 @@ addListener('winnerData', function(event){
 	var winnerPoints = score[1];
 	
 
-	$('#headingWinner').html('Der Sieger ist <b>'+winnerName+'</b> mit '+winnerPoints+' Punkten:');
+	$('#headingWinner').html('Der Sieger ist <b>'+playerMessage+'</b> mit '+winnerPoints+' Punkten:');
 
 
 	for (var i = 2; i < score.length; i++) {
@@ -540,9 +540,11 @@ addListener('winnerData', function(event){
 		var image_name = '';
 		if (fieldArray[0].charAt(0) == '1' || fieldArray[0].charAt(0) == '2') {
 			image_name = 'dice_'+fieldArray[0];
+			console.log(i-1 + ": " + image_name);
 		}
 		else if ((fieldArray[0].charAt(0) == 'l')) {
 			image_name = 'specia'+fieldArray[0];
+			console.log(i-1 + ": " + image_name);
 		} 
 		else {
 			//alert('Bilddatei mit der Endung '+fieldArray[0]+' nicht gefunden!');
@@ -550,7 +552,8 @@ addListener('winnerData', function(event){
 		}
 
 		var field_nr = fieldArray[1];
-		var image_angle = fieldArray[2];
+		var integer = parseInt(fieldArray[2], 10);
+		var image_angle = integer;
 		var image_mirror = fieldArray[3];
 
 		// alert('Bild: '+image_name+', Feld: '+field_nr+', Winkel: '+image_angle+', Spiegelung: '+image_mirror);
@@ -561,8 +564,19 @@ addListener('winnerData', function(event){
 	            'draggable':'false'
 	        });
 
-		if (image_mirror == 1) {
+		if (image_name == "dice_2_1.png"){
+			console.log(image_angle);
+			image_angle += 180;
+			console.log("passiert" + image_angle);
+		}
+		if (image_name == "dice_2_2.png" && image_mirror ==0){
+			console.log(image_angle + " , " + image_mirror)
 			image_angle += 180; //test
+			console.log(image_angle + " , " + image_mirror)
+		   
+		}
+		if (image_mirror == 1) {
+			//image_angle += 90;			
 			$(wfield_img).css({'transform': 'rotate('+image_angle+'deg) scale(1, -1)'});
 		}
 		else {
@@ -581,7 +595,7 @@ addListener('myScore', function(event) {
 	document.getElementById("score_3").innerHTML = score[4];
 	document.getElementById("score_4").innerHTML = score[5];
 	document.getElementById("score_5").innerHTML = score[6];
-	document.getElementById("score_final").innerHTML = score[7];
+	document.getElementById("score_final").innerHTML = score[7].slice(0,2);
 	
 });
 addListener('NEW_PLAYER', function(event){
