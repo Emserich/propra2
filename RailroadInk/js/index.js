@@ -345,7 +345,7 @@ function insertFieldnumber() {
 
 	for (var i = 1; i <= 49; i++) {
 
-		document.getElementById("field_"+i).innerHTML = '<span>'+i+'</span>';
+		// document.getElementById("field_"+i).innerHTML = '<span>'+i+'</span>';
 	}    
 }
 
@@ -589,12 +589,12 @@ addListener('winnerData', function(event){
 addListener('myScore', function(event) {
 	var stringFromServer = event.data;
 	var score = stringFromServer.split(',');
-	document.getElementById("modal_finish_title").innerHTML = score[1];
-	document.getElementById("score_1").innerHTML = score[2];
-	document.getElementById("score_2").innerHTML = score[3];
-	document.getElementById("score_3").innerHTML = score[4];
-	document.getElementById("score_4").innerHTML = score[5];
-	document.getElementById("score_5").innerHTML = score[6];
+	document.getElementById("modal_finish_title").innerHTML = 'Spiel beendet! Hier ist dein Spielergebnis, '+score[1]+'!';
+	document.getElementById("score_1").innerHTML = '= '+score[2];
+	document.getElementById("score_2").innerHTML = '= '+score[3];
+	document.getElementById("score_3").innerHTML = '= '+score[4];
+	document.getElementById("score_4").innerHTML = '= '+score[5];
+	document.getElementById("score_5").innerHTML = '= '+score[6];
 	document.getElementById("score_final").innerHTML = score[7].slice(0,2);
 	
 });
@@ -604,9 +604,7 @@ addListener('NEW_PLAYER', function(event){
 
 addListener('EndOfTurn', function(event) {
 		turnCounter +=1;
-		if (turnCounter > 7) {
-			$('#button_finish_round').hide();
-		}
+		
 		$('.dice_cube').removeClass("img_used"); //Strecken wieder wählbar machen
 		activeImageID = '';
 		var stringFromServer = event.data;
@@ -616,13 +614,18 @@ addListener('EndOfTurn', function(event) {
 		if (arr[1] == "HOST")
 		{setVisible()};
 
-			diceCounter = 0;	
-			turnData = [0, 0, 0, 0];
- 			stringData = "";				
-			rollButtonCounter = 0;
-			roleValue = [0,0,0,0];		
-			document.getElementById("Player").innerHTML = "Runde " + turnCounter + " wurde gestartet!";
-			document.getElementById('gameround').innerHTML = 'Runde ' +  turnCounter;
+		diceCounter = 0;	
+		turnData = [0, 0, 0, 0];
+			stringData = "";				
+		rollButtonCounter = 0;
+		roleValue = [0,0,0,0];		
+		document.getElementById("Player").innerHTML = "Runde " + turnCounter + " wurde gestartet!";
+		document.getElementById('gameround').innerHTML = 'Runde ' +  turnCounter;
+
+		if (turnCounter > 7) {
+			$('#button_finish_round').hide();
+			document.getElementById('gameround').innerHTML = 'Spiel vorbei!';
+		}
 			
 		statusWait = false;
 	});
