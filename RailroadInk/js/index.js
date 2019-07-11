@@ -636,8 +636,10 @@ addListener('START', function(event){
 	var stringFromServer = event.data;
 	var arr = stringFromServer.split(',');
 	playerMessage = arr[1];
+	var userName = arr[3];
 	console.log(arr);
 	document.getElementById("Player").innerHTML = playerMessage;
+	document.getElementById("userName").innerHTML =  "Hallo " + userName + "!";
 	turnCounter++;
 	document.getElementById('gameround').innerHTML = 'Runde ' +  turnCounter;
 	$('.dice_cube').removeClass("img_used"); //Strecken wieder wählbar machen
@@ -651,11 +653,13 @@ addListener('START_KI', function(event){
 	var stringFromServer = event.data;
 	var arr = stringFromServer.split(',');
 	playerMessage = arr[1];
+	userName = arr[3];
 	document.getElementById("Player").innerHTML = playerMessage;
 	$('.dice_cube').removeClass("img_used"); //Strecken wieder wählbar machen
 	$('.special .dice_image').removeClass("img_used");
 	if(arr[2]=="HOST") setVisible();
 	console.log(arr[2]);
+	document.getElementById("userName").innerHTML = "Hallo " + userName + "!";
 	statusWait = false;	
 });
 

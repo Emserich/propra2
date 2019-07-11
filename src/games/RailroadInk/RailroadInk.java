@@ -466,7 +466,7 @@ public class RailroadInk extends Game {
 			return "Cannot restart game once it was started.";
 		}
 		if(eventName.equals("START")) {
-			return "START" + ",Spiel gestartet!"+ isHost(user);
+			return "START" + ",Spiel gestartet!"+ isHost(user) + ","+  user.getName();
 		}
 		if(eventName.equals("HOST")) {
 			return "CLOSE";
@@ -476,7 +476,7 @@ public class RailroadInk extends Game {
 		}
 		if(eventName.equals("START_KI")) {
 			//to do: packe KI ins Spiel!
-			return "START" + ",Spiel gegen KI gestartet!" + isHost(user);
+			return "START" + ",Spiel gegen KI gestartet!" + isHost(user) +","+ user.getName();
 		}
 		if(eventName.equals("NOTTHEHOST")) {
 			return "PLAYERLEFT" + user.getName();
