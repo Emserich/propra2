@@ -906,10 +906,10 @@ public class RailroadInk extends Game {
 					type = "l_6.png";
 					break;
 				case ROAD_CROSSROAD:
-					type = "1_3.png";
+					type = "l_3.png";
 					break;
 				case RAIL_CROSSROAD:
-					type = "1_4.png";
+					type = "l_4.png";
 					break;
 				}
 				int orientation = -1;
