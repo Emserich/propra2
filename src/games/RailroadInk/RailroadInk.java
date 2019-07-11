@@ -410,7 +410,15 @@ public class RailroadInk extends Game {
 				if(turnCounter == 7) {
 					//calculate the results of each player
 					for(User player : playerList) {
-						calculateSingleResults(player);
+						if(AI == null) {
+							calculateSingleResults(player);
+						} else {
+							if(player == AI.getBoard().getUser()) {
+								calculateAiResult();
+							} else {
+								calculateSingleResults(player);
+							}
+						}
 					}
 					
 					//end the turn and ultimately end the game
@@ -977,6 +985,25 @@ public class RailroadInk extends Game {
 		
 		String boardRepresentation = boardToJsRepresentation(board);
 		Result resClass = new Result(user, res, boardRepresentation);
+		results.add(resClass);
+		
+		return result;
+	}
+	
+	private String calculateAiResult() {
+		String result = "";
+		
+		ResultCalculator calc = new ResultCalculator();
+		
+		User aiUser = AI.getBoard().getUser();
+		Board aiBoard = AI.getBoard();
+		
+		String username = aiUser.getName();
+		int[] res = calc.calculateResult(aiBoard);
+		result += username + "," + res[0] + "," + res[1] + "," + res[2] + "," + res[3] + "," + res[4] + "," + res[5] + ";";
+		
+		String boardRepresentation = boardToJsRepresentation(aiBoard);
+		Result resClass = new Result(aiUser, res, boardRepresentation);
 		results.add(resClass);
 		
 		return result;
