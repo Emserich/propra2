@@ -684,6 +684,7 @@ addListener('WrongField',function(event){
 
 addListener('CANT_END_TURN',function(event){
 	console.log("cant end");
+	$('#button_finish_round').show();
 	alert('Es müssen weitere Elemente gesetzt werden!');
 });
 addListener('dropped',function(event){
